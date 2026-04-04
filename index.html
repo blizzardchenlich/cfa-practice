@@ -110,6 +110,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 .explanation-box h4 { font-size: .85rem; font-weight: 600; color: var(--blue); margin-bottom: 8px; text-transform: uppercase; letter-spacing: .05em; }
 .explanation-box p { font-size: .9rem; line-height: 1.7; color: var(--text); white-space: pre-wrap; }
 .los-tag { margin-top: 10px; font-size: .8rem; color: var(--text-muted); font-style: italic; }
+.tips-box { background: #f0fdf4; border: 1px solid #86efac; border-left: 4px solid var(--green); border-radius: 8px; padding: 20px; margin-top: 24px; }
+.tips-box h4 { font-size: .85rem; font-weight: 600; color: var(--green); margin-bottom: 10px; text-transform: uppercase; letter-spacing: .05em; }
+.tips-content { font-size: .9rem; line-height: 1.75; color: var(--text); }
+.tips-content strong { color: var(--blue); }
+.tips-content ol { margin: 6px 0 6px 20px; }
+.tips-content ol li { margin-bottom: 4px; }
 
 /* Nav Panel */
 .nav-panel h3 { font-size: .85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 12px; }
@@ -683,13 +689,19 @@ function renderQuestion() {
   });
 
   let explanationHtml = '';
-  if (showAnswer && q.explanation) {
-    explanationHtml = `
+  if (showAnswer) {
+    const tipsHtml = q.tips ? `
+      <div class="tips-box">
+        <h4>解题思路</h4>
+        <div class="tips-content">${renderTips(q.tips)}</div>
+      </div>` : '';
+    const explHtml = q.explanation ? `
       <div class="explanation-box">
-        <h4>解析</h4>
+        <h4>Kaplan 解析</h4>
         <p>${escHtml(q.explanation)}</p>
         ${q.module ? `<div class="los-tag">Module ${q.module} · LOS ${q.los || ''}</div>` : ''}
-      </div>`;
+      </div>` : '';
+    explanationHtml = tipsHtml + explHtml;
   }
 
   let trainFeedback = '';
@@ -924,6 +936,28 @@ function shuffle(arr) {
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
+}
+
+function renderTips(text) {
+  if (!text) return '';
+  // Convert **bold** to <strong>, numbered lists to <ol>
+  let html = escHtml(text);
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // Convert numbered list lines into <ol>
+  const lines = html.split('\n');
+  let out = '', inList = false;
+  for (const line of lines) {
+    const m = line.match(/^(\d+)\.\s+(.*)/);
+    if (m) {
+      if (!inList) { out += '<ol>'; inList = true; }
+      out += `<li>${m[2]}</li>`;
+    } else {
+      if (inList) { out += '</ol>'; inList = false; }
+      out += line ? `<p style="margin:4px 0">${line}</p>` : '';
+    }
+  }
+  if (inList) out += '</ol>';
+  return out;
 }
 
 function escHtml(str) {
