@@ -38,7 +38,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 .home-card .icon { font-size: 3rem; margin-bottom: 16px; }
 .home-card h2 { font-size: 1.3rem; font-weight: 600; color: var(--blue); margin-bottom: 8px; }
 .home-card p { color: var(--text-muted); font-size: .9rem; }
-.home-stats { margin-top: 40px; text-align: center; color: var(--text-muted); font-size: .9rem; }
+.home-stats { margin-top: 24px; text-align: center; color: var(--text-muted); font-size: .9rem; }
+.home-cards-secondary { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 16px; }
+.home-card-sm { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 24px 32px; cursor: pointer; transition: all .2s; text-align: center; flex: 1; min-width: 180px; max-width: 240px; }
+.home-card-sm:hover { border-color: var(--blue-light); box-shadow: 0 4px 20px rgba(37,99,235,.15); transform: translateY(-2px); }
+.home-card-sm .icon { font-size: 2rem; margin-bottom: 8px; }
+.home-card-sm h2 { font-size: 1.05rem; font-weight: 600; color: var(--blue); margin-bottom: 4px; }
+.home-card-sm .count { color: var(--text-muted); font-size: .85rem; }
+.bookmark-btn { padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px; background: white; cursor: pointer; font-size: .85rem; display: flex; align-items: center; gap: 6px; transition: all .15s; }
+.bookmark-btn.bookmarked { background: #fef3c7; border-color: #f59e0b; color: #b45309; }
 
 /* ========== EXAM SETUP ========== */
 #exam-setup, #train-setup { display: none; padding: 32px; max-width: 600px; margin: 0 auto; }
@@ -188,6 +196,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
       <p>按科目/Reading选题 · 即时反馈 · 强化弱点</p>
     </div>
   </div>
+  <div class="home-cards-secondary">
+    <div class="home-card-sm" onclick="showCollection('wrong')">
+      <div class="icon">❌</div>
+      <h2>错题集</h2>
+      <div class="count" id="wrong-count">0 题</div>
+    </div>
+    <div class="home-card-sm" onclick="showCollection('bookmark')">
+      <div class="icon">⭐</div>
+      <h2>标记题目</h2>
+      <div class="count" id="bookmark-count">0 题</div>
+    </div>
+  </div>
   <div class="home-stats" id="home-stats"></div>
 </div>
 
@@ -323,6 +343,12 @@ let examMode = 'exam'; // 'exam' or 'train'
 let trainImmediate = true;
 let isReviewMode = false;
 
+// Persistent: wrong answers & bookmarks
+let wrongIds = new Set(JSON.parse(localStorage.getItem('cfa_wrong_ids') || '[]'));
+let bookmarkIds = new Set(JSON.parse(localStorage.getItem('cfa_bookmark_ids') || '[]'));
+function saveWrongIds() { localStorage.setItem('cfa_wrong_ids', JSON.stringify([...wrongIds])); }
+function saveBookmarkIds() { localStorage.setItem('cfa_bookmark_ids', JSON.stringify([...bookmarkIds])); }
+
 // CFA Topic Weights (总100%)
 const CFA_WEIGHTS = {
   'Ethics and Professional Standards': 0.15,
@@ -347,6 +373,7 @@ async function loadQuestions() {
     allQuestions = data.questions || [];
     hideLoading();
     updateHomeStats(data);
+    updateHomeCounts();
     return true;
   } catch(e) {
     hideLoading();
@@ -370,6 +397,14 @@ function showHome() {
   hideAll();
   document.getElementById('home').style.display = 'flex';
   stopTimer();
+  updateHomeCounts();
+}
+
+function updateHomeCounts() {
+  const wEl = document.getElementById('wrong-count');
+  const bEl = document.getElementById('bookmark-count');
+  if (wEl) wEl.textContent = wrongIds.size + ' 题';
+  if (bEl) bEl.textContent = bookmarkIds.size + ' 题';
 }
 
 function showExamSetup() {
@@ -621,6 +656,8 @@ function renderQuestion() {
   const losBadge = q.los ? `<span class="badge">LOS ${q.los}</span>` : '';
   const flagClass = flagged.has(currentIndex) ? 'flagged' : '';
   const flagText = flagged.has(currentIndex) ? '🚩 已标记' : '🏳 标记';
+  const bmClass = bookmarkIds.has(q.id) ? 'bookmarked' : '';
+  const bmText = bookmarkIds.has(q.id) ? '⭐ 已收藏' : '☆ 收藏';
 
   let optionsHtml = '';
   ['A', 'B', 'C'].forEach(letter => {
@@ -689,6 +726,7 @@ function renderQuestion() {
       ${nextBtn}
       ${submitBtn}
       ${!isReviewMode ? `<button class="flag-btn ${flagClass}" onclick="toggleFlag()"><span>🏳</span> ${flagText}</button>` : ''}
+      <button class="bookmark-btn ${bmClass}" onclick="toggleBookmark()">${bmText}</button>
     </div>
   `;
 
@@ -703,6 +741,14 @@ function selectOption(letter) {
   if (isImmediate && userAnswers[currentIndex] !== undefined) return;
 
   userAnswers[currentIndex] = letter;
+
+  // 即时训练模式：实时记录错题
+  if (isImmediate) {
+    const q = currentQuestions[currentIndex];
+    if (letter !== q.correct) wrongIds.add(q.id);
+    saveWrongIds();
+  }
+
   renderQuestion();
 
   // Auto-advance in training mode after delay
@@ -718,6 +764,14 @@ function selectOption(letter) {
 function toggleFlag() {
   if (flagged.has(currentIndex)) flagged.delete(currentIndex);
   else flagged.add(currentIndex);
+  renderQuestion();
+}
+
+function toggleBookmark() {
+  const qid = currentQuestions[currentIndex].id;
+  if (bookmarkIds.has(qid)) bookmarkIds.delete(qid);
+  else bookmarkIds.add(qid);
+  saveBookmarkIds();
   renderQuestion();
 }
 
@@ -775,7 +829,28 @@ function confirmSubmit() {
 
 function submitExam() {
   stopTimer();
+  // 保存本次错题（模拟考试 & 延后反馈训练）
+  currentQuestions.forEach((q, i) => {
+    if (userAnswers[i] !== undefined && userAnswers[i] !== q.correct) {
+      wrongIds.add(q.id);
+    }
+  });
+  saveWrongIds();
   showResults();
+}
+
+function showCollection(type) {
+  const ids = type === 'wrong' ? wrongIds : bookmarkIds;
+  const qs = allQuestions.filter(q => ids.has(q.id));
+  if (qs.length === 0) {
+    showToast(type === 'wrong' ? '错题集为空，先去做题吧' : '暂无标记题目');
+    return;
+  }
+  examMode = 'train';
+  isReviewMode = false;
+  trainImmediate = true;
+  const label = type === 'wrong' ? `错题集 (${qs.length}题)` : `标记题目 (${qs.length}题)`;
+  startSession(shuffle([...qs]), 0, label);
 }
 
 // ========== RESULTS ==========
