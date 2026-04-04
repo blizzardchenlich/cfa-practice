@@ -762,15 +762,6 @@ function selectOption(letter) {
   }
 
   renderQuestion();
-
-  // Auto-advance in training mode after delay
-  if (isImmediate) {
-    setTimeout(() => {
-      if (currentIndex < currentQuestions.length - 1) {
-        goTo(currentIndex + 1);
-      }
-    }, 1800);
-  }
 }
 
 function toggleFlag() {
