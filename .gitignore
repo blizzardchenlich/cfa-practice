@@ -1,0 +1,10 @@
+ocr_cache.json
+correct_answers.json
+extract_log.txt
+extract.py
+redetect.py
+reparse.py
+make_demo.py
+__pycache__/
+*.pyc
+/tmp/
