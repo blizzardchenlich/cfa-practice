@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CFA Level 1 练习系统</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
   --blue: #1a3c6e;
@@ -26,6 +27,42 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f9fafb; color: var(--text); min-height: 100vh; }
+
+/* ========== AUTH ========== */
+#auth-view { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:24px; background:#f9fafb; }
+.auth-card { background:white; border:1px solid var(--border); border-radius:16px; padding:40px; width:100%; max-width:400px; box-shadow:0 4px 24px rgba(0,0,0,.08); }
+.auth-logo { text-align:center; margin-bottom:28px; }
+.auth-logo h1 { font-size:1.5rem; font-weight:700; color:var(--blue); }
+.auth-logo p { color:var(--text-muted); font-size:.9rem; margin-top:4px; }
+.auth-tabs { display:flex; border-bottom:2px solid var(--border); margin-bottom:24px; }
+.auth-tab { flex:1; padding:10px; background:none; border:none; cursor:pointer; font-size:.95rem; color:var(--text-muted); font-weight:500; transition:all .15s; }
+.auth-tab.active { color:var(--blue); border-bottom:2px solid var(--blue); margin-bottom:-2px; }
+.auth-field { margin-bottom:14px; }
+.auth-field label { display:block; font-size:.85rem; font-weight:500; color:var(--text); margin-bottom:6px; }
+.auth-field input { width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:8px; font-size:.95rem; outline:none; transition:border .15s; }
+.auth-field input:focus { border-color:var(--blue-light); }
+.auth-error { color:var(--red); font-size:.85rem; min-height:20px; margin-bottom:8px; }
+.auth-btn { width:100%; padding:12px; background:var(--blue); color:white; border:none; border-radius:8px; font-size:1rem; font-weight:600; cursor:pointer; transition:background .15s; }
+.auth-btn:hover { background:#1e40af; }
+.auth-btn:disabled { background:var(--gray); cursor:not-allowed; }
+
+/* ========== USER BAR ========== */
+.user-bar { position:fixed; top:0; right:0; padding:10px 20px; display:flex; align-items:center; gap:12px; z-index:200; }
+.user-avatar { width:32px; height:32px; border-radius:50%; background:var(--blue); color:white; display:flex; align-items:center; justify-content:center; font-size:.85rem; font-weight:600; }
+.user-email { font-size:.82rem; color:var(--text-muted); max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.signout-btn { padding:5px 12px; border:1px solid var(--border); border-radius:6px; background:white; font-size:.8rem; cursor:pointer; color:var(--text-muted); transition:all .15s; }
+.signout-btn:hover { border-color:var(--red); color:var(--red); }
+
+/* ========== HISTORY ========== */
+.history-section { margin-top:32px; width:100%; max-width:560px; }
+.history-section h3 { font-size:.9rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:.05em; margin-bottom:12px; text-align:center; }
+.history-list { display:flex; flex-direction:column; gap:8px; }
+.history-item { background:white; border:1px solid var(--border); border-radius:10px; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; }
+.history-item .hi-label { font-size:.88rem; font-weight:500; color:var(--text); }
+.history-item .hi-date { font-size:.78rem; color:var(--text-muted); }
+.history-badge { font-size:.95rem; font-weight:700; padding:3px 10px; border-radius:20px; }
+.history-badge.pass { background:var(--green-pale); color:var(--green); }
+.history-badge.fail { background:var(--red-pale); color:var(--red); }
 
 /* ========== HOME ========== */
 #home { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 32px; }
@@ -184,8 +221,38 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 </head>
 <body>
 
+<!-- ========== AUTH ========== -->
+<div id="auth-view" style="display:none;">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <h1>CFA Level 1 练习系统</h1>
+      <p>Kaplan QBank 2025</p>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">登录</button>
+      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">注册</button>
+    </div>
+    <div class="auth-field">
+      <label>邮箱</label>
+      <input type="email" id="auth-email" placeholder="your@email.com" onkeydown="if(event.key==='Enter')handleAuth()">
+    </div>
+    <div class="auth-field">
+      <label>密码</label>
+      <input type="password" id="auth-password" placeholder="至少6位" onkeydown="if(event.key==='Enter')handleAuth()">
+    </div>
+    <div class="auth-error" id="auth-error"></div>
+    <button class="auth-btn" id="auth-submit-btn" onclick="handleAuth()">登录</button>
+  </div>
+</div>
+
 <!-- ========== HOME ========== -->
 <div id="home">
+  <!-- User bar -->
+  <div class="user-bar">
+    <div class="user-avatar" id="user-avatar">?</div>
+    <span class="user-email" id="user-email-display"></span>
+    <button class="signout-btn" onclick="handleSignOut()">退出</button>
+  </div>
   <div class="home-header">
     <h1>CFA Level 1 练习系统</h1>
     <p>Kaplan QBank 2025 · 全真模拟 & 专项训练</p>
@@ -215,6 +282,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
     </div>
   </div>
   <div class="home-stats" id="home-stats"></div>
+  <div class="history-section" id="history-section" style="display:none;">
+    <h3>最近考试记录</h3>
+    <div class="history-list" id="history-list"></div>
+  </div>
 </div>
 
 <!-- ========== EXAM SETUP ========== -->
@@ -337,6 +408,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 <div class="toast" id="toast"></div>
 
 <script>
+// ========== SUPABASE ==========
+const SUPABASE_URL      = '__SUPABASE_URL__';
+const SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY__';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let currentUser = null;
+
 // ========== STATE ==========
 let allQuestions = [];
 let currentQuestions = [];
@@ -349,11 +426,35 @@ let examMode = 'exam'; // 'exam' or 'train'
 let trainImmediate = true;
 let isReviewMode = false;
 
-// Persistent: wrong answers & bookmarks
-let wrongIds = new Set(JSON.parse(localStorage.getItem('cfa_wrong_ids') || '[]'));
-let bookmarkIds = new Set(JSON.parse(localStorage.getItem('cfa_bookmark_ids') || '[]'));
-function saveWrongIds() { localStorage.setItem('cfa_wrong_ids', JSON.stringify([...wrongIds])); }
-function saveBookmarkIds() { localStorage.setItem('cfa_bookmark_ids', JSON.stringify([...bookmarkIds])); }
+// Persistent: wrong answers & bookmarks (cloud-synced)
+let wrongIds = new Set();
+let bookmarkIds = new Set();
+
+async function loadUserData() {
+  const [w, b] = await Promise.all([
+    sb.from('user_wrong_ids').select('question_id').eq('user_id', currentUser.id),
+    sb.from('user_bookmarks').select('question_id').eq('user_id', currentUser.id),
+  ]);
+  wrongIds    = new Set((w.data || []).map(r => r.question_id));
+  bookmarkIds = new Set((b.data || []).map(r => r.question_id));
+}
+
+async function saveWrongIds(qid) {
+  if (!currentUser) return;
+  wrongIds.add(qid);
+  await sb.from('user_wrong_ids').upsert({ user_id: currentUser.id, question_id: qid });
+}
+
+async function saveBookmarkIds(qid, add) {
+  if (!currentUser) return;
+  if (add) {
+    bookmarkIds.add(qid);
+    await sb.from('user_bookmarks').upsert({ user_id: currentUser.id, question_id: qid });
+  } else {
+    bookmarkIds.delete(qid);
+    await sb.from('user_bookmarks').delete().eq('user_id', currentUser.id).eq('question_id', qid);
+  }
+}
 
 // CFA Topic Weights (总100%)
 const CFA_WEIGHTS = {
@@ -399,11 +500,12 @@ function updateHomeStats(data) {
 }
 
 // ========== NAVIGATION ==========
-function showHome() {
+async function showHome() {
   hideAll();
   document.getElementById('home').style.display = 'flex';
   stopTimer();
   updateHomeCounts();
+  await renderExamHistory();
 }
 
 function updateHomeCounts() {
@@ -411,6 +513,28 @@ function updateHomeCounts() {
   const bEl = document.getElementById('bookmark-count');
   if (wEl) wEl.textContent = wrongIds.size + ' 题';
   if (bEl) bEl.textContent = bookmarkIds.size + ' 题';
+}
+
+async function renderExamHistory() {
+  if (!currentUser) return;
+  const { data } = await sb.from('exam_records')
+    .select('*').eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false }).limit(8);
+  const sec  = document.getElementById('history-section');
+  const list = document.getElementById('history-list');
+  if (!data || data.length === 0) { sec.style.display = 'none'; return; }
+  sec.style.display = 'block';
+  list.innerHTML = data.map(r => {
+    const pass  = r.pct >= 65;
+    const date  = new Date(r.created_at).toLocaleDateString('zh-CN', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+    return `<div class="history-item">
+      <div>
+        <div class="hi-label">${escHtml(r.label)}</div>
+        <div class="hi-date">${date}</div>
+      </div>
+      <span class="history-badge ${pass ? 'pass' : 'fail'}">${r.score}/${r.total} &nbsp;${r.pct}%</span>
+    </div>`;
+  }).join('');
 }
 
 function showExamSetup() {
@@ -427,7 +551,7 @@ function showTrainSetup() {
 }
 
 function hideAll() {
-  ['home','exam-setup','train-setup','exam-view','results-view'].forEach(id => {
+  ['auth-view','home','exam-setup','train-setup','exam-view','results-view'].forEach(id => {
     document.getElementById(id).style.display = 'none';
   });
 }
@@ -757,8 +881,7 @@ function selectOption(letter) {
   // 即时训练模式：实时记录错题
   if (isImmediate) {
     const q = currentQuestions[currentIndex];
-    if (letter !== q.correct) wrongIds.add(q.id);
-    saveWrongIds();
+    if (letter !== q.correct) saveWrongIds(q.id);
   }
 
   renderQuestion();
@@ -772,9 +895,8 @@ function toggleFlag() {
 
 function toggleBookmark() {
   const qid = currentQuestions[currentIndex].id;
-  if (bookmarkIds.has(qid)) bookmarkIds.delete(qid);
-  else bookmarkIds.add(qid);
-  saveBookmarkIds();
+  const adding = !bookmarkIds.has(qid);
+  saveBookmarkIds(qid, adding);
   renderQuestion();
 }
 
@@ -830,15 +952,13 @@ function confirmSubmit() {
   submitExam();
 }
 
-function submitExam() {
+async function submitExam() {
   stopTimer();
   // 保存本次错题（模拟考试 & 延后反馈训练）
-  currentQuestions.forEach((q, i) => {
-    if (userAnswers[i] !== undefined && userAnswers[i] !== q.correct) {
-      wrongIds.add(q.id);
-    }
-  });
-  saveWrongIds();
+  const wrongPromises = currentQuestions
+    .filter((q, i) => userAnswers[i] !== undefined && userAnswers[i] !== q.correct)
+    .map(q => saveWrongIds(q.id));
+  await Promise.all(wrongPromises);
   showResults();
 }
 
@@ -903,6 +1023,15 @@ function showResults() {
         <div class="topic-pct">${stats.correct}/${stats.total} (${p}%)</div>
       </div>`;
   });
+
+  // 保存考试记录到云端
+  if (currentUser) {
+    const label = document.getElementById('exam-mode-label').textContent || (examMode === 'exam' ? '模拟考试' : '专项训练');
+    sb.from('exam_records').insert({
+      user_id: currentUser.id, score: correct, total, pct,
+      mode: examMode, label, topic_stats: topicStats,
+    });
+  }
 
   window.scrollTo(0, 0);
 }
@@ -972,9 +1101,85 @@ function showToast(msg, dur = 2000) {
   setTimeout(() => el.classList.remove('show'), dur);
 }
 
+// ========== AUTH ==========
+let authMode = 'login';
+
+function showAuth() {
+  hideAll();
+  document.getElementById('auth-view').style.display = 'flex';
+}
+
+function switchAuthTab(mode) {
+  authMode = mode;
+  document.getElementById('tab-login').classList.toggle('active', mode === 'login');
+  document.getElementById('tab-register').classList.toggle('active', mode === 'register');
+  document.getElementById('auth-submit-btn').textContent = mode === 'login' ? '登录' : '注册';
+  document.getElementById('auth-error').textContent = '';
+}
+
+async function handleAuth() {
+  const email    = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  const errEl    = document.getElementById('auth-error');
+  const btn      = document.getElementById('auth-submit-btn');
+  if (!email || !password) { errEl.textContent = '请输入邮箱和密码'; return; }
+  btn.disabled = true;
+  btn.textContent = '请稍候...';
+  errEl.textContent = '';
+  try {
+    let result;
+    if (authMode === 'login') {
+      result = await sb.auth.signInWithPassword({ email, password });
+    } else {
+      result = await sb.auth.signUp({ email, password });
+      if (!result.error && result.data.user && !result.data.session) {
+        errEl.textContent = '注册成功！请检查邮箱确认后再登录。';
+        btn.disabled = false; btn.textContent = '注册'; return;
+      }
+    }
+    if (result.error) throw result.error;
+    currentUser = result.data.user;
+    showLoading('加载数据...');
+    await loadUserData();
+    await loadQuestions();
+    updateUserBar();
+    hideLoading();
+    showHome();
+  } catch(e) {
+    errEl.textContent = e.message || '操作失败，请重试';
+    btn.disabled = false;
+    btn.textContent = authMode === 'login' ? '登录' : '注册';
+  }
+}
+
+async function handleSignOut() {
+  await sb.auth.signOut();
+  currentUser = null;
+  wrongIds.clear(); bookmarkIds.clear();
+  showAuth();
+}
+
+function updateUserBar() {
+  if (!currentUser) return;
+  const email = currentUser.email || '';
+  document.getElementById('user-email-display').textContent = email;
+  document.getElementById('user-avatar').textContent = email[0].toUpperCase();
+}
+
 // ========== INIT ==========
-window.addEventListener('load', () => {
-  loadQuestions();
+window.addEventListener('load', async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    currentUser = session.user;
+    showLoading('加载数据...');
+    await loadUserData();
+    await loadQuestions();
+    updateUserBar();
+    hideLoading();
+    showHome();
+  } else {
+    showAuth();
+  }
 });
 </script>
 </body>
