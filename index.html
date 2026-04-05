@@ -431,12 +431,16 @@ let wrongIds = new Set();
 let bookmarkIds = new Set();
 
 async function loadUserData() {
-  const [w, b] = await Promise.all([
-    sb.from('user_wrong_ids').select('question_id').eq('user_id', currentUser.id),
-    sb.from('user_bookmarks').select('question_id').eq('user_id', currentUser.id),
-  ]);
-  wrongIds    = new Set((w.data || []).map(r => r.question_id));
-  bookmarkIds = new Set((b.data || []).map(r => r.question_id));
+  try {
+    const [w, b] = await Promise.all([
+      sb.from('user_wrong_ids').select('question_id').eq('user_id', currentUser.id),
+      sb.from('user_bookmarks').select('question_id').eq('user_id', currentUser.id),
+    ]);
+    wrongIds    = new Set((w.data || []).map(r => r.question_id));
+    bookmarkIds = new Set((b.data || []).map(r => r.question_id));
+  } catch(e) {
+    console.warn('loadUserData error (tables may not exist yet):', e);
+  }
 }
 
 async function saveWrongIds(qid) {
@@ -1139,13 +1143,15 @@ async function handleAuth() {
     }
     if (result.error) throw result.error;
     currentUser = result.data.user;
-    showLoading('加载数据...');
+    showLoading('加载用户数据...');
     await loadUserData();
+    showLoading('加载题库（约3秒）...');
     await loadQuestions();
     updateUserBar();
     hideLoading();
-    showHome();
+    await showHome();
   } catch(e) {
+    hideLoading();
     errEl.textContent = e.message || '操作失败，请重试';
     btn.disabled = false;
     btn.textContent = authMode === 'login' ? '登录' : '注册';
@@ -1168,17 +1174,24 @@ function updateUserBar() {
 
 // ========== INIT ==========
 window.addEventListener('load', async () => {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session) {
-    currentUser = session.user;
-    showLoading('加载数据...');
-    await loadUserData();
-    await loadQuestions();
-    updateUserBar();
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) {
+      currentUser = session.user;
+      showLoading('加载用户数据...');
+      await loadUserData();
+      showLoading('加载题库（约3秒）...');
+      await loadQuestions();
+      updateUserBar();
+      hideLoading();
+      await showHome();
+    } else {
+      showAuth();
+    }
+  } catch(e) {
     hideLoading();
-    showHome();
-  } else {
     showAuth();
+    console.error('Init error:', e);
   }
 });
 </script>
