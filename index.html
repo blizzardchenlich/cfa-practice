@@ -1160,7 +1160,7 @@ async function handleAuth() {
   const errEl    = document.getElementById('auth-error');
   const btn      = document.getElementById('auth-submit-btn');
   if (!username || !password) { errEl.textContent = '请输入用户名和密码'; return; }
-  const email = username + '@cfa.local';
+  const email = username + '@cfastudy.com';
   btn.disabled = true;
   btn.textContent = '请稍候...';
   errEl.textContent = '';
@@ -1197,7 +1197,7 @@ async function handleSignOut() {
 
 function updateUserBar() {
   if (!currentUser) return;
-  const username = (currentUser.email || '').replace('@cfa.local', '');
+  const username = (currentUser.email || '').replace('@cfastudy.com', '');
   document.getElementById('user-email-display').textContent = username;
   document.getElementById('user-avatar').textContent = username[0].toUpperCase();
 }
