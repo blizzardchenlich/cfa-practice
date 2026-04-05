@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CFA Level I — Book 3 三色笔记</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; background: #f0f2f5; color: #222; }
+.layout { display: flex; min-height: 100vh; }
+.sidebar { width: 240px; background: #1a237e; color: white; padding: 16px 12px; position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0; }
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.25); border-radius: 2px; }
+.sidebar .logo { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px; padding: 0 6px; }
+.sidebar .sub { font-size: 11px; color: #90caf9; padding: 0 6px; margin-bottom: 16px; }
+.sidebar-group { margin-bottom: 14px; }
+.sidebar-group-title { font-size: 10px; font-weight: 700; color: #ffcc80; text-transform: uppercase; letter-spacing: .8px; padding: 4px 8px; background: rgba(255,255,255,.08); border-radius: 4px; margin-bottom: 4px; }
+.sidebar a { display: block; padding: 5px 10px; color: #c5cae9; font-size: 12px; text-decoration: none; border-radius: 4px; transition: background .15s; line-height: 1.4; }
+.sidebar a:hover { background: rgba(255,255,255,.14); color: white; }
+.sidebar-back { display: block; padding: 8px 10px; margin-bottom: 14px; background: rgba(255,255,255,.1); border-radius: 6px; color: #90caf9; font-size: 12px; text-decoration: none; text-align: center; transition: background .15s; }
+.sidebar-back:hover { background: rgba(255,255,255,.2); color: white; }
+.main { flex: 1; padding: 24px; overflow-x: hidden; }
+.page-title { background: linear-gradient(135deg, #1a237e 0%, #283593 100%); color: white; text-align: center; padding: 24px 20px; margin-bottom: 28px; border-radius: 12px; box-shadow: 0 4px 16px rgba(26,35,126,.3); }
+.page-title h1 { font-size: 20px; margin-bottom: 6px; font-weight: 700; }
+.page-title p { font-size: 13px; color: #90caf9; }
+.note-section { border-radius: 14px; padding: 22px 20px 20px; margin-bottom: 24px; scroll-margin-top: 20px; }
+.s-yellow { background: #fff8e1; } .s-purple { background: #ede7f6; } .s-blue { background: #e3f2fd; } .s-green { background: #e8f5e9; } .s-pink { background: #fce4ec; } .s-teal { background: #e0f7fa; } .s-orange { background: #fff3e0; } .s-indigo { background: #e8eaf6; }
+.sec-title-wrap { display: flex; justify-content: center; margin-bottom: 18px; }
+.sec-title-box { color: white; font-weight: 700; font-size: 13px; text-align: center; text-transform: uppercase; padding: 10px 30px; border-radius: 8px; letter-spacing: .6px; line-height: 1.5; max-width: 460px; }
+.t-yellow { background: #f57f17; } .t-purple { background: #6a1b9a; } .t-blue { background: #0d47a1; } .t-green { background: #1b5e20; } .t-pink { background: #880e4f; } .t-teal { background: #006064; } .t-orange { background: #bf360c; } .t-indigo { background: #283593; }
+.reading-label { font-size: 10.5px; color: rgba(0,0,0,.4); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; text-align: center; }
+.row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.sub-head { flex: 1; min-width: 140px; text-align: center; font-weight: 700; font-size: 12.5px; padding: 8px 10px; border-radius: 8px; border: 2px solid; }
+.h-yellow { background: #fff9c4; border-color: #f9a825; color: #5d3d00; } .h-purple { background: #f3e5f5; border-color: #9c27b0; color: #4a0072; } .h-blue { background: #e3f2fd; border-color: #1e88e5; color: #0d3576; } .h-green { background: #f1f8e9; border-color: #66bb6a; color: #1b5e20; } .h-pink { background: #fce4ec; border-color: #ec407a; color: #880e4f; } .h-teal { background: #e0f7fa; border-color: #26c6da; color: #006064; } .h-orange { background: #fff8e1; border-color: #ffa726; color: #bf360c; } .h-indigo { background: #e8eaf6; border-color: #7986cb; color: #283593; }
+.cbox { flex: 1; min-width: 170px; background: rgba(255,255,255,.68); border-radius: 9px; padding: 12px 14px; border: 1px solid rgba(0,0,0,.09); font-size: 12.5px; line-height: 1.55; }
+.cbox ul { padding-left: 16px; } .cbox li { margin-bottom: 4px; } .cbox strong { color: #1a237e; }
+.cbox .f { font-family: 'Courier New', monospace; background: rgba(0,0,0,.06); padding: 3px 8px; border-radius: 4px; font-size: 12px; margin: 4px 0; display: inline-block; }
+.cbox table { border-collapse: collapse; width: 100%; font-size: 11.5px; }
+.cbox table td { padding: 4px 6px; border: 1px solid #ccc; }
+.cbox table tr:first-child td { background: rgba(0,0,0,.05); font-weight: 600; }
+.divider { border: none; border-top: 1.5px solid rgba(0,0,0,.1); margin: 14px 0; }
+@media (max-width: 768px) { .sidebar { display: none; } .main { padding: 12px; } .row { flex-direction: column; } }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="logo">CFA Level I</div>
+  <div class="sub">Book 3 三色笔记</div>
+  <a href="notes.html" class="sidebar-back">&#8592; 返回主页</a>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Financial Statement Analysis</div>
+    <a href="#r29">R29 Intro to FSA</a>
+    <a href="#r30">R30 Income Statements</a>
+    <a href="#r31">R31 Balance Sheets</a>
+    <a href="#r32">R32 Cash Flows I</a>
+    <a href="#r33">R33 Cash Flows II</a>
+    <a href="#r34">R34 Inventories</a>
+    <a href="#r35">R35 Long-Term Assets</a>
+    <a href="#r36">R36 LT Liabilities &amp; Equity</a>
+    <a href="#r37">R37 Income Taxes</a>
+    <a href="#r38">R38 Reporting Quality</a>
+    <a href="#r39">R39 Analysis Techniques</a>
+    <a href="#r40">R40 FSA Modeling</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Equity Investments</div>
+    <a href="#r41">R41 Market Organization</a>
+    <a href="#r42">R42 Market Indexes</a>
+    <a href="#r43">R43 Market Efficiency</a>
+    <a href="#r44">R44 Equity Securities</a>
+    <a href="#r45">R45 Company Analysis</a>
+    <a href="#r46">R46 Industry Analysis</a>
+    <a href="#r47">R47 Forecasting</a>
+    <a href="#r48">R48 Equity Valuation</a>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <div class="page-title">
+    <h1>CFA Level I &mdash; Book 3 三色笔记</h1>
+    <p>Financial Statement Analysis &amp; Equity Investments | SchweserNotes 2024</p>
+  </div>
+
+  <!-- ==================== R29 ==================== -->
+  <section class="note-section s-yellow" id="r29">
+    <div class="reading-label">Reading 29 · Financial Statement Analysis</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-yellow">R29 — Introduction to Financial Statement Analysis</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-yellow">Financial Statements Overview</div>
+      <div class="sub-head h-yellow">Roles and Users</div>
+      <div class="sub-head h-yellow">Quality Framework &amp; IFRS vs GAAP</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Income Statement (IS):</strong> revenues, expenses, net income over a period</li>
+          <li><strong>Balance Sheet (BS):</strong> assets = liabilities + equity at a point in time</li>
+          <li><strong>Cash Flow Statement (CF):</strong> operating, investing, financing activities</li>
+          <li><strong>Statement of Changes in Equity:</strong> tracks equity components over period</li>
+          <li><strong>Notes &amp; MD&amp;A:</strong> required disclosures, accounting policies, management discussion</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">Assets = Liabilities + Equity</span>
+        <span class="f">Net Income = Rev &minus; Expenses</span>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Internal users:</strong> management, board of directors</li>
+          <li><strong>External users:</strong> equity investors, creditors, regulators, analysts</li>
+          <li><strong>Equity investors</strong> focus on profitability, growth, risk</li>
+          <li><strong>Creditors</strong> focus on liquidity, solvency, cash flow coverage</li>
+          <li><strong>Auditor role:</strong> provides reasonable assurance statements are free from material misstatement</li>
+          <li><strong>Standard-setters:</strong> IASB (IFRS), FASB (US GAAP)</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <table>
+          <tr><td>Feature</td><td>IFRS</td><td>US GAAP</td></tr>
+          <tr><td>Basis</td><td>Principles-based</td><td>Rules-based</td></tr>
+          <tr><td>Inventory</td><td>No LIFO</td><td>LIFO allowed</td></tr>
+          <tr><td>Revaluation</td><td>Allowed (PP&amp;E)</td><td>Not allowed</td></tr>
+          <tr><td>Dev. costs</td><td>Capitalize if criteria met</td><td>Expense (except software)</td></tr>
+        </table>
+        <hr class="divider">
+        <ul>
+          <li><strong>IOSCO:</strong> international body promoting quality standards</li>
+          <li><strong>Convergence:</strong> ongoing IFRS/GAAP harmonization effort</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R30 ==================== -->
+  <section class="note-section s-purple" id="r30">
+    <div class="reading-label">Reading 30 · Financial Statement Analysis</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-purple">R30 — Analyzing Income Statements</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-purple">Revenue Recognition (5-Step Model)</div>
+      <div class="sub-head h-purple">Expense Recognition &amp; Non-Recurring Items</div>
+      <div class="sub-head h-purple">EPS &amp; Common-Size IS</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Step 1:</strong> Identify the contract with customer</li>
+          <li><strong>Step 2:</strong> Identify performance obligations</li>
+          <li><strong>Step 3:</strong> Determine transaction price</li>
+          <li><strong>Step 4:</strong> Allocate price to performance obligations</li>
+          <li><strong>Step 5:</strong> Recognize revenue when/as obligation satisfied</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li><strong>Point in time</strong> vs <strong>over time</strong> recognition</li>
+          <li>Variable consideration: constrained to amount highly probable</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Matching principle:</strong> expenses recognized in same period as related revenue</li>
+          <li><strong>Period costs:</strong> SG&amp;A, admin — expensed as incurred</li>
+          <li><strong>Non-recurring items:</strong> discontinued operations (net of tax, separate line), unusual/infrequent items (still in operating income)</li>
+          <li><strong>Changes in accounting policy:</strong> retrospective restatement</li>
+          <li><strong>Changes in estimate:</strong> prospective treatment</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">Gross Profit = Revenue &minus; COGS</span>
+        <span class="f">Operating Income = Gross Profit &minus; OpEx</span>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Basic EPS:</strong> net income available to common / weighted avg shares</li>
+          <li><strong>Diluted EPS:</strong> adjusts for options, convertibles, warrants (always &le; basic EPS)</li>
+          <li><strong>Simple capital structure:</strong> only common stock, no dilutive securities</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">Basic EPS = (NI &minus; Pref Div) / Wtd Avg Shares</span>
+        <span class="f">Common-size IS: each item / Revenue &times; 100%</span>
+        <hr class="divider">
+        <ul>
+          <li><strong>Common-size IS</strong> enables cross-company comparisons regardless of size</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R31 ==================== -->
+  <section class="note-section s-blue" id="r31">
+    <div class="reading-label">Reading 31 · Financial Statement Analysis</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-blue">R31 — Analyzing Balance Sheets</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-blue">Asset Classification</div>
+      <div class="sub-head h-blue">Liabilities &amp; Equity</div>
+      <div class="sub-head h-blue">Liquidity Ratios &amp; B/S Analysis</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Current assets:</strong> converted to cash within 1 year (cash, AR, inventory, prepaid)</li>
+          <li><strong>Non-current assets:</strong> PP&amp;E, intangibles, goodwill, long-term investments</li>
+          <li><strong>Measurement bases:</strong> historical cost, fair value, amortized cost, NRV</li>
+          <li><strong>Goodwill:</strong> only from acquisitions; tested annually for impairment (not amortized under IFRS/GAAP)</li>
+          <li><strong>Intangibles:</strong> finite life = amortize; indefinite life = impairment test</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Current liabilities:</strong> due within 1 year (AP, accrued liabilities, short-term debt)</li>
+          <li><strong>Non-current liabilities:</strong> long-term debt, deferred tax, lease obligations</li>
+          <li><strong>Shareholders' equity:</strong> contributed capital + retained earnings + AOCI + treasury stock (contra)</li>
+          <li><strong>AOCI:</strong> unrealized G/L on AFS securities, FX translation, pension adjustments</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">Retained Earnings = Prior RE + NI &minus; Dividends</span>
+      </div>
+      <div class="cbox">
+        <span class="f">Current Ratio = CA / CL</span>
+        <span class="f">Quick Ratio = (Cash + ST Inv + AR) / CL</span>
+        <span class="f">Cash Ratio = (Cash + ST Inv) / CL</span>
+        <span class="f">Working Capital = CA &minus; CL</span>
+        <hr class="divider">
+        <ul>
+          <li><strong>Current ratio &gt; 1:</strong> positive working capital (generally favorable)</li>
+          <li><strong>Common-size BS:</strong> each item / Total Assets &times; 100%</li>
+          <li>Vertical analysis reveals capital structure and asset mix</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R32 ==================== -->
+  <section class="note-section s-green" id="r32">
+    <div class="reading-label">Reading 32 · Financial Statement Analysis</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-green">R32 — Analyzing Statements of Cash Flows I</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-green">Direct vs Indirect Method</div>
+      <div class="sub-head h-green">Operating Cash Flow</div>
+      <div class="sub-head h-green">CFO Adjustments from Net Income</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Direct method:</strong> lists actual cash receipts and payments from operations; preferred by standard-setters</li>
+          <li><strong>Indirect method:</strong> starts with net income, adjusts for non-cash items and working capital changes; more common in practice</li>
+          <li>Both methods produce the <strong>same CFO total</strong></li>
+          <li>Investing and financing sections are identical under both methods</li>
+          <li>IFRS: interest paid can be CFO or CFF; dividends received can be CFO or CFI</li>
+          <li>US GAAP: interest paid = CFO; dividends received = CFO</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>CFO (Indirect):</strong> NI + non-cash charges &minus; non-cash gains ± working capital changes</li>
+          <li><strong>Non-cash add-backs:</strong> depreciation, amortization, impairment losses</li>
+          <li><strong>Working capital increases</strong> in assets = cash outflow (subtract)</li>
+          <li><strong>Working capital increases</strong> in liabilities = cash inflow (add)</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">CFO = NI + D&amp;A &pm; WC Changes &pm; Other</span>
+      </div>
+      <div class="cbox">
+        <table>
+          <tr><td>Adjustment</td><td>Effect on CFO</td></tr>
+          <tr><td>AR increases</td><td>&minus; (cash not yet received)</td></tr>
+          <tr><td>Inventory increases</td><td>&minus; (cash paid for stock)</td></tr>
+          <tr><td>AP increases</td><td>+ (cash not yet paid)</td></tr>
+          <tr><td>Depreciation</td><td>+ (non-cash expense)</td></tr>
+          <tr><td>Gain on sale asset</td><td>&minus; (goes to CFI)</td></tr>
+        </table>
+        <hr class="divider">
+        <ul>
+          <li>Gains on asset sales are <strong>removed from CFO</strong> and shown in CFI</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R33 ==================== -->
+  <section class="note-section s-pink" id="r33">
+    <div class="reading-label">Reading 33 · Financial Statement Analysis</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-pink">R33 — Analyzing Statements of Cash Flows II</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-pink">Investing &amp; Financing Cash Flows</div>
+      <div class="sub-head h-pink">Free Cash Flow (FCFF &amp; FCFE)</div>
+      <div class="sub-head h-pink">Cash Flow Analysis Ratios</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>CFI:</strong> purchases/sales of PP&amp;E, investments, acquisitions</li>
+          <li><strong>Capex:</strong> major use of cash in CFI; purchase of PP&amp;E is outflow</li>
+          <li><strong>CFF:</strong> debt issuance/repayment, equity issuance/buybacks, dividends paid</li>
+          <li>IFRS: dividends paid can be CFO or CFF (US GAAP: always CFF)</li>
+          <li>Net increase/decrease in cash = CFO + CFI + CFF</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">Ending Cash = Beg Cash + CFO + CFI + CFF</span>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>FCFF (Free CF to Firm):</strong> CF available to all capital providers</li>
+          <li><strong>FCFE (Free CF to Equity):</strong> CF available to equity holders after debt obligations</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">FCFF = CFO + Int(1&minus;t) &minus; Capex</span>
+        <span class="f">FCFE = CFO &minus; Capex + Net Borrowing</span>
+        <hr class="divider">
+        <ul>
+          <li>Positive FCF indicates company can fund growth internally</li>
+          <li><strong>Capex</strong> = ending PP&amp;E &minus; beginning PP&amp;E + depreciation</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <span class="f">CFO-to-Revenue = CFO / Revenue</span>
+        <span class="f">CFO-to-Net Income = CFO / NI</span>
+        <span class="f">Debt Coverage = CFO / Total Debt</span>
+        <span class="f">Capex Coverage = CFO / Capex</span>
+        <hr class="divider">
+        <ul>
+          <li><strong>CFO &gt; Net Income</strong> consistently = higher earnings quality</li>
+          <li>Large gap between NI and CFO may signal aggressive accruals</li>
+          <li><strong>Dividend coverage:</strong> CFO / dividends paid</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R34 ==================== -->
+  <section class="note-section s-teal" id="r34">
+    <div class="reading-label">Reading 34 · Financial Statement Analysis</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-teal">R34 — Analysis of Inventories</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-teal">FIFO / LIFO / Weighted Average</div>
+      <div class="sub-head h-teal">Inventory Ratios</div>
+      <div class="sub-head h-teal">LIFO Reserve &amp; IFRS vs GAAP</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <table>
+          <tr><td>Method</td><td>Rising Prices</td><td>Falling Prices</td></tr>
+          <tr><td>FIFO COGS</td><td>Lower</td><td>Higher</td></tr>
+          <tr><td>FIFO NI</td><td>Higher</td><td>Lower</td></tr>
+          <tr><td>FIFO Inv (BS)</td><td>Higher</td><td>Lower</td></tr>
+          <tr><td>LIFO COGS</td><td>Higher</td><td>Lower</td></tr>
+          <tr><td>LIFO NI</td><td>Lower</td><td>Higher</td></tr>
+          <tr><td>LIFO Inv (BS)</td><td>Lower</td><td>Higher</td></tr>
+        </table>
+        <hr class="divider">
+        <ul>
+          <li><strong>Weighted average</strong> smooths between FIFO and LIFO results</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <span class="f">Inventory Turnover = COGS / Avg Inventory</span>
+        <span class="f">Days Inventory = 365 / Inventory Turnover</span>
+        <hr class="divider">
+        <ul>
+          <li><strong>Higher turnover</strong> = more efficient inventory management</li>
+          <li><strong>LIFO liquidation:</strong> occurs when old, low-cost layers are sold; artificially boosts NI</li>
+          <li>Inventory measured at <strong>lower of cost or NRV</strong> (IFRS) or lower of cost or market (GAAP)</li>
+          <li>Inventory write-downs: <strong>cannot be reversed under GAAP</strong>; can be reversed under IFRS</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>IFRS prohibits LIFO;</strong> US GAAP allows FIFO, LIFO, weighted average</li>
+          <li><strong>LIFO reserve</strong> = FIFO inventory &minus; LIFO inventory (disclosed in notes)</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">FIFO Inv = LIFO Inv + LIFO Reserve</span>
+        <span class="f">FIFO COGS = LIFO COGS &minus; &Delta;LIFO Reserve</span>
+        <span class="f">FIFO NI = LIFO NI + &Delta;LIFO Reserve &times; (1&minus;t)</span>
+        <hr class="divider">
+        <ul>
+          <li>To compare LIFO company to FIFO: add LIFO reserve to inventory; adjust COGS and equity</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R35 ==================== -->
+  <section class="note-section s-orange" id="r35">
+    <div class="reading-label">Reading 35 · Financial Statement Analysis</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-orange">R35 — Analysis of Long-Term Assets</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-orange">Capitalization vs Expensing</div>
+      <div class="sub-head h-orange">Depreciation Methods</div>
+      <div class="sub-head h-orange">Impairment, Revaluation &amp; Intangibles</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Capitalize:</strong> costs added to asset on BS; expensed over time via depreciation</li>
+          <li><strong>Expense:</strong> costs charged immediately to IS; reduces current period income</li>
+          <li>Capitalizing increases: assets, equity, NI (short-term); lowers future NI via depreciation</li>
+          <li><strong>Research costs:</strong> always expensed (IFRS &amp; GAAP)</li>
+          <li><strong>Development costs:</strong> IFRS = capitalize if 6 criteria met; GAAP = expense (except internal-use software)</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">Asset Turnover = Revenue / Avg Total Assets</span>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Straight-line (SL):</strong> equal annual depreciation</li>
+          <li><strong>Double-declining balance (DDB):</strong> accelerated; higher early depreciation</li>
+          <li><strong>Units of production:</strong> based on actual usage/output</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">SL Dep = (Cost &minus; Salvage) / Useful Life</span>
+        <span class="f">DDB Dep = (2 / Life) &times; Book Value</span>
+        <span class="f">UoP Dep = (Cost &minus; Salvage) / Total Units &times; Units Used</span>
+        <hr class="divider">
+        <ul>
+          <li>DDB switches to SL when SL gives higher charge</li>
+          <li><strong>Accelerated depreciation:</strong> lower early NI, higher CFO (same cash flow effect)</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Impairment:</strong> carrying value exceeds recoverable amount; write down to recoverable amount</li>
+          <li>IFRS: recoverable = higher of fair value less costs to sell OR value in use</li>
+          <li>GAAP: impairment if carrying value &gt; undiscounted future CF; write down to fair value</li>
+          <li><strong>Revaluation (IFRS only):</strong> can write PP&amp;E up to fair value; increase goes to revaluation surplus (OCI)</li>
+          <li><strong>Goodwill:</strong> not amortized; tested annually for impairment</li>
+          <li><strong>Intangibles acquired</strong> separately: recognized at cost; internally generated: generally expensed</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R36 ==================== -->
+  <section class="note-section s-indigo" id="r36">
+    <div class="reading-label">Reading 36 · Financial Statement Analysis</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-indigo">R36 — Topics in Long-Term Liabilities and Equity</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-indigo">Bonds Payable &amp; Amortization</div>
+      <div class="sub-head h-indigo">Leases: Finance vs Operating</div>
+      <div class="sub-head h-indigo">Shareholders' Equity Components</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Issued at par:</strong> coupon rate = market rate; no premium/discount</li>
+          <li><strong>Premium bond:</strong> coupon &gt; market rate; amortize premium over life</li>
+          <li><strong>Discount bond:</strong> coupon &lt; market rate; amortize discount over life</li>
+          <li><strong>Effective interest method:</strong> interest expense = carrying value &times; market rate</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">Int Expense = Carrying Value &times; Market Rate</span>
+        <span class="f">Amortization = Int Expense &minus; Coupon Paid</span>
+        <span class="f">New CV = Old CV + Discount Amort (or &minus; Premium Amort)</span>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Finance lease (lessee):</strong> asset &amp; liability on BS; front-loaded total expense (int + dep &gt; rent in early years)</li>
+          <li><strong>Operating lease (lessee, old GAAP):</strong> rent expense; off-balance sheet</li>
+          <li>Under IFRS 16 / ASC 842: <strong>all leases &gt; 12 months</strong> on BS as ROU asset + lease liability</li>
+          <li>Finance lease: higher early expense, lower later; operating lease: straight-line</li>
+          <li>Finance lease: higher D/E ratio, lower asset turnover initially</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">Lease Liability = PV of future lease payments</span>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Contributed capital:</strong> par value + additional paid-in capital (APIC)</li>
+          <li><strong>Retained earnings:</strong> cumulative undistributed net income</li>
+          <li><strong>Treasury stock:</strong> shares repurchased; reduces equity (contra-equity)</li>
+          <li><strong>AOCI:</strong> unrealized gains/losses bypass IS; recorded in OCI</li>
+          <li><strong>Book value per share:</strong> total equity / shares outstanding</li>
+          <li>Share repurchases: reduce shares outstanding, increase EPS (if NI unchanged)</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">BV/Share = Total Equity / Shares Outstanding</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R37 ==================== -->
+  <section class="note-section s-yellow" id="r37">
+    <div class="reading-label">Reading 37 · Financial Statement Analysis</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-yellow">R37 — Analysis of Income Taxes</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-yellow">Current vs Deferred Taxes</div>
+      <div class="sub-head h-yellow">DTL / DTA Creation</div>
+      <div class="sub-head h-yellow">Tax Rate Reconciliation &amp; Valuation Allowance</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Tax expense (IS):</strong> = current tax + change in deferred tax</li>
+          <li><strong>Current tax:</strong> taxes actually payable to government for the period</li>
+          <li><strong>Deferred tax:</strong> arises from temporary differences between accounting income and taxable income</li>
+          <li><strong>Temporary differences:</strong> timing; will reverse in future periods</li>
+          <li><strong>Permanent differences:</strong> do not create deferred taxes (e.g., tax-exempt income)</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">Tax Expense = Current Tax + &Delta;Deferred Tax</span>
+        <span class="f">Effective Tax Rate = Tax Expense / Pre-tax Income</span>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>DTL (Deferred Tax Liability):</strong> taxable income &lt; accounting income now; will pay more tax later (e.g., accelerated depreciation for tax)</li>
+          <li><strong>DTA (Deferred Tax Asset):</strong> taxable income &gt; accounting income now; will save taxes later (e.g., warranty expense recognized early on IS)</li>
+          <li>DTL: recognize always; DTA: recognize if probable to utilize</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">DTL = Temp Diff &times; Tax Rate (tax base &lt; carrying value)</span>
+        <span class="f">DTA = Temp Diff &times; Tax Rate (tax base &gt; carrying value)</span>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Statutory rate:</strong> legal tax rate in jurisdiction</li>
+          <li><strong>Effective rate:</strong> actual tax paid / pre-tax income; may differ due to permanent diffs</li>
+          <li><strong>Tax rate reconciliation:</strong> explains difference between statutory and effective rate</li>
+          <li><strong>Valuation allowance (GAAP):</strong> reduces DTA if not likely to be realized; increase in allowance = higher tax expense</li>
+          <li>IFRS uses "probable" threshold; no separate valuation allowance account</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R38 ==================== -->
+  <section class="note-section s-purple" id="r38">
+    <div class="reading-label">Reading 38 · Financial Statement Analysis</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-purple">R38 — Financial Reporting Quality</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-purple">Quality Spectrum</div>
+      <div class="sub-head h-purple">Earnings Quality</div>
+      <div class="sub-head h-purple">Red Flags &amp; Aggressive Accounting</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>High quality reporting:</strong> compliant with GAAP/IFRS, decision-useful, sustainable earnings</li>
+          <li><strong>Biased accounting:</strong> compliant but uses choices to manage earnings</li>
+          <li><strong>Non-compliant:</strong> fraudulent reporting, fictitious transactions</li>
+          <li>Quality spectrum: GAAP-compliant &amp; decision-useful &rarr; GAAP-compliant but biased &rarr; non-compliant</li>
+          <li><strong>Reporting quality</strong> (compliance) distinct from <strong>earnings quality</strong> (sustainability)</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>High earnings quality:</strong> recurring, sustainable, cash-backed income</li>
+          <li><strong>Accruals-based earnings</strong> are less persistent than cash-based earnings</li>
+          <li><strong>Accruals ratio:</strong> measures accrual component; lower = higher quality</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">Accruals Ratio (BS) = (NI &minus; CFO &minus; CFI) / Avg NOA</span>
+        <span class="f">NOA = Operating Assets &minus; Operating Liabilities</span>
+        <hr class="divider">
+        <ul>
+          <li>Large positive accruals ratio: potential earnings management concern</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Channel stuffing:</strong> shipping excess goods to distributors to inflate revenue</li>
+          <li><strong>Bill-and-hold:</strong> recording revenue before delivery</li>
+          <li><strong>Capitalizing operating expenses:</strong> inflates NI and assets</li>
+          <li><strong>Cookie jar reserves:</strong> over-provisioning in good years, releasing in bad years</li>
+          <li><strong>Red flags:</strong> AR growing faster than revenue, big bath charges, frequent accounting changes, CFO &lt;&lt; NI</li>
+          <li><strong>Beneish M-score:</strong> quantitative fraud detection model</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R39 ==================== -->
+  <section class="note-section s-blue" id="r39">
+    <div class="reading-label">Reading 39 · Financial Statement Analysis</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-blue">R39 — Financial Analysis Techniques</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-blue">Activity / Liquidity / Solvency / Profitability Ratios</div>
+      <div class="sub-head h-blue">DuPont Analysis</div>
+      <div class="sub-head h-blue">Common-Size &amp; Cross-Sectional Analysis</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <span class="f">Receivables Turnover = Revenue / Avg AR</span>
+        <span class="f">Days Sales Outstanding = 365 / AR Turnover</span>
+        <span class="f">Payables Turnover = Purchases / Avg AP</span>
+        <span class="f">Cash Conversion Cycle = DOH + DSO &minus; DPO</span>
+        <span class="f">Debt-to-Equity = Total Debt / Total Equity</span>
+        <span class="f">Interest Coverage = EBIT / Interest Expense</span>
+        <span class="f">Net Profit Margin = NI / Revenue</span>
+        <span class="f">ROA = NI / Avg Total Assets</span>
+        <span class="f">ROE = NI / Avg Equity</span>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>3-Factor DuPont:</strong></li>
+        </ul>
+        <span class="f">ROE = Net Margin &times; Asset Turnover &times; Leverage</span>
+        <hr class="divider">
+        <ul>
+          <li><strong>5-Factor DuPont:</strong></li>
+        </ul>
+        <span class="f">ROE = (NI/EBT) &times; (EBT/EBIT) &times; (EBIT/Rev) &times; (Rev/Assets) &times; (Assets/Equity)</span>
+        <hr class="divider">
+        <ul>
+          <li>Tax burden &times; Interest burden &times; EBIT margin &times; Asset turnover &times; Financial leverage</li>
+          <li>Decomposes ROE to identify drivers of profitability vs leverage</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Vertical common-size:</strong> IS items / revenue; BS items / total assets</li>
+          <li><strong>Horizontal analysis:</strong> year-over-year % change (trend analysis)</li>
+          <li><strong>Cross-sectional analysis:</strong> compare to industry peers or benchmarks</li>
+          <li><strong>Trend analysis:</strong> compare company over multiple periods</li>
+          <li>Ratios must be used in context; no ratio in isolation is conclusive</li>
+          <li>Beware of <strong>window dressing:</strong> managing ratios at period end</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R40 ==================== -->
+  <section class="note-section s-green" id="r40">
+    <div class="reading-label">Reading 40 · Financial Statement Analysis</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-green">R40 — Introduction to Financial Statement Modeling</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-green">Building Pro Forma Statements</div>
+      <div class="sub-head h-green">Forecasting Revenue &amp; Costs</div>
+      <div class="sub-head h-green">Sensitivity &amp; Scenario Analysis</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Pro forma statements:</strong> projected IS, BS, and CF based on assumptions</li>
+          <li>Start with revenue forecast; derive COGS and operating expenses</li>
+          <li><strong>Circular references:</strong> interest expense depends on debt balance which depends on net income (solved iteratively)</li>
+          <li>Balance sheet must balance: plug item typically retained earnings or debt</li>
+          <li><strong>Quality of model</strong> depends on quality of underlying assumptions</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Top-down forecasting:</strong> start with macro/industry outlook, derive company revenue</li>
+          <li><strong>Bottom-up forecasting:</strong> start with company-level drivers (units, pricing, capacity)</li>
+          <li><strong>COGS as % of revenue:</strong> common approach for cost forecasting</li>
+          <li><strong>Fixed vs variable costs:</strong> fixed costs = operating leverage</li>
+          <li>Gross margin trends signal pricing power and cost efficiency</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">Revenue = Volume &times; Price</span>
+        <span class="f">COGS = Revenue &times; COGS%</span>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Sensitivity analysis:</strong> change one variable at a time; observe impact on output (e.g., NI)</li>
+          <li><strong>Scenario analysis:</strong> define base, bull, and bear case; changes multiple variables simultaneously</li>
+          <li><strong>Monte Carlo simulation:</strong> generates distribution of outcomes using random variable inputs</li>
+          <li>Analysts report <strong>range of outcomes</strong>, not just point estimates</li>
+          <li>Key sensitivities: revenue growth rate, gross margin, discount rate</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R41 ==================== -->
+  <section class="note-section s-pink" id="r41">
+    <div class="reading-label">Reading 41 · Equity Investments</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-pink">R41 — Market Organization and Structure</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-pink">Types of Markets</div>
+      <div class="sub-head h-pink">Order Types</div>
+      <div class="sub-head h-pink">Short Selling Mechanics</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Quote-driven (dealer) market:</strong> dealers post bid/ask; investors trade against dealer inventory</li>
+          <li><strong>Order-driven market:</strong> buy/sell orders matched directly; no dealer intermediary (e.g., electronic exchanges)</li>
+          <li><strong>Brokered market:</strong> broker finds counterparty; common for illiquid assets</li>
+          <li><strong>Primary market:</strong> new issuance of securities (IPO, secondary offerings)</li>
+          <li><strong>Secondary market:</strong> trading of existing securities</li>
+          <li><strong>Bid-ask spread:</strong> dealer's profit; narrower = more liquid</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Market order:</strong> execute immediately at best available price; price uncertainty</li>
+          <li><strong>Limit order:</strong> specify max buy price or min sell price; execution uncertainty</li>
+          <li><strong>Stop order (stop-loss):</strong> becomes market order when price hits trigger</li>
+          <li><strong>Stop-limit order:</strong> becomes limit order at trigger; may not execute</li>
+          <li><strong>Day order:</strong> expires end of trading day</li>
+          <li><strong>GTC (Good-till-cancelled):</strong> remains until filled or cancelled</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Short selling:</strong> borrow shares, sell now, buy back later at lower price</li>
+          <li>Profit = sell price &minus; repurchase price &minus; borrowing costs &minus; dividends paid</li>
+          <li><strong>Margin requirement:</strong> short seller must post collateral; margin call if price rises</li>
+          <li><strong>Maximum loss:</strong> theoretically unlimited (price can rise indefinitely)</li>
+          <li><strong>Maximum gain:</strong> limited to initial sale price (stock can only fall to zero)</li>
+          <li><strong>Uptick rule (GAAP historical):</strong> short only on uptick to prevent downward spirals</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">Profit = Sale Price &minus; Repurchase Price &minus; Costs</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R42 ==================== -->
+  <section class="note-section s-teal" id="r42">
+    <div class="reading-label">Reading 42 · Equity Investments</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-teal">R42 — Security Market Indexes</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-teal">Weighting Methods</div>
+      <div class="sub-head h-teal">Rebalancing &amp; Reconstitution</div>
+      <div class="sub-head h-teal">Uses of Indexes</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Price-weighted:</strong> average of prices; higher-priced stocks have more influence (e.g., DJIA)</li>
+          <li><strong>Value-weighted (market cap):</strong> weight = market cap / total market cap (e.g., S&amp;P 500, MSCI); float-adjusted version uses free float</li>
+          <li><strong>Equal-weighted:</strong> each security has same weight; requires frequent rebalancing; small-cap bias</li>
+          <li><strong>Fundamental-weighted:</strong> weight by earnings, dividends, sales, book value</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">PW Index = &sum;Prices / Adjusted Divisor</span>
+        <span class="f">VW Weight = Mkt Cap_i / &sum;Mkt Cap</span>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Rebalancing:</strong> restoring weights to target; required more often for equal-weighted indexes</li>
+          <li><strong>Reconstitution:</strong> adding/removing securities from the index; can cause price pressure on additions</li>
+          <li>Price-weighted: adjust divisor for stock splits to maintain continuity</li>
+          <li>Value-weighted: automatically adjusts for splits and dividends (self-adjusting)</li>
+          <li><strong>Return index:</strong> includes dividends (total return); <strong>price index:</strong> price changes only</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Gauge of market sentiment</strong> and economic conditions</li>
+          <li><strong>Benchmark</strong> for active portfolio manager performance</li>
+          <li><strong>Basis for passive/index funds</strong> and ETFs</li>
+          <li><strong>Proxy for systematic risk</strong> in asset pricing models (CAPM beta)</li>
+          <li><strong>Asset allocation tools:</strong> factor indexes (value, growth, momentum)</li>
+          <li>Survivorship bias: indexes that exclude failed companies overstate historical returns</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R43 ==================== -->
+  <section class="note-section s-orange" id="r43">
+    <div class="reading-label">Reading 43 · Equity Investments</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-orange">R43 — Market Efficiency</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-orange">EMH: Weak / Semi-Strong / Strong</div>
+      <div class="sub-head h-orange">Anomalies</div>
+      <div class="sub-head h-orange">Behavioral Finance Implications</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <table>
+          <tr><td>Form</td><td>Information Reflected</td><td>Implication</td></tr>
+          <tr><td>Weak</td><td>Past prices/volume</td><td>Technical analysis useless</td></tr>
+          <tr><td>Semi-Strong</td><td>All public info</td><td>Fundamental analysis useless</td></tr>
+          <tr><td>Strong</td><td>All info incl. private</td><td>Insider trading useless</td></tr>
+        </table>
+        <hr class="divider">
+        <ul>
+          <li>Markets are generally <strong>semi-strong efficient</strong> in developed markets</li>
+          <li><strong>Abnormal return</strong> = actual return &minus; expected return (CAPM)</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Calendar anomalies:</strong> January effect (small caps outperform in Jan), day-of-week effect</li>
+          <li><strong>Momentum:</strong> past winners continue winning short-term</li>
+          <li><strong>Value anomaly:</strong> low P/E, low P/B stocks outperform on average</li>
+          <li><strong>Size effect:</strong> small-cap stocks historically outperform large-cap</li>
+          <li>Anomalies may reflect: data mining, risk premiums, or true market inefficiency</li>
+          <li>Many anomalies <strong>disappear after discovery</strong> or adjustment for risk</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Loss aversion:</strong> losses feel twice as bad as equivalent gains (Kahneman &amp; Tversky)</li>
+          <li><strong>Overconfidence:</strong> investors overestimate their ability; leads to excessive trading</li>
+          <li><strong>Herding:</strong> following the crowd; can create bubbles and crashes</li>
+          <li><strong>Anchoring:</strong> over-relying on initial information</li>
+          <li><strong>Representativeness:</strong> judging based on superficial similarities</li>
+          <li>Behavioral biases explain persistent anomalies that rational models cannot</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R44 ==================== -->
+  <section class="note-section s-indigo" id="r44">
+    <div class="reading-label">Reading 44 · Equity Investments</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-indigo">R44 — Overview of Equity Securities</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-indigo">Common vs Preferred Shares</div>
+      <div class="sub-head h-indigo">Private Equity</div>
+      <div class="sub-head h-indigo">Risk/Return, Book vs Market Value, ROE</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Common shares:</strong> voting rights, residual claim, dividends not guaranteed</li>
+          <li><strong>Preferred shares:</strong> fixed dividend (like debt), priority over common in liquidation, typically no voting rights</li>
+          <li><strong>Callable preferred:</strong> issuer can redeem at set price</li>
+          <li><strong>Convertible preferred:</strong> can convert to common shares</li>
+          <li><strong>Cumulative preferred:</strong> unpaid dividends accumulate (must be paid before common dividends)</li>
+          <li><strong>Participating preferred:</strong> share in extra dividends above stated rate</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Venture capital:</strong> early-stage companies; high risk/return</li>
+          <li><strong>Leveraged buyout (LBO):</strong> acquisition using significant debt; target's CF services debt</li>
+          <li><strong>Private equity:</strong> illiquid; long investment horizon; higher expected returns vs public equity</li>
+          <li>Exit strategies: IPO, strategic sale, secondary sale</li>
+          <li><strong>PIPE (Private Investment in Public Equity):</strong> private placement in already-public company</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>Private equity returns include <strong>illiquidity premium</strong></li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Equity risk premium:</strong> excess return over risk-free rate demanded by equity investors</li>
+          <li><strong>Book value:</strong> total equity / shares outstanding (accounting-based)</li>
+          <li><strong>Market value:</strong> share price × shares outstanding (market-based)</li>
+          <li><strong>P/B &gt; 1:</strong> market expects returns above cost of equity</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">ROE = Net Income / Avg Shareholders' Equity</span>
+        <span class="f">P/B = Market Price / Book Value per Share</span>
+        <hr class="divider">
+        <ul>
+          <li>Higher ROE with same P/B = better value; ROE drives P/B in theory</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R45 ==================== -->
+  <section class="note-section s-yellow" id="r45">
+    <div class="reading-label">Reading 45 · Equity Investments</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-yellow">R45 — Company Analysis: Past and Present</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-yellow">FSA for Equity Analysis</div>
+      <div class="sub-head h-yellow">Quality of Earnings Assessment</div>
+      <div class="sub-head h-yellow">Porter's Five Forces Applied</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li>Equity analysts use FSA to assess <strong>intrinsic value</strong> and investment merit</li>
+          <li>Key financial metrics: revenue growth, gross margin, operating margin, FCF, ROE, ROIC</li>
+          <li><strong>ROIC (Return on Invested Capital):</strong> measures how well company generates returns above cost of capital</li>
+          <li>Compare margins over time and against competitors</li>
+          <li>Analyze <strong>segment data</strong> for diversified companies</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">ROIC = NOPAT / Invested Capital</span>
+        <span class="f">NOPAT = EBIT &times; (1 &minus; Tax Rate)</span>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Sustainable earnings:</strong> recurring, cash-backed, not dependent on one-time items</li>
+          <li>Remove <strong>non-recurring items</strong> to assess underlying earnings power</li>
+          <li>Compare <strong>CFO to Net Income:</strong> consistent CFO &gt; NI signals high quality</li>
+          <li>Watch for aggressive revenue recognition, understated reserves</li>
+          <li><strong>Normalizing earnings:</strong> adjust for cyclicality, non-recurring items</li>
+          <li>Analyst adjustments: operating leases, pension obligations, off-BS items</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Threat of new entrants:</strong> barriers to entry (economies of scale, brand, regulation)</li>
+          <li><strong>Bargaining power of suppliers:</strong> few suppliers = high power, squeeze margins</li>
+          <li><strong>Bargaining power of buyers:</strong> few buyers or price-sensitive = high power</li>
+          <li><strong>Threat of substitutes:</strong> alternative products limit pricing power</li>
+          <li><strong>Industry rivalry:</strong> intense competition erodes profitability</li>
+          <li>Strong competitive position = <strong>economic moat</strong> = sustained excess returns</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R46 ==================== -->
+  <section class="note-section s-purple" id="r46">
+    <div class="reading-label">Reading 46 · Equity Investments</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-purple">R46 — Industry and Competitive Analysis</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-purple">Industry Classification</div>
+      <div class="sub-head h-purple">Porter's Five Forces</div>
+      <div class="sub-head h-purple">Competitive Strategy</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>GICS (Global Industry Classification Standard):</strong> 11 sectors, 24 industry groups, 69 industries, 158 sub-industries</li>
+          <li><strong>SIC (Standard Industrial Classification):</strong> older US government system</li>
+          <li><strong>Commercial classifiers:</strong> MSCI, S&amp;P (GICS); FTSE Russell (ICB)</li>
+          <li><strong>Business cycle sensitivity:</strong> cyclical industries (autos, materials) vs defensive (utilities, consumer staples)</li>
+          <li><strong>Industry life cycle:</strong> embryonic, growth, shakeout, mature, declining</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Force 1 — New entrants:</strong> high barriers protect incumbents (patents, scale, regulation)</li>
+          <li><strong>Force 2 — Suppliers:</strong> concentrated suppliers can demand higher prices</li>
+          <li><strong>Force 3 — Buyers:</strong> powerful buyers push prices down</li>
+          <li><strong>Force 4 — Substitutes:</strong> close substitutes cap pricing power</li>
+          <li><strong>Force 5 — Rivalry:</strong> many competitors, slow growth, high fixed costs = intense rivalry</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>All 5 forces together determine industry profitability potential</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Cost leadership:</strong> lowest cost producer; compete on price; high volumes; Walmart, Amazon</li>
+          <li><strong>Differentiation:</strong> unique product/brand; command premium price; Apple, LVMH</li>
+          <li><strong>Focus strategy:</strong> target niche market with cost or differentiation approach</li>
+          <li><strong>"Stuck in the middle":</strong> no clear strategy; typically earns below-average returns</li>
+          <li><strong>Competitive advantage:</strong> cost advantage or pricing power sustained over time</li>
+          <li>Analyst evaluates whether strategy is sustainable given industry structure</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R47 ==================== -->
+  <section class="note-section s-blue" id="r47">
+    <div class="reading-label">Reading 47 · Equity Investments</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-blue">R47 — Company Analysis: Forecasting</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-blue">Top-Down vs Bottom-Up</div>
+      <div class="sub-head h-blue">Revenue Forecasting</div>
+      <div class="sub-head h-blue">Earnings &amp; Cash Flow Projections</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Top-down:</strong> macro GDP growth &rarr; industry growth &rarr; company market share &rarr; revenue</li>
+          <li><strong>Bottom-up:</strong> company unit volumes, pricing, capacity &rarr; aggregate to revenue</li>
+          <li>Top-down better for macro-sensitive industries; bottom-up better for company-specific analysis</li>
+          <li><strong>Hybrid approach:</strong> often most robust; cross-check top-down with bottom-up</li>
+          <li>Consider <strong>currency effects</strong> for multinational companies</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li>Key drivers: market size, market share, pricing power, product mix</li>
+          <li><strong>Same-store sales:</strong> organic growth excluding new locations</li>
+          <li><strong>Volume &times; price</strong> decomposition reveals sources of revenue change</li>
+          <li>Use <strong>historical growth rates</strong> as starting point; adjust for strategic changes</li>
+          <li><strong>Backlogs, order books, contracts:</strong> provide revenue visibility</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">Revenue Growth = Volume Growth + Pricing Growth</span>
+        <span class="f">Market Share = Co. Revenue / Industry Revenue</span>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li>Forecast <strong>gross margin</strong> first (revenue &minus; COGS%); then operating expenses</li>
+          <li><strong>Operating leverage:</strong> fixed costs amplify EPS swings relative to revenue changes</li>
+          <li>Estimate <strong>capex</strong> based on maintenance vs growth spending</li>
+          <li>Working capital changes affect FCF: growing companies consume WC</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">EBITDA = EBIT + D&amp;A</span>
+        <span class="f">FCF = EBITDA &minus; Taxes &minus; Capex &minus; &Delta;WC</span>
+        <hr class="divider">
+        <ul>
+          <li>Earnings estimates drive <strong>price targets</strong> in equity research</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== R48 ==================== -->
+  <section class="note-section s-green" id="r48">
+    <div class="reading-label">Reading 48 · Equity Investments</div>
+    <div class="sec-title-wrap">
+      <div class="sec-title-box t-green">R48 — Equity Valuation: Concepts and Basic Tools</div>
+    </div>
+    <div class="row">
+      <div class="sub-head h-green">DDM &amp; Gordon Growth Model</div>
+      <div class="sub-head h-green">Multiplier Models (P/E, P/B, P/S, P/CF)</div>
+      <div class="sub-head h-green">Asset-Based Valuation</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>DDM:</strong> value = PV of all future dividends</li>
+          <li><strong>Gordon Growth Model:</strong> assumes constant dividend growth forever</li>
+          <li>Appropriate for: stable, dividend-paying companies with predictable growth</li>
+          <li><strong>Multi-stage DDM:</strong> high growth phase then stable growth; sum PVs of each stage</li>
+          <li>If g &ge; r: model breaks down (denominator = 0 or negative)</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">P&sub;0; = D&sub;1; / (r &minus; g)</span>
+        <span class="f">D&sub;1; = D&sub;0; &times; (1 + g)</span>
+        <span class="f">r = D&sub;1;/P&sub;0; + g (required return)</span>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>P/E (trailing):</strong> price / last 12mo EPS; <strong>forward P/E:</strong> price / next 12mo EPS estimate</li>
+          <li><strong>Justified P/E</strong> = (1 &minus; b) / (r &minus; g) where b = retention ratio</li>
+          <li><strong>P/B:</strong> price / book value per share; useful for financial firms</li>
+          <li><strong>P/S:</strong> price / sales per share; useful when EPS negative</li>
+          <li><strong>P/CF (EV/EBITDA):</strong> removes capital structure and D&amp;A effects</li>
+          <li><strong>PEG ratio:</strong> P/E divided by earnings growth rate; &lt;1 may indicate undervaluation</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">Justified P/B = ROE / r &minus; g / (r &minus; g)</span>
+        <span class="f">EV = Mkt Cap + Debt &minus; Cash</span>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Asset-based valuation:</strong> value = fair value of assets &minus; fair value of liabilities</li>
+          <li>Best for: companies with substantial tangible assets (real estate, holding companies, liquidation scenarios)</li>
+          <li><strong>Book value</strong> often understates asset values (historical cost basis)</li>
+          <li>Analyst must adjust for: hidden assets, off-BS liabilities, intangible values</li>
+          <li>Often used as <strong>floor valuation</strong> (minimum value)</li>
+        </ul>
+        <hr class="divider">
+        <span class="f">Intrinsic Value = FV Assets &minus; FV Liabilities</span>
+        <hr class="divider">
+        <ul>
+          <li>Intrinsic value &gt; market price &rarr; <strong>undervalued</strong>; buy signal</li>
+          <li>Multiple approaches: use DDM, multiples, and asset-based to triangulate</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+</div>
+</body>
+</html>

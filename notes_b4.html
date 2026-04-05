@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CFA Level I — Book 4 三色笔记</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; background: #f0f2f5; color: #222; }
+.layout { display: flex; min-height: 100vh; }
+.sidebar { width: 240px; background: #1a237e; color: white; padding: 16px 12px; position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0; }
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.25); border-radius: 2px; }
+.sidebar .logo { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px; padding: 0 6px; }
+.sidebar .sub { font-size: 11px; color: #90caf9; padding: 0 6px; margin-bottom: 16px; }
+.sidebar-group { margin-bottom: 14px; }
+.sidebar-group-title { font-size: 10px; font-weight: 700; color: #ffcc80; text-transform: uppercase; letter-spacing: .8px; padding: 4px 8px; background: rgba(255,255,255,.08); border-radius: 4px; margin-bottom: 4px; }
+.sidebar a { display: block; padding: 5px 10px; color: #c5cae9; font-size: 12px; text-decoration: none; border-radius: 4px; transition: background .15s; line-height: 1.4; }
+.sidebar a:hover { background: rgba(255,255,255,.14); color: white; }
+.sidebar-back { display: block; padding: 8px 10px; margin-bottom: 14px; background: rgba(255,255,255,.1); border-radius: 6px; color: #90caf9; font-size: 12px; text-decoration: none; text-align: center; transition: background .15s; }
+.sidebar-back:hover { background: rgba(255,255,255,.2); color: white; }
+.main { flex: 1; padding: 24px; overflow-x: hidden; }
+.page-title { background: linear-gradient(135deg, #1a237e 0%, #283593 100%); color: white; text-align: center; padding: 24px 20px; margin-bottom: 28px; border-radius: 12px; box-shadow: 0 4px 16px rgba(26,35,126,.3); }
+.page-title h1 { font-size: 20px; margin-bottom: 6px; font-weight: 700; }
+.page-title p { font-size: 13px; color: #90caf9; }
+.note-section { border-radius: 14px; padding: 22px 20px 20px; margin-bottom: 24px; scroll-margin-top: 20px; }
+.s-yellow { background: #fff8e1; } .s-purple { background: #ede7f6; } .s-blue { background: #e3f2fd; } .s-green { background: #e8f5e9; } .s-pink { background: #fce4ec; } .s-teal { background: #e0f7fa; } .s-orange { background: #fff3e0; } .s-indigo { background: #e8eaf6; }
+.sec-title-wrap { display: flex; justify-content: center; margin-bottom: 18px; }
+.sec-title-box { color: white; font-weight: 700; font-size: 13px; text-align: center; text-transform: uppercase; padding: 10px 30px; border-radius: 8px; letter-spacing: .6px; line-height: 1.5; max-width: 460px; }
+.t-yellow { background: #f57f17; } .t-purple { background: #6a1b9a; } .t-blue { background: #0d47a1; } .t-green { background: #1b5e20; } .t-pink { background: #880e4f; } .t-teal { background: #006064; } .t-orange { background: #bf360c; } .t-indigo { background: #283593; }
+.reading-label { font-size: 10.5px; color: rgba(0,0,0,.4); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; text-align: center; }
+.row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.sub-head { flex: 1; min-width: 140px; text-align: center; font-weight: 700; font-size: 12.5px; padding: 8px 10px; border-radius: 8px; border: 2px solid; }
+.h-yellow { background: #fff9c4; border-color: #f9a825; color: #5d3d00; } .h-purple { background: #f3e5f5; border-color: #9c27b0; color: #4a0072; } .h-blue { background: #e3f2fd; border-color: #1e88e5; color: #0d3576; } .h-green { background: #f1f8e9; border-color: #66bb6a; color: #1b5e20; } .h-pink { background: #fce4ec; border-color: #ec407a; color: #880e4f; } .h-teal { background: #e0f7fa; border-color: #26c6da; color: #006064; } .h-orange { background: #fff8e1; border-color: #ffa726; color: #bf360c; } .h-indigo { background: #e8eaf6; border-color: #7986cb; color: #283593; }
+.cbox { flex: 1; min-width: 170px; background: rgba(255,255,255,.68); border-radius: 9px; padding: 12px 14px; border: 1px solid rgba(0,0,0,.09); font-size: 12.5px; line-height: 1.55; }
+.cbox ul { padding-left: 16px; } .cbox li { margin-bottom: 4px; } .cbox strong { color: #1a237e; }
+.cbox .f { font-family: 'Courier New', monospace; background: rgba(0,0,0,.06); padding: 3px 8px; border-radius: 4px; font-size: 12px; margin: 4px 0; display: inline-block; }
+.cbox table { border-collapse: collapse; width: 100%; font-size: 11.5px; }
+.cbox table td { padding: 4px 6px; border: 1px solid #ccc; }
+.cbox table tr:first-child td { background: rgba(0,0,0,.05); font-weight: 600; }
+.divider { border: none; border-top: 1.5px solid rgba(0,0,0,.1); margin: 14px 0; }
+@media (max-width: 768px) { .sidebar { display: none; } .main { padding: 12px; } .row { flex-direction: column; } }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="logo">CFA Level I</div>
+  <div class="sub">Book 4 三色笔记</div>
+  <a class="sidebar-back" href="index.html">&#8592; Back to Index</a>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Fixed Income</div>
+    <a href="#r49">R49 Instrument Features</a>
+    <a href="#r50">R50 Cash Flows &amp; Types</a>
+    <a href="#r51">R51 Issuance &amp; Trading</a>
+    <a href="#r52">R52 Corporate Issuers</a>
+    <a href="#r53">R53 Government Issuers</a>
+    <a href="#r54">R54 Bond Valuation</a>
+    <a href="#r55">R55 Yield &amp; Spread (Fixed)</a>
+    <a href="#r56">R56 Yield &amp; Spread (FRN)</a>
+    <a href="#r57">R57 Term Structure</a>
+    <a href="#r58">R58 Interest Rate Risk &amp; Return</a>
+    <a href="#r59">R59 Yield-Based Duration</a>
+    <a href="#r60">R60 Convexity</a>
+    <a href="#r61">R61 Curve-Based Risk</a>
+    <a href="#r62">R62 Credit Risk</a>
+    <a href="#r63">R63 Credit: Government</a>
+    <a href="#r64">R64 Credit: Corporate</a>
+    <a href="#r65">R65 Securitization</a>
+    <a href="#r66">R66 ABS</a>
+    <a href="#r67">R67 MBS</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Derivatives</div>
+    <a href="#r68">R68 Derivative Features</a>
+    <a href="#r69">R69 Forward &amp; Contingent Claims</a>
+    <a href="#r70">R70 Benefits, Risks &amp; Uses</a>
+    <a href="#r71">R71 Arbitrage &amp; Cost of Carry</a>
+    <a href="#r72">R72 Pricing Forwards</a>
+    <a href="#r73">R73 Pricing Futures</a>
+    <a href="#r74">R74 Pricing Swaps</a>
+    <a href="#r75">R75 Pricing Options</a>
+    <a href="#r76">R76 Put-Call Parity</a>
+    <a href="#r77">R77 Binomial Model</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+<div class="page-title">
+  <h1>CFA Level I — Book 4 三色笔记</h1>
+  <p>Fixed Income &amp; Derivatives | SchweserNotes 2024</p>
+</div>
+
+<!-- ========== R49 ========== -->
+<section class="note-section s-yellow" id="r49">
+  <div class="reading-label">Reading 49 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-yellow">Fixed-Income Instrument Features</div></div>
+  <div class="row">
+    <div class="sub-head h-yellow">Bond Structure</div>
+    <div class="sub-head h-yellow">Indenture &amp; Covenants</div>
+    <div class="sub-head h-yellow">Embedded Options</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Par value (face value)</strong>: amount repaid at maturity</li>
+        <li><strong>Coupon rate</strong>: annual interest as % of par</li>
+        <li><strong>Maturity</strong>: date of final principal repayment</li>
+        <li><strong>Currency</strong>: domestic or foreign (dual-currency)</li>
+        <li><strong>Seniority</strong>: secured &gt; senior unsecured &gt; subordinated</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">Coupon = Par × Coupon Rate</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Indenture (trust deed)</strong>: legal contract between issuer and bondholders</li>
+        <li><strong>Affirmative covenants</strong>: issuer must do (pay interest, maintain insurance)</li>
+        <li><strong>Negative covenants</strong>: issuer must not do (limit debt, restrict asset sales)</li>
+        <li>Covenants protect bondholders from agency conflicts</li>
+        <li>Violation = <strong>event of default</strong></li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Call option</strong>: issuer can redeem early (benefits issuer)</li>
+        <li><strong>Put option</strong>: holder can sell back early (benefits holder)</li>
+        <li><strong>Conversion option</strong>: convert bond to equity</li>
+        <li><strong>Make-whole call</strong>: call at PV of remaining cash flows — protects investors</li>
+        <li>Embedded options affect yield and price</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R50 ========== -->
+<section class="note-section s-purple" id="r50">
+  <div class="reading-label">Reading 50 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-purple">Fixed-Income Cash Flows and Types</div></div>
+  <div class="row">
+    <div class="sub-head h-purple">Principal Repayment Structures</div>
+    <div class="sub-head h-purple">Floating-Rate Notes</div>
+    <div class="sub-head h-purple">Inflation-Linked &amp; Other Bonds</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Bullet bond</strong>: full principal at maturity, periodic coupons</li>
+        <li><strong>Amortizing bond</strong>: scheduled principal + interest each period</li>
+        <li><strong>Sinking fund</strong>: periodic retirement of principal through open market or lottery</li>
+        <li><strong>Zero-coupon bond</strong>: no coupon, issued at discount</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">Zero price = Par / (1+r)^T</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Floating-rate note (FRN)</strong>: coupon resets periodically</li>
+        <li><strong>Reference rate</strong>: LIBOR/SOFR + quoted margin (QM)</li>
+        <li><strong>Cap</strong>: maximum coupon (benefits issuer)</li>
+        <li><strong>Floor</strong>: minimum coupon (benefits holder)</li>
+        <li><strong>Inverse floater</strong>: coupon moves opposite to reference rate</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">Coupon = Ref Rate + QM</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>TIPS</strong>: principal adjusted for CPI; coupon paid on adjusted principal</li>
+        <li><strong>Linkers</strong>: general term for inflation-linked bonds</li>
+        <li><strong>Step-up bonds</strong>: coupon increases at set dates</li>
+        <li><strong>PIK bonds</strong>: pay-in-kind — interest paid with more bonds</li>
+        <li><strong>Deferred coupon</strong>: no coupons early, larger later</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R51 ========== -->
+<section class="note-section s-blue" id="r51">
+  <div class="reading-label">Reading 51 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-blue">Fixed-Income Issuance and Trading</div></div>
+  <div class="row">
+    <div class="sub-head h-blue">Primary Markets</div>
+    <div class="sub-head h-blue">Secondary Markets</div>
+    <div class="sub-head h-blue">Settlement &amp; Bid-Ask</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Public offering</strong>: sold to general public via prospectus</li>
+        <li><strong>Underwritten offering</strong>: investment bank guarantees proceeds</li>
+        <li><strong>Best efforts</strong>: underwriter sells but no guarantee</li>
+        <li><strong>Private placement</strong>: sold to limited qualified investors, less disclosure</li>
+        <li><strong>Shelf registration</strong>: pre-register securities for later issuance</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li>Most bonds trade <strong>OTC</strong> (over-the-counter), not on exchanges</li>
+        <li>Dealers maintain inventory; quote bid and ask prices</li>
+        <li><strong>Electronic trading</strong> increasing transparency</li>
+        <li>Less liquid than equity markets — wider spreads</li>
+        <li><strong>On-the-run</strong>: most recently issued (most liquid)</li>
+        <li><strong>Off-the-run</strong>: older issues, less liquid</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Bid price</strong>: dealer buys; <strong>Ask price</strong>: dealer sells</li>
+        <li><strong>Bid-ask spread</strong> = dealer's compensation/profit</li>
+        <li>Accrued interest: buyer pays seller interest since last coupon</li>
+        <li><strong>Full (dirty) price</strong> = flat (clean) price + accrued interest</li>
+        <li>Settlement: T+1 to T+3 depending on market</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">AI = Coupon × (Days since coupon / Days in period)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R52 ========== -->
+<section class="note-section s-green" id="r52">
+  <div class="reading-label">Reading 52 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-green">Fixed-Income Markets for Corporate Issuers</div></div>
+  <div class="row">
+    <div class="sub-head h-green">Investment Grade vs High Yield</div>
+    <div class="sub-head h-green">Short-Term Instruments</div>
+    <div class="sub-head h-green">Medium-Term Notes &amp; Ratings</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Investment grade</strong>: rated BBB-/Baa3 or above</li>
+        <li><strong>High yield (junk)</strong>: below BBB-/Baa3 — higher default risk</li>
+        <li><strong>Fallen angels</strong>: downgraded from IG to HY</li>
+        <li><strong>Rising stars</strong>: upgraded from HY to IG</li>
+        <li>HY bonds carry higher spreads to compensate for default risk</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Commercial paper (CP)</strong>: unsecured short-term debt (&lt;270 days in US)</li>
+        <li>Used for working capital needs; rollover risk</li>
+        <li>Issued at discount; no coupon</li>
+        <li><strong>Banker's acceptance</strong>: bank-guaranteed trade finance instrument</li>
+        <li><strong>Repurchase agreement (repo)</strong>: sell securities + agree to buy back</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Medium-term notes (MTN)</strong>: continuously offered, flexible maturities (1–30 yr)</li>
+        <li>Shelf registration allows issuer to tap market quickly</li>
+        <li><strong>S&amp;P ratings</strong>: AAA, AA, A, BBB (IG) / BB, B, CCC, CC, C, D (HY)</li>
+        <li><strong>Moody's ratings</strong>: Aaa, Aa, A, Baa (IG) / Ba, B, Caa, Ca, C (HY)</li>
+        <li>Ratings affect required yield and investor base</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R53 ========== -->
+<section class="note-section s-pink" id="r53">
+  <div class="reading-label">Reading 53 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-pink">Fixed-Income Markets for Government Issuers</div></div>
+  <div class="row">
+    <div class="sub-head h-pink">Sovereign Bonds</div>
+    <div class="sub-head h-pink">US Treasury Securities</div>
+    <div class="sub-head h-pink">Agency &amp; Municipal Bonds</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Sovereign bonds</strong>: issued by national governments</li>
+        <li>Domestic currency issuers: lowest default risk (can print money)</li>
+        <li>Foreign currency issuers: higher default risk</li>
+        <li><strong>Benchmark bonds</strong>: sovereign bonds used as reference rates</li>
+        <li>Credit quality varies widely across countries</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>T-bills</strong>: &lt;1 yr, zero coupon, issued at discount</li>
+        <li><strong>T-notes</strong>: 2–10 yr, semi-annual coupons</li>
+        <li><strong>T-bonds</strong>: 10–30 yr, semi-annual coupons</li>
+        <li><strong>TIPS</strong>: inflation-protected Treasury securities</li>
+        <li>Auctioned by Treasury; primary dealers obligated to bid</li>
+        <li><strong>STRIPS</strong>: Treasury coupon and principal stripped separately</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Agency bonds</strong>: issued by GSEs (Fannie Mae, Freddie Mac)</li>
+        <li>Implicit government support — near-sovereign credit quality</li>
+        <li><strong>Municipal bonds</strong>: issued by state/local governments</li>
+        <li><strong>GO bonds</strong>: backed by taxing power</li>
+        <li><strong>Revenue bonds</strong>: backed by project revenues</li>
+        <li>Often tax-exempt — attractive to high-bracket investors</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R54 ========== -->
+<section class="note-section s-teal" id="r54">
+  <div class="reading-label">Reading 54 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-teal">Fixed-Income Bond Valuation: Prices and Yields</div></div>
+  <div class="row">
+    <div class="sub-head h-teal">Bond Pricing (PV of Cash Flows)</div>
+    <div class="sub-head h-teal">Yield to Maturity (YTM)</div>
+    <div class="sub-head h-teal">Price-Yield Relationship</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li>Bond price = PV of all future cash flows discounted at required yield</li>
+        <li>Semi-annual coupon bonds: divide coupon and rate by 2, double periods</li>
+        <li>Price &gt; Par = <strong>premium bond</strong> (coupon &gt; YTM)</li>
+        <li>Price &lt; Par = <strong>discount bond</strong> (coupon &lt; YTM)</li>
+        <li>Price = Par = <strong>par bond</strong> (coupon = YTM)</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">P = &sum; [C/(1+r)^t] + Par/(1+r)^N</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>YTM</strong>: IRR of bond's cash flows at current price</li>
+        <li>Assumes coupons reinvested at YTM — a key limitation</li>
+        <li>Annualized as <strong>BEY</strong> (bond equivalent yield) = 2 × semi-annual rate</li>
+        <li>YTM is the yield if held to maturity with no default</li>
+        <li>Find by trial and error / financial calculator</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">Solve for r: P = &sum;[CF_t/(1+r)^t]</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Inverse relationship</strong>: price falls when yield rises</li>
+        <li><strong>Convex</strong> relationship — price rises more than it falls for equal yield changes</li>
+        <li>Pull-to-par: as maturity approaches, price converges to par</li>
+        <li>Longer maturity = more price sensitivity to yield changes</li>
+        <li>Lower coupon = more price sensitivity to yield changes</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R55 ========== -->
+<section class="note-section s-orange" id="r55">
+  <div class="reading-label">Reading 55 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-orange">Yield and Yield Spread Measures for Fixed-Rate Bonds</div></div>
+  <div class="row">
+    <div class="sub-head h-orange">Yield Measures</div>
+    <div class="sub-head h-orange">Spread Measures</div>
+    <div class="sub-head h-orange">OAS &amp; Interpretation</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Current yield</strong> = Annual coupon / Price</li>
+        <li><strong>YTM</strong>: most widely used; IRR of cash flows</li>
+        <li><strong>Yield to call (YTC)</strong>: assumes bond called at first call date</li>
+        <li><strong>Yield to worst (YTW)</strong>: minimum of YTM, YTC, YTP</li>
+        <li><strong>Street convention</strong>: assumes 30/360 day count</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">Current Yield = Annual Coupon / Price</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>G-spread</strong>: YTM − benchmark government bond yield</li>
+        <li><strong>I-spread</strong>: YTM − swap rate (same maturity)</li>
+        <li><strong>Z-spread (zero-volatility spread)</strong>: constant spread added to spot curve to price bond</li>
+        <li>Z-spread &gt; G-spread (reflects term structure shape)</li>
+        <li>All spreads measure compensation for credit/liquidity risk</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>OAS (option-adjusted spread)</strong>: Z-spread minus option cost</li>
+        <li>OAS removes embedded option value — true credit/liquidity spread</li>
+        <li>For callable: Z-spread &gt; OAS (call option has value to issuer)</li>
+        <li>For putable: Z-spread &lt; OAS (put option has value to holder)</li>
+        <li>Higher OAS = more attractive (more compensation per unit risk)</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">OAS = Z-spread − Option Value</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R56 ========== -->
+<section class="note-section s-indigo" id="r56">
+  <div class="reading-label">Reading 56 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-indigo">Yield and Yield Spread Measures for Floating-Rate Instruments</div></div>
+  <div class="row">
+    <div class="sub-head h-indigo">FRN Pricing</div>
+    <div class="sub-head h-indigo">Quoted Margin vs Required Margin</div>
+    <div class="sub-head h-indigo">Discount / Premium FRN</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>FRN</strong>: coupon resets each period based on reference rate + QM</li>
+        <li>If <strong>QM = required margin (RM)</strong>: FRN priced at par on reset date</li>
+        <li>Price fluctuates between reset dates due to rate changes</li>
+        <li>Credit risk affects required margin; market rate affects reference</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">Coupon = Reference Rate + Quoted Margin</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Quoted margin (QM)</strong>: fixed spread stated in indenture</li>
+        <li><strong>Required margin (RM)</strong>: spread demanded by market now</li>
+        <li>RM increases if credit quality deteriorates</li>
+        <li>RM decreases if credit quality improves</li>
+        <li><strong>Discount margin (DM)</strong>: spread that makes PV of FRN cash flows = price</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">DM: solve P = &sum;[(Ref+QM)/(1+Ref+DM)^t + Par/(1+Ref+DM)^N]</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li>QM &gt; RM → FRN trades at <strong>premium</strong> to par</li>
+        <li>QM &lt; RM → FRN trades at <strong>discount</strong> to par</li>
+        <li>QM = RM → FRN trades at <strong>par</strong></li>
+        <li>Interest rate risk of FRN is low (coupon resets)</li>
+        <li>Credit risk still present — if issuer quality changes, DM changes</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R57 ========== -->
+<section class="note-section s-yellow" id="r57">
+  <div class="reading-label">Reading 57 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-yellow">Term Structure of Interest Rates</div></div>
+  <div class="row">
+    <div class="sub-head h-yellow">Spot, Par &amp; Forward Rates</div>
+    <div class="sub-head h-yellow">Bootstrapping</div>
+    <div class="sub-head h-yellow">Term Structure Theories</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Spot rate (z)</strong>: yield on zero-coupon bond for given maturity</li>
+        <li><strong>Par rate</strong>: coupon rate that prices bond at par given spot curve</li>
+        <li><strong>Forward rate</strong>: interest rate for a future period, implied by spot rates</li>
+        <li>Yield curve: plot of YTM vs maturity for same-quality bonds</li>
+        <li>Normal: upward sloping; Inverted: downward; Flat; Humped</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">(1+z_2)^2 = (1+z_1)(1+f_{1,1})</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Bootstrapping</strong>: extract spot rates from par bond prices sequentially</li>
+        <li>Start with short-term T-bill (already zero coupon)</li>
+        <li>Use 2-yr par bond: strip coupon cash flows, solve for 2-yr spot</li>
+        <li>Repeat for each maturity using previously derived spots</li>
+        <li>Produces spot curve consistent with observable bond prices</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">Par = C/(1+z_1) + (C+100)/(1+z_2)^2 → solve z_2</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Pure expectations</strong>: forward rates = expected future spot rates</li>
+        <li><strong>Liquidity preference</strong>: forward rates include liquidity premium (upward bias)</li>
+        <li><strong>Preferred habitat</strong>: investors prefer certain maturities; supply/demand drives shape</li>
+        <li><strong>Segmented market</strong>: each maturity segment independent</li>
+        <li>Most empirical support: liquidity preference + preferred habitat</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R58 ========== -->
+<section class="note-section s-purple" id="r58">
+  <div class="reading-label">Reading 58 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-purple">Interest Rate Risk and Return</div></div>
+  <div class="row">
+    <div class="sub-head h-purple">Sources of Return</div>
+    <div class="sub-head h-purple">Coupon Reinvestment vs Price Risk</div>
+    <div class="sub-head h-purple">Investment Horizon &amp; Duration</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Coupon interest</strong>: periodic payments received</li>
+        <li><strong>Reinvestment income</strong>: interest earned on reinvested coupons</li>
+        <li><strong>Capital gain/loss</strong>: difference between purchase price and sale/maturity price</li>
+        <li>Total return depends on all three sources</li>
+        <li>YTM realized only if coupons reinvested at YTM and held to maturity</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Price risk</strong>: rate rises → price falls (hurts if selling early)</li>
+        <li><strong>Reinvestment risk</strong>: rate falls → reinvestment income lower (hurts long-term holders)</li>
+        <li>These two risks offset each other at <strong>Macaulay duration horizon</strong></li>
+        <li>Short horizon: price risk dominates</li>
+        <li>Long horizon: reinvestment risk dominates</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Macaulay duration</strong> = investment horizon where price and reinvestment risks exactly offset</li>
+        <li>If horizon = Macaulay duration → immunized against parallel rate shifts</li>
+        <li>Coupon bond: Macaulay duration &lt; maturity</li>
+        <li>Zero-coupon: Macaulay duration = maturity (no reinvestment risk)</li>
+        <li>Higher YTM → lower Macaulay duration</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R59 ========== -->
+<section class="note-section s-blue" id="r59">
+  <div class="reading-label">Reading 59 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-blue">Yield-Based Bond Duration</div></div>
+  <div class="row">
+    <div class="sub-head h-blue">Macaulay Duration</div>
+    <div class="sub-head h-blue">Modified Duration</div>
+    <div class="sub-head h-blue">Duration Factors</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Macaulay duration</strong>: weighted average time to receive cash flows (in years)</li>
+        <li>Weights = PV(CF_t) / Bond Price</li>
+        <li>Measures time dimension of bond</li>
+        <li>Zero-coupon bond: MacDur = maturity</li>
+        <li>Coupon bond: MacDur &lt; maturity</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">MacDur = &sum;[t × PV(CF_t)] / Price</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Modified duration (ModDur)</strong>: % price change per 1% yield change</li>
+        <li>More practical than Macaulay for price sensitivity</li>
+        <li>Approximation — exact only for small yield changes</li>
+        <li>Portfolio duration = weighted average of individual durations</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">ModDur = MacDur / (1 + YTM/m)</div>
+      <div class="f">%&Delta;P &asymp; &minus;ModDur &times; &Delta;y</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li>Duration <strong>increases</strong> with: longer maturity, lower coupon, lower YTM</li>
+        <li>Duration <strong>decreases</strong> with: shorter maturity, higher coupon, higher YTM, more frequent coupons</li>
+        <li>Callable bonds: duration decreases when rates fall (call becomes likely)</li>
+        <li>Floating-rate bonds: low duration (reset to par at each reset)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R60 ========== -->
+<section class="note-section s-green" id="r60">
+  <div class="reading-label">Reading 60 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-green">Yield-Based Bond Convexity</div></div>
+  <div class="row">
+    <div class="sub-head h-green">Convexity Concept</div>
+    <div class="sub-head h-green">Convexity Adjustment</div>
+    <div class="sub-head h-green">Negative Convexity</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Convexity</strong>: curvature of price-yield relationship</li>
+        <li>Duration is linear approximation; convexity corrects for curvature</li>
+        <li><strong>Positive convexity</strong>: price rises more than it falls for equal yield changes</li>
+        <li>Higher convexity = more desirable (better price appreciation)</li>
+        <li>Longer maturity and lower coupon → higher convexity</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li>Full price change includes duration + convexity adjustment</li>
+        <li>Convexity adjustment is always positive for option-free bonds</li>
+        <li>Important for larger yield changes</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">%&Delta;P &asymp; &minus;ModDur &times; &Delta;y + &frac12; &times; Convexity &times; (&Delta;y)&sup2;</div>
+      <div class="f">Convexity = &sum;[t(t+1) PV(CF_t)] / [P(1+y)&sup2;]</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Negative convexity</strong>: price rises less than it falls — seen in callable bonds at low yields</li>
+        <li>When rates fall: call option likely exercised → price capped</li>
+        <li>When rates rise: callable behaves like option-free (negative convexity less relevant)</li>
+        <li><strong>MBS/prepayable bonds</strong>: also exhibit negative convexity</li>
+        <li>Investors demand higher yield for negative convexity</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R61 ========== -->
+<section class="note-section s-pink" id="r61">
+  <div class="reading-label">Reading 61 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-pink">Curve-Based and Empirical Risk Measures</div></div>
+  <div class="row">
+    <div class="sub-head h-pink">Key Rate Duration</div>
+    <div class="sub-head h-pink">PV01 / DV01</div>
+    <div class="sub-head h-pink">Empirical Duration</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Key rate duration (KRD)</strong>: sensitivity to change in yield at specific maturity point</li>
+        <li>Sum of KRDs = effective duration</li>
+        <li>Captures non-parallel yield curve shifts</li>
+        <li>Different bonds have different KRD profiles (e.g., bullet vs barbell)</li>
+        <li>Essential for portfolio immunization against curve twists</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>PV01 (Price Value of a Basis Point)</strong>: dollar change in price for 1 bp yield change</li>
+        <li>Also called <strong>DV01</strong> (Dollar Value of 01)</li>
+        <li>Useful for absolute dollar risk management</li>
+        <li>Basis for hedge ratio calculation</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">PV01 = ModDur × Price × 0.0001</div>
+      <div class="f">Hedge ratio = PV01(bond) / PV01(futures)</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Empirical duration</strong>: estimated from historical price-yield data (regression)</li>
+        <li>More accurate for bonds with embedded options (callable, MBS)</li>
+        <li>Analytical duration may overstate sensitivity for callables</li>
+        <li>Empirical duration better reflects actual market behavior</li>
+        <li>Limitation: relies on historical data, may not be forward-looking</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R62 ========== -->
+<section class="note-section s-teal" id="r62">
+  <div class="reading-label">Reading 62 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-teal">Credit Risk</div></div>
+  <div class="row">
+    <div class="sub-head h-teal">Expected Loss Framework</div>
+    <div class="sub-head h-teal">Credit Spread</div>
+    <div class="sub-head h-teal">Credit Migration Risk</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Default risk</strong>: probability issuer fails to pay interest or principal</li>
+        <li><strong>PD</strong>: probability of default</li>
+        <li><strong>LGD</strong>: loss given default = 1 − recovery rate</li>
+        <li><strong>Expected loss (EL)</strong> = PD × LGD</li>
+        <li>Recovery rate varies by seniority (secured &gt; senior unsecured &gt; sub)</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">EL = PD &times; LGD = PD &times; (1 &minus; Recovery Rate)</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Credit spread</strong>: yield premium over risk-free rate</li>
+        <li>Compensates for default risk, liquidity risk, and tax treatment</li>
+        <li><strong>Spread duration</strong>: price sensitivity to spread changes (≈ modified duration for fixed-rate bonds)</li>
+        <li>Higher spread → lower bond price → higher yield</li>
+        <li>Spread widening = credit deterioration signal</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">Yield = Risk-free rate + Credit spread</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Credit migration risk</strong>: risk of rating downgrade/upgrade</li>
+        <li>Downgrade → spread widens → price falls</li>
+        <li>Rating transitions tracked in migration matrices</li>
+        <li><strong>Event risk</strong>: sudden credit deterioration (LBO, fraud, natural disaster)</li>
+        <li><strong>Crossover credits</strong>: near IG/HY boundary — higher migration risk</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R63 ========== -->
+<section class="note-section s-orange" id="r63">
+  <div class="reading-label">Reading 63 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-orange">Credit Analysis for Government Issuers</div></div>
+  <div class="row">
+    <div class="sub-head h-orange">Sovereign Risk Framework</div>
+    <div class="sub-head h-orange">Fiscal &amp; Economic Metrics</div>
+    <div class="sub-head h-orange">Ratings &amp; Considerations</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Willingness to pay</strong>: political will to honor debt (sovereign immunity)</li>
+        <li><strong>Ability to pay</strong>: economic/fiscal capacity to service debt</li>
+        <li>Domestic currency debt: lower risk (can print money)</li>
+        <li>Foreign currency debt: higher risk (cannot print)</li>
+        <li>Political stability, institutions, rule of law matter</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Debt/GDP ratio</strong>: key leverage metric (&lt;60% often cited as sustainable)</li>
+        <li><strong>Deficit/GDP ratio</strong>: fiscal balance indicator</li>
+        <li><strong>Current account balance</strong>: external financing needs</li>
+        <li><strong>FX reserves</strong>: buffer against currency crises</li>
+        <li>GDP growth rate: ability to grow out of debt</li>
+        <li>Inflation rate: signals monetary discipline</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li>Sovereign ratings by S&amp;P, Moody's, Fitch based on willingness + ability</li>
+        <li>Rating ceiling: corporate ratings typically capped at sovereign rating</li>
+        <li><strong>Sub-sovereign (municipal)</strong>: rated separately; may lack taxing power</li>
+        <li>Quasi-government: agencies may have explicit/implicit government support</li>
+        <li>Spread vs comparable sovereigns reflects relative credit</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R64 ========== -->
+<section class="note-section s-indigo" id="r64">
+  <div class="reading-label">Reading 64 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-indigo">Credit Analysis for Corporate Issuers</div></div>
+  <div class="row">
+    <div class="sub-head h-indigo">The 4 Cs of Credit</div>
+    <div class="sub-head h-indigo">Key Financial Ratios</div>
+    <div class="sub-head h-indigo">Credit Scoring &amp; High Yield</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Capacity</strong>: ability to repay — cash flows, profitability, leverage</li>
+        <li><strong>Collateral</strong>: assets available to creditors upon default</li>
+        <li><strong>Covenants</strong>: bond indenture terms protecting creditors</li>
+        <li><strong>Character</strong>: management integrity, track record, strategy</li>
+        <li>Sometimes expanded to 5Cs: add <strong>Capital</strong> (equity cushion)</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Leverage ratios</strong>: Debt/EBITDA, Debt/Capital, Debt/Equity</li>
+        <li><strong>Coverage ratios</strong>: EBITDA/Interest (interest coverage), EBIT/Interest</li>
+        <li>Higher leverage → lower coverage → weaker credit</li>
+        <li>Free cash flow (FCF) critical for repayment capacity</li>
+        <li>Trend analysis more important than single year snapshot</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">Interest Coverage = EBITDA / Interest Expense</div>
+      <div class="f">Debt/EBITDA = Total Debt / EBITDA</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Credit scoring models</strong>: Altman Z-score predicts bankruptcy probability</li>
+        <li>High-yield analysis: more focused on asset values, recovery</li>
+        <li>Covenant analysis especially important for HY (looser = riskier)</li>
+        <li><strong>Covenant-lite</strong> loans: fewer protections → higher risk</li>
+        <li>Equity-like analysis for distressed debt (near default)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R65 ========== -->
+<section class="note-section s-yellow" id="r65">
+  <div class="reading-label">Reading 65 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-yellow">Fixed-Income Securitization</div></div>
+  <div class="row">
+    <div class="sub-head h-yellow">Securitization Process</div>
+    <div class="sub-head h-yellow">SPE / SPV Structure</div>
+    <div class="sub-head h-yellow">Tranching &amp; Waterfall</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Securitization</strong>: pooling illiquid assets → issuing tradable securities</li>
+        <li>Originates from loans (mortgages, auto, credit card)</li>
+        <li>Converts illiquid loans to liquid ABS/MBS</li>
+        <li>Allows originators to free up capital (originate-to-distribute)</li>
+        <li>Benefits: lower funding costs, risk transfer, broader investor base</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>SPE/SPV</strong> (special purpose entity/vehicle): bankruptcy-remote entity holds assets</li>
+        <li>Isolates assets from originator's credit risk</li>
+        <li>True sale: assets legally transferred to SPE</li>
+        <li>Servicer: collects payments, manages delinquencies (often originator)</li>
+        <li>Trustee: protects investors' interests</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Tranching</strong>: divides pool into classes with different risk/return</li>
+        <li><strong>Senior tranche</strong>: paid first, lowest risk/yield</li>
+        <li><strong>Subordinated tranches</strong>: absorb losses first, higher yield</li>
+        <li><strong>Equity/residual tranche</strong>: last paid, highest risk</li>
+        <li><strong>Waterfall</strong>: payment priority structure among tranches</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R66 ========== -->
+<section class="note-section s-purple" id="r66">
+  <div class="reading-label">Reading 66 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-purple">ABS Instrument and Market Features</div></div>
+  <div class="row">
+    <div class="sub-head h-purple">Types of ABS</div>
+    <div class="sub-head h-purple">Prepayment Risk</div>
+    <div class="sub-head h-purple">Credit Enhancement</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Auto loan ABS</strong>: backed by auto loans; relatively short duration</li>
+        <li><strong>Credit card ABS</strong>: revolving credit; lockout period (no principal pay-down early)</li>
+        <li><strong>Student loan ABS</strong>: backed by student loans; long duration; may have gov guarantee</li>
+        <li><strong>Equipment ABS</strong>: machinery, aircraft, etc.</li>
+        <li><strong>CLO</strong>: collateralized loan obligation — leveraged loans</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Prepayment risk</strong>: borrowers repay principal early</li>
+        <li><strong>Contraction risk</strong>: rates fall → prepayments accelerate → shorter duration than expected</li>
+        <li><strong>Extension risk</strong>: rates rise → prepayments slow → longer duration than expected</li>
+        <li>Contraction hurts when rates fall (reinvest at lower rates)</li>
+        <li>Extension hurts when rates rise (locked in at lower rates)</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Internal credit enhancement</strong>: subordination (senior/sub structure), over-collateralization, excess spread</li>
+        <li><strong>External credit enhancement</strong>: bond insurance, bank letter of credit, third-party guarantee</li>
+        <li><strong>Excess spread</strong>: yield on assets minus costs — first loss buffer</li>
+        <li><strong>Reserve fund</strong>: cash held to cover losses</li>
+        <li>More enhancement → higher rating on senior tranche</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R67 ========== -->
+<section class="note-section s-blue" id="r67">
+  <div class="reading-label">Reading 67 · Fixed Income</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-blue">MBS Instrument and Market Features</div></div>
+  <div class="row">
+    <div class="sub-head h-blue">Mortgage Pools &amp; Pass-Throughs</div>
+    <div class="sub-head h-blue">PSA Prepayment Model</div>
+    <div class="sub-head h-blue">CMO Tranches &amp; IO/PO Strips</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Mortgage pass-through</strong>: pool of mortgages; investors receive pro-rata share of all cash flows</li>
+        <li>Agency MBS: issued/guaranteed by Fannie Mae, Freddie Mac, Ginnie Mae</li>
+        <li>Non-agency MBS: private label — no government guarantee</li>
+        <li>WAC (weighted average coupon) and WAM (weighted average maturity)</li>
+        <li>Prepayments passed through to investors immediately</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>PSA model</strong>: industry benchmark for prepayment speeds</li>
+        <li>100% PSA: CPR rises linearly from 0% to 6% over 30 months, then stays at 6%</li>
+        <li>200% PSA = twice as fast prepayment; 50% PSA = half speed</li>
+        <li><strong>CPR</strong> (conditional prepayment rate): annualized prepayment rate</li>
+        <li><strong>SMM</strong> (single monthly mortality): monthly prepayment rate</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">SMM = 1 &minus; (1 &minus; CPR)^(1/12)</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>CMO (collateralized mortgage obligation)</strong>: restructures MBS cash flows into tranches</li>
+        <li><strong>Sequential pay</strong>: tranches paid off in order (A first, then B, etc.)</li>
+        <li><strong>PAC tranche</strong>: planned amortization class — stable cash flows over prepayment range</li>
+        <li><strong>Support/companion tranche</strong>: absorbs excess prepayments to protect PAC</li>
+        <li><strong>IO strip</strong>: receives only interest — value rises when prepayments slow</li>
+        <li><strong>PO strip</strong>: receives only principal — value rises when prepayments accelerate</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R68 ========== -->
+<section class="note-section s-green" id="r68">
+  <div class="reading-label">Reading 68 · Derivatives</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-green">Derivative Instrument Features</div></div>
+  <div class="row">
+    <div class="sub-head h-green">Derivative Definitions</div>
+    <div class="sub-head h-green">Exchange-Traded vs OTC</div>
+    <div class="sub-head h-green">Underlying Assets</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Derivative</strong>: instrument whose value depends on underlying asset</li>
+        <li><strong>Forward</strong>: obligation to buy/sell at set price on future date</li>
+        <li><strong>Futures</strong>: standardized, exchange-traded forward</li>
+        <li><strong>Swap</strong>: exchange of cash flows based on notional</li>
+        <li><strong>Option</strong>: right (not obligation) to buy (call) or sell (put)</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Exchange-traded</strong>: standardized contracts, clearing house, margin requirements, marked to market daily</li>
+        <li><strong>OTC (over-the-counter)</strong>: customized bilateral contracts, counterparty risk, less regulated</li>
+        <li>Post-2008: mandatory central clearing for many OTC derivatives</li>
+        <li>Clearing house acts as counterparty to both sides — reduces credit risk</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Equities</strong>: individual stocks, indices</li>
+        <li><strong>Fixed income</strong>: bonds, interest rates</li>
+        <li><strong>Currencies</strong>: FX forwards, cross-currency swaps</li>
+        <li><strong>Commodities</strong>: oil, gold, agricultural</li>
+        <li><strong>Credit</strong>: credit default swaps (CDS)</li>
+        <li><strong>Volatility</strong>: VIX futures, variance swaps</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R69 ========== -->
+<section class="note-section s-pink" id="r69">
+  <div class="reading-label">Reading 69 · Derivatives</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-pink">Forward Commitment and Contingent Claim Features</div></div>
+  <div class="row">
+    <div class="sub-head h-pink">Forward Commitments</div>
+    <div class="sub-head h-pink">Contingent Claims (Options)</div>
+    <div class="sub-head h-pink">Moneyness &amp; Exercise Styles</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Forward commitment</strong>: both parties obligated to transact (forwards, futures, swaps)</li>
+        <li><strong>Long forward</strong>: obligated to buy — profits when price rises</li>
+        <li><strong>Short forward</strong>: obligated to sell — profits when price falls</li>
+        <li><strong>Swaps</strong>: series of forward contracts; counterparties exchange cash flows periodically</li>
+        <li>Zero-sum: gains to one party = losses to other</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Contingent claim</strong>: payoff contingent on future event (options)</li>
+        <li><strong>Call option</strong>: right to buy at strike price X</li>
+        <li><strong>Put option</strong>: right to sell at strike price X</li>
+        <li>Option buyer pays <strong>premium</strong>; seller receives premium</li>
+        <li>Buyer's max loss = premium paid; seller's max loss = potentially unlimited (call)</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>In-the-money (ITM)</strong>: exercise has positive intrinsic value</li>
+        <li><strong>At-the-money (ATM)</strong>: S = X</li>
+        <li><strong>Out-of-the-money (OTM)</strong>: exercise has negative intrinsic value</li>
+        <li><strong>European option</strong>: exercisable only at expiration</li>
+        <li><strong>American option</strong>: exercisable any time before expiration</li>
+        <li><strong>Bermudan option</strong>: exercisable on specific dates</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R70 ========== -->
+<section class="note-section s-teal" id="r70">
+  <div class="reading-label">Reading 70 · Derivatives</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-teal">Derivative Benefits, Risks, and Uses</div></div>
+  <div class="row">
+    <div class="sub-head h-teal">Benefits of Derivatives</div>
+    <div class="sub-head h-teal">Risks of Derivatives</div>
+    <div class="sub-head h-teal">Uses of Derivatives</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Price discovery</strong>: futures prices reflect market's forward-looking consensus</li>
+        <li><strong>Risk management</strong>: hedge underlying exposures efficiently</li>
+        <li><strong>Leverage</strong>: control large positions with small capital outlay</li>
+        <li><strong>Market completeness</strong>: provide payoffs not achievable otherwise</li>
+        <li><strong>Efficiency</strong>: lower transaction costs vs buying underlying</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Counterparty risk</strong>: OTC — other party may default</li>
+        <li><strong>Liquidity risk</strong>: difficulty exiting positions</li>
+        <li><strong>Market risk</strong>: leverage amplifies losses</li>
+        <li><strong>Operational risk</strong>: model errors, settlement failures</li>
+        <li><strong>Legal risk</strong>: enforceability of contracts</li>
+        <li>Derivatives can destabilize markets if misused (systemic risk)</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Hedging</strong>: reduce risk of existing positions</li>
+        <li><strong>Speculation</strong>: take directional view with leverage</li>
+        <li><strong>Arbitrage</strong>: exploit mispricings across related markets</li>
+        <li><strong>Income generation</strong>: writing covered calls</li>
+        <li><strong>Portfolio management</strong>: adjust exposures quickly without trading cash assets</li>
+        <li><strong>Tax/regulatory</strong>: restructure exposures for efficiency</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R71 ========== -->
+<section class="note-section s-orange" id="r71">
+  <div class="reading-label">Reading 71 · Derivatives</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-orange">Arbitrage, Replication, and Cost of Carry</div></div>
+  <div class="row">
+    <div class="sub-head h-orange">No-Arbitrage Principle</div>
+    <div class="sub-head h-orange">Replication</div>
+    <div class="sub-head h-orange">Cost of Carry Model</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Law of one price</strong>: identical cash flows must have same price</li>
+        <li>If mispriced: arbitrageurs buy cheap, sell expensive → prices converge</li>
+        <li>Arbitrage profits should be <strong>riskless</strong> and require <strong>zero net investment</strong></li>
+        <li>No-arbitrage condition establishes forward/futures fair value</li>
+        <li>Markets generally efficient — arbitrage opportunities short-lived</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Replication</strong>: creating same payoff using different instruments</li>
+        <li>Forward = Long spot + Borrowing (carry position to delivery)</li>
+        <li>Replication used to price derivatives based on no-arbitrage</li>
+        <li>Dynamic replication: continuously adjust hedge to replicate option payoff</li>
+        <li>Risk-neutral pricing: price = PV(expected payoffs) under risk-neutral measure</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Cost of carry</strong>: net cost of holding underlying to delivery date</li>
+        <li>Includes: financing cost, storage, insurance</li>
+        <li>Less: convenience yield (benefit of holding physical), dividends</li>
+        <li>Continuous: F = S × e^((r−q)T)</li>
+        <li>Discrete: F = S × (1+r−q)^T</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">F = S &times; e^((r&minus;q)T)  [continuous]</div>
+      <div class="f">F = S &times; (1+r&minus;q)^T  [discrete]</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R72 ========== -->
+<section class="note-section s-indigo" id="r72">
+  <div class="reading-label">Reading 72 · Derivatives</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-indigo">Pricing Forward Contracts</div></div>
+  <div class="row">
+    <div class="sub-head h-indigo">Forward Price Formula</div>
+    <div class="sub-head h-indigo">Value of Forward Contract</div>
+    <div class="sub-head h-indigo">Types of Forwards</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Forward price (F)</strong>: price agreed today for delivery at T</li>
+        <li>Set so contract has zero value at inception</li>
+        <li>For stock paying dividends: adjust spot for PV of dividends</li>
+        <li>For currency: use interest rate parity</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">F_0 = S_0 &times; (1+r)^T &minus; FV(Dividends)</div>
+      <div class="f">F_0(FX) = S_0 &times; (1+r_d)^T / (1+r_f)^T</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li>At inception: V = 0 (fair priced forward)</li>
+        <li>During life: V = PV of (F_t − F_0) for long position</li>
+        <li>At expiration: V = S_T − F_0 (long) or F_0 − S_T (short)</li>
+        <li>Long profits if S_T &gt; F_0; short profits if S_T &lt; F_0</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">V_t(long) = S_t &minus; F_0/(1+r)^(T&minus;t)</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Equity forward</strong>: on stock or index; adjust for dividends</li>
+        <li><strong>FX forward</strong>: exchange currencies at future date; use interest rate parity</li>
+        <li><strong>Fixed income forward</strong>: on bond; adjust for coupon cash flows</li>
+        <li><strong>FRA (forward rate agreement)</strong>: on interest rate; settled in cash</li>
+        <li>All types follow same no-arbitrage logic</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R73 ========== -->
+<section class="note-section s-yellow" id="r73">
+  <div class="reading-label">Reading 73 · Derivatives</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-yellow">Pricing Futures Contracts</div></div>
+  <div class="row">
+    <div class="sub-head h-yellow">Futures vs Forward Pricing</div>
+    <div class="sub-head h-yellow">Marking to Market &amp; Basis</div>
+    <div class="sub-head h-yellow">Convergence</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li>Futures and forwards have same price if interest rates are non-stochastic</li>
+        <li>If rates are positively correlated with asset: futures price &gt; forward price</li>
+        <li>If rates are negatively correlated: futures price &lt; forward price</li>
+        <li>In practice, difference is small — often assumed equal</li>
+        <li>Futures require margin; forwards do not</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Marking to market</strong>: daily settlement of gains/losses</li>
+        <li>Eliminates accumulated credit risk (unlike forwards)</li>
+        <li><strong>Initial margin</strong>: deposit required to open position</li>
+        <li><strong>Maintenance margin</strong>: minimum balance; margin call if below</li>
+        <li><strong>Basis</strong> = Spot price − Futures price (can also be reversed)</li>
+        <li>Basis risk: spot and futures may not move perfectly together</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">Basis = S &minus; F</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Convergence</strong>: futures price converges to spot price at expiration</li>
+        <li>If F &gt; S at expiry: arbitrage by selling futures, buying spot</li>
+        <li>If F &lt; S at expiry: arbitrage by buying futures, selling spot</li>
+        <li>Calendar spread: difference between two futures contracts of same commodity, different expiry</li>
+        <li>Cost of carry drives shape of futures term structure</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R74 ========== -->
+<section class="note-section s-purple" id="r74">
+  <div class="reading-label">Reading 74 · Derivatives</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-purple">Pricing Interest Rate and Other Swaps</div></div>
+  <div class="row">
+    <div class="sub-head h-purple">Plain Vanilla IRS Structure</div>
+    <div class="sub-head h-purple">Swap as Bond Portfolio</div>
+    <div class="sub-head h-purple">Swap Rate Calculation</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Plain vanilla IRS</strong>: pay fixed, receive floating (or vice versa)</li>
+        <li>Notional principal is not exchanged</li>
+        <li>Net payment made each period</li>
+        <li><strong>Fixed rate payer</strong>: benefits when floating rates rise</li>
+        <li><strong>Floating rate payer</strong>: benefits when floating rates fall</li>
+        <li>Swap tenor, reset frequency, notional specified in agreement</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li>Pay-fixed IRS = Long floating-rate bond + Short fixed-rate bond</li>
+        <li>Receive-fixed IRS = Long fixed-rate bond + Short floating-rate bond</li>
+        <li>Swap value = difference in value of the two bond positions</li>
+        <li>At inception: swap value = 0 (both legs equal in PV)</li>
+        <li>During life: value changes as rates change</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">V_swap(pay fixed) = V_float &minus; V_fixed</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Swap rate</strong>: fixed rate making swap value = 0 at inception</li>
+        <li>Solve for fixed rate (C) such that PV(fixed) = PV(floating)</li>
+        <li>PV(floating) = 1 (par, since FRN = par on reset)</li>
+        <li>C = (1 − Z_N) / &sum;Z_t where Z_t are discount factors</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">C = (1 &minus; Z_N) / &sum;Z_t</div>
+      <div class="f">Z_t = 1 / (1 + LIBOR_t &times; t/360)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R75 ========== -->
+<section class="note-section s-blue" id="r75">
+  <div class="reading-label">Reading 75 · Derivatives</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-blue">Pricing and Valuation of Options</div></div>
+  <div class="row">
+    <div class="sub-head h-blue">Option Payoffs</div>
+    <div class="sub-head h-blue">Intrinsic vs Time Value</div>
+    <div class="sub-head h-blue">Factors Affecting Option Value</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Call payoff at expiry</strong>: max(S_T − X, 0)</li>
+        <li><strong>Put payoff at expiry</strong>: max(X − S_T, 0)</li>
+        <li><strong>Call profit</strong>: max(S_T − X, 0) − C_0</li>
+        <li><strong>Put profit</strong>: max(X − S_T, 0) − P_0</li>
+        <li>Option buyer: limited loss (premium), unlimited potential gain (call)</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">Call payoff = max(S_T &minus; X, 0)</div>
+      <div class="f">Put payoff = max(X &minus; S_T, 0)</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Intrinsic value</strong>: immediate exercise value</li>
+        <li>Call: max(S − X, 0); Put: max(X − S, 0)</li>
+        <li><strong>Time value</strong>: option price − intrinsic value</li>
+        <li>Time value always ≥ 0; declines as expiration approaches (<strong>theta decay</strong>)</li>
+        <li>Deep ITM or OTM options have low time value</li>
+        <li>ATM options have maximum time value</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <table>
+        <tr><td>Factor</td><td>Call</td><td>Put</td></tr>
+        <tr><td>S increases</td><td>+</td><td>-</td></tr>
+        <tr><td>X increases</td><td>-</td><td>+</td></tr>
+        <tr><td>T increases</td><td>+</td><td>+</td></tr>
+        <tr><td>Vol increases</td><td>+</td><td>+</td></tr>
+        <tr><td>r increases</td><td>+</td><td>-</td></tr>
+        <tr><td>Dividends</td><td>-</td><td>+</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R76 ========== -->
+<section class="note-section s-green" id="r76">
+  <div class="reading-label">Reading 76 · Derivatives</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-green">Option Replication Using Put-Call Parity</div></div>
+  <div class="row">
+    <div class="sub-head h-green">Put-Call Parity</div>
+    <div class="sub-head h-green">Protective Put &amp; Fiduciary Call</div>
+    <div class="sub-head h-green">Synthetic Positions</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li>Fundamental relationship between European put, call, stock, and bond</li>
+        <li>Violation creates arbitrage opportunity</li>
+        <li>Applies to European options only (strictly)</li>
+        <li>If LHS &gt; RHS: sell protected put, buy fiduciary call</li>
+        <li>If LHS &lt; RHS: buy protective put, sell fiduciary call</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">P + S = C + PV(X)</div>
+      <div class="f">C &minus; P = S &minus; PV(X)</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Protective put</strong>: S + P — stock + put = portfolio insurance</li>
+        <li>Limits downside while preserving upside</li>
+        <li><strong>Fiduciary call</strong>: C + PV(X) — call + risk-free bond</li>
+        <li>Same payoff as protective put at all stock prices</li>
+        <li>Put-call parity: protective put = fiduciary call</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Synthetic call</strong>: C = P + S − PV(X)</li>
+        <li><strong>Synthetic put</strong>: P = C − S + PV(X)</li>
+        <li><strong>Synthetic stock</strong>: S = C − P + PV(X)</li>
+        <li><strong>Synthetic bond</strong>: PV(X) = P + S − C</li>
+        <li>Allows replication using other instruments</li>
+        <li>Used for arbitrage, hedging, and synthetic position creation</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== R77 ========== -->
+<section class="note-section s-pink" id="r77">
+  <div class="reading-label">Reading 77 · Derivatives</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-pink">Valuing Derivatives Using One-Period Binomial Model</div></div>
+  <div class="row">
+    <div class="sub-head h-pink">Up/Down Factors</div>
+    <div class="sub-head h-pink">Risk-Neutral Probabilities</div>
+    <div class="sub-head h-pink">Call &amp; Put Valuation</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li>Stock moves to one of two values in next period</li>
+        <li><strong>u</strong> (up factor): S_u = u × S_0 where u &gt; 1</li>
+        <li><strong>d</strong> (down factor): S_d = d × S_0 where d &lt; 1</li>
+        <li>No-arbitrage requires: d &lt; (1+r) &lt; u</li>
+        <li>Typical: u = e^(&sigma;&radic;T), d = e^(&minus;&sigma;&radic;T) = 1/u (CRR model)</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">S_u = u &times; S_0 ; S_d = d &times; S_0</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Risk-neutral probability</strong> (π): not the real probability — used for pricing</li>
+        <li>Probability such that expected return = risk-free rate</li>
+        <li>π<sub>u</sub> = (1+r − d) / (u − d)</li>
+        <li>π<sub>d</sub> = 1 − π<sub>u</sub></li>
+        <li>Option value = PV of risk-neutral expected payoff</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">&pi;<sub>u</sub> = (1+r &minus; d) / (u &minus; d)</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Call value</strong>: C_0 = [π_u × C_u + π_d × C_d] / (1+r)</li>
+        <li><strong>Put value</strong>: P_0 = [π_u × P_u + π_d × P_d] / (1+r)</li>
+        <li>C_u = max(S_u − X, 0); C_d = max(S_d − X, 0)</li>
+        <li>P_u = max(X − S_u, 0); P_d = max(X − S_d, 0)</li>
+        <li>Extend to multi-period by backward induction</li>
+      </ul>
+      <hr class="divider">
+      <div class="f">C_0 = [&pi;_u C_u + &pi;_d C_d] / (1+r)</div>
+    </div>
+  </div>
+</section>
+
+</main>
+</div>
+</body>
+</html>

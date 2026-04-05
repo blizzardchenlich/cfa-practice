@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CFA Level I — Book 5 三色笔记</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; background: #f0f2f5; color: #222; }
+.layout { display: flex; min-height: 100vh; }
+.sidebar { width: 240px; background: #1a237e; color: white; padding: 16px 12px; position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0; }
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.25); border-radius: 2px; }
+.sidebar .logo { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px; padding: 0 6px; }
+.sidebar .sub { font-size: 11px; color: #90caf9; padding: 0 6px; margin-bottom: 16px; }
+.sidebar-group { margin-bottom: 14px; }
+.sidebar-group-title { font-size: 10px; font-weight: 700; color: #ffcc80; text-transform: uppercase; letter-spacing: .8px; padding: 4px 8px; background: rgba(255,255,255,.08); border-radius: 4px; margin-bottom: 4px; }
+.sidebar a { display: block; padding: 5px 10px; color: #c5cae9; font-size: 12px; text-decoration: none; border-radius: 4px; transition: background .15s; line-height: 1.4; }
+.sidebar a:hover { background: rgba(255,255,255,.14); color: white; }
+.sidebar-back { display: block; padding: 8px 10px; margin-bottom: 14px; background: rgba(255,255,255,.1); border-radius: 6px; color: #90caf9; font-size: 12px; text-decoration: none; text-align: center; transition: background .15s; }
+.sidebar-back:hover { background: rgba(255,255,255,.2); color: white; }
+.main { flex: 1; padding: 24px; overflow-x: hidden; }
+.page-title { background: linear-gradient(135deg, #1a237e 0%, #283593 100%); color: white; text-align: center; padding: 24px 20px; margin-bottom: 28px; border-radius: 12px; box-shadow: 0 4px 16px rgba(26,35,126,.3); }
+.page-title h1 { font-size: 20px; margin-bottom: 6px; font-weight: 700; }
+.page-title p { font-size: 13px; color: #90caf9; }
+.note-section { border-radius: 14px; padding: 22px 20px 20px; margin-bottom: 24px; scroll-margin-top: 20px; }
+.s-yellow { background: #fff8e1; } .s-purple { background: #ede7f6; } .s-blue { background: #e3f2fd; } .s-green { background: #e8f5e9; } .s-pink { background: #fce4ec; } .s-teal { background: #e0f7fa; } .s-orange { background: #fff3e0; } .s-indigo { background: #e8eaf6; }
+.sec-title-wrap { display: flex; justify-content: center; margin-bottom: 18px; }
+.sec-title-box { color: white; font-weight: 700; font-size: 13px; text-align: center; text-transform: uppercase; padding: 10px 30px; border-radius: 8px; letter-spacing: .6px; line-height: 1.5; max-width: 460px; }
+.t-yellow { background: #f57f17; } .t-purple { background: #6a1b9a; } .t-blue { background: #0d47a1; } .t-green { background: #1b5e20; } .t-pink { background: #880e4f; } .t-teal { background: #006064; } .t-orange { background: #bf360c; } .t-indigo { background: #283593; }
+.reading-label { font-size: 10.5px; color: rgba(0,0,0,.4); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; text-align: center; }
+.row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.sub-head { flex: 1; min-width: 140px; text-align: center; font-weight: 700; font-size: 12.5px; padding: 8px 10px; border-radius: 8px; border: 2px solid; }
+.h-yellow { background: #fff9c4; border-color: #f9a825; color: #5d3d00; } .h-purple { background: #f3e5f5; border-color: #9c27b0; color: #4a0072; } .h-blue { background: #e3f2fd; border-color: #1e88e5; color: #0d3576; } .h-green { background: #f1f8e9; border-color: #66bb6a; color: #1b5e20; } .h-pink { background: #fce4ec; border-color: #ec407a; color: #880e4f; } .h-teal { background: #e0f7fa; border-color: #26c6da; color: #006064; } .h-orange { background: #fff8e1; border-color: #ffa726; color: #bf360c; } .h-indigo { background: #e8eaf6; border-color: #7986cb; color: #283593; }
+.cbox { flex: 1; min-width: 170px; background: rgba(255,255,255,.68); border-radius: 9px; padding: 12px 14px; border: 1px solid rgba(0,0,0,.09); font-size: 12.5px; line-height: 1.55; }
+.cbox ul { padding-left: 16px; } .cbox li { margin-bottom: 4px; } .cbox strong { color: #1a237e; }
+.cbox .f { font-family: 'Courier New', monospace; background: rgba(0,0,0,.06); padding: 3px 8px; border-radius: 4px; font-size: 12px; margin: 4px 0; display: inline-block; }
+.cbox table { border-collapse: collapse; width: 100%; font-size: 11.5px; }
+.cbox table td { padding: 4px 6px; border: 1px solid #ccc; }
+.cbox table tr:first-child td { background: rgba(0,0,0,.05); font-weight: 600; }
+.divider { border: none; border-top: 1.5px solid rgba(0,0,0,.1); margin: 14px 0; }
+@media (max-width: 768px) { .sidebar { display: none; } .main { padding: 12px; } .row { flex-direction: column; } }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="logo">CFA Level I</div>
+  <div class="sub">Book 5 三色笔记</div>
+  <a class="sidebar-back" href="index.html">← 返回主页</a>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Alternative Investments</div>
+    <a href="#r78">R78 Features &amp; Structures</a>
+    <a href="#r79">R79 Performance &amp; Returns</a>
+    <a href="#r80">R80 Private Capital</a>
+    <a href="#r81">R81 Real Estate &amp; Infrastructure</a>
+    <a href="#r82">R82 Natural Resources</a>
+    <a href="#r83">R83 Hedge Funds</a>
+    <a href="#r84">R84 Digital Assets</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Portfolio Management</div>
+    <a href="#r85">R85 PM Overview</a>
+    <a href="#r86">R86 Planning &amp; Construction</a>
+    <a href="#r87">R87 Behavioral Biases</a>
+    <a href="#r88">R88 Risk Management</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Ethics &amp; Standards</div>
+    <a href="#r89">R89 Ethics &amp; Trust</a>
+    <a href="#r90">R90 Code of Ethics</a>
+    <a href="#r91">R91 Standards I–VII</a>
+    <a href="#r92">R92 GIPS</a>
+    <a href="#r93">R93 Ethics Application</a>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <div class="page-title">
+    <h1>CFA Level I — Book 5 三色笔记</h1>
+    <p>Alternative Investments, Portfolio Management &amp; Ethics | SchweserNotes 2024</p>
+  </div>
+
+  <!-- ==================== R78 ==================== -->
+  <div class="note-section s-yellow" id="r78">
+    <div class="sec-title-wrap"><div class="sec-title-box t-yellow">R78 · Alternative Investment Features, Methods, and Structures</div></div>
+    <div class="reading-label">Reading 78 — Alternative Investments</div>
+    <div class="row">
+      <div class="sub-head h-yellow">Asset Classes &amp; Characteristics</div>
+      <div class="sub-head h-yellow">Investment Structures</div>
+      <div class="sub-head h-yellow">Fund-of-Funds &amp; Key Risks</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Hedge Funds:</strong> pooled vehicles using leverage, short selling, derivatives; absolute return focus</li>
+          <li><strong>Private Equity:</strong> buyouts, venture capital, growth equity; illiquid, long horizon</li>
+          <li><strong>Real Estate:</strong> direct ownership or REITs; income + appreciation</li>
+          <li><strong>Commodities:</strong> physical goods; inflation hedge; spot vs. futures exposure</li>
+          <li><strong>Digital Assets:</strong> cryptocurrencies, tokens; high volatility, regulatory uncertainty</li>
+          <li><strong>Infrastructure:</strong> long-lived physical assets; stable cash flows, inflation-linked</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>Low correlation to traditional assets → <strong>diversification benefit</strong></li>
+          <li>Higher return potential but also <strong>higher risk, lower liquidity</strong></li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Limited Partnership (LP):</strong> most common PE/hedge fund structure</li>
+          <li><strong>GP</strong> manages the fund; has unlimited liability</li>
+          <li><strong>LPs</strong> provide capital; liability limited to investment</li>
+          <li><strong>Closed-end fund:</strong> fixed term, capital called/distributed over life</li>
+          <li><strong>Open-end fund:</strong> investors can subscribe/redeem (most hedge funds)</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li><strong>Management fee:</strong> 1–2% of AUM annually</li>
+          <li><strong>Incentive fee (carry):</strong> 20% of profits above hurdle rate</li>
+          <li><strong>Hurdle rate:</strong> minimum return before carry is earned</li>
+          <li><strong>Clawback:</strong> GP returns excess carry if later losses occur</li>
+          <li><strong>High-water mark:</strong> must recover previous losses before new carry</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Fund-of-Funds (FoF):</strong> invests in multiple alt funds; adds layer of diversification</li>
+          <li><strong>Double fee layer:</strong> investor pays FoF fees + underlying fund fees → performance drag</li>
+          <li><strong>Access benefit:</strong> access to top managers otherwise closed</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li><strong>Liquidity risk:</strong> lock-up periods, redemption gates, side pockets</li>
+          <li><strong>Leverage risk:</strong> amplifies gains AND losses</li>
+          <li><strong>Valuation risk:</strong> illiquid assets hard to price; stale pricing</li>
+          <li><strong>Transparency risk:</strong> limited disclosure to investors</li>
+          <li><strong>Operational risk:</strong> fraud, back-office failures</li>
+          <li><strong>Counterparty risk:</strong> OTC derivatives exposure</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== R79 ==================== -->
+  <div class="note-section s-purple" id="r79">
+    <div class="sec-title-wrap"><div class="sec-title-box t-purple">R79 · Alternative Investment Performance and Returns</div></div>
+    <div class="reading-label">Reading 79 — Alternative Investments</div>
+    <div class="row">
+      <div class="sub-head h-purple">IRR &amp; MOIC / TVPI</div>
+      <div class="sub-head h-purple">J-Curve &amp; Cash Flow Timing</div>
+      <div class="sub-head h-purple">Benchmarking &amp; Biases</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>IRR (Internal Rate of Return):</strong> time-weighted return for PE; accounts for timing of cash flows</li>
+          <li><span class="f">NPV = 0 → solve for IRR</span></li>
+          <li><strong>MOIC (Multiple on Invested Capital):</strong> total value / invested capital; ignores time</li>
+          <li><span class="f">MOIC = (Realized + Unrealized) / Capital Invested</span></li>
+          <li><strong>TVPI (Total Value to Paid-In):</strong> same as MOIC conceptually; = DPI + RVPI</li>
+          <li><strong>DPI:</strong> Distributed to Paid-In (realized gains only)</li>
+          <li><strong>RVPI:</strong> Residual Value to Paid-In (unrealized NAV)</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>J-Curve effect:</strong> early years show negative returns (fees + unrealized losses); positive returns emerge later as investments mature</li>
+          <li>Capital called early (deployment) → distributions come years later</li>
+          <li><strong>Vintage year:</strong> year fund makes first investment; used to compare funds</li>
+        </ul>
+        <hr class="divider">
+        <table>
+          <tr><td>Phase</td><td>Cash Flow</td><td>Typical Year</td></tr>
+          <tr><td>Investment</td><td>Negative (calls)</td><td>1–4</td></tr>
+          <tr><td>Value creation</td><td>Near zero</td><td>3–6</td></tr>
+          <tr><td>Harvesting</td><td>Positive (distributions)</td><td>5–10+</td></tr>
+        </table>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Survivorship bias:</strong> failed funds not reported → overstated returns in databases</li>
+          <li><strong>Backfill bias (instant history bias):</strong> funds add historical data when joining database → upward bias</li>
+          <li><strong>Stale pricing:</strong> infrequent valuation smooths returns → understates volatility</li>
+          <li><strong>Benchmarking challenges:</strong> no single agreed benchmark; peer group comparisons common</li>
+          <li>Public market equivalent (<strong>PME</strong>): compares PE returns to equivalent public index investment</li>
+          <li>Correlations may appear low due to smoothing, not true diversification</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== R80 ==================== -->
+  <div class="note-section s-blue" id="r80">
+    <div class="sec-title-wrap"><div class="sec-title-box t-blue">R80 · Investments in Private Capital: Equity and Debt</div></div>
+    <div class="reading-label">Reading 80 — Alternative Investments</div>
+    <div class="row">
+      <div class="sub-head h-blue">Venture Capital Stages</div>
+      <div class="sub-head h-blue">Leveraged Buyouts (LBO)</div>
+      <div class="sub-head h-blue">Private Debt &amp; Exit Strategies</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Seed stage:</strong> concept/idea; highest risk; small capital amounts</li>
+          <li><strong>Early stage (Series A/B):</strong> product development, initial revenues; still pre-profitability</li>
+          <li><strong>Late stage (growth/expansion):</strong> scaling operations; proven business model</li>
+          <li><strong>Pre-IPO / bridge:</strong> final round before public listing</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>VC investors receive <strong>preferred stock</strong> (liquidation preference, anti-dilution rights)</li>
+          <li><strong>Post-money valuation</strong> = pre-money + new investment</li>
+          <li>VC targets <strong>high IRR</strong> (25–35%+) to compensate for high failure rates</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>LBO:</strong> acquisition financed mostly with debt; target's cash flows service debt</li>
+          <li>Typical capital structure: 60–70% debt, 30–40% equity</li>
+          <li><strong>Value creation levers:</strong> (1) operational improvements, (2) multiple expansion, (3) leverage paydown</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li><strong>Senior secured debt:</strong> lowest cost, first priority</li>
+          <li><strong>Mezzanine debt:</strong> subordinated; higher yield; may include warrants or equity kickers</li>
+          <li><strong>PIK (payment-in-kind):</strong> interest paid in additional debt, not cash</li>
+          <li>Equity holders (GP) get residual value after debt repaid</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>PE exit strategies:</strong></li>
+          <li><strong>IPO:</strong> highest valuation potential; subject to market conditions; lock-up period applies</li>
+          <li><strong>Strategic sale (M&amp;A):</strong> sale to corporate acquirer; synergy premium possible</li>
+          <li><strong>Secondary sale:</strong> sale to another PE fund; faster but lower premium</li>
+          <li><strong>Recapitalization:</strong> additional debt raised; distribute proceeds to equity holders</li>
+          <li><strong>Liquidation:</strong> wind-down; typically worst outcome</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li><strong>Private debt:</strong> direct lending, distressed debt, venture debt, mezzanine</li>
+          <li>Offers <strong>illiquidity premium</strong> over public bonds</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== R81 ==================== -->
+  <div class="note-section s-green" id="r81">
+    <div class="sec-title-wrap"><div class="sec-title-box t-green">R81 · Real Estate and Infrastructure</div></div>
+    <div class="reading-label">Reading 81 — Alternative Investments</div>
+    <div class="row">
+      <div class="sub-head h-green">Real Estate Investment Forms</div>
+      <div class="sub-head h-green">Key RE Valuation Metrics</div>
+      <div class="sub-head h-green">Infrastructure Characteristics</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Direct investment:</strong> ownership of physical property; high capital, illiquid, active management</li>
+          <li><strong>REITs (Real Estate Investment Trusts):</strong> publicly traded; liquid; must distribute ≥90% of taxable income</li>
+          <li><strong>Private RE funds:</strong> LP structure; closed-end; leveraged</li>
+          <li><strong>CMBS (Commercial MBS):</strong> debt exposure to commercial RE; more liquid</li>
+          <li><strong>Mortgage REITs:</strong> hold mortgages, not properties</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>RE provides <strong>income + capital appreciation + inflation hedge</strong></li>
+          <li>Disadvantages: illiquidity, management burden, transaction costs</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>NOI (Net Operating Income):</strong> rental revenue − operating expenses (excl. financing &amp; taxes)</li>
+          <li><span class="f">NOI = Gross Revenue − Vacancy − Expenses</span></li>
+          <li><strong>Cap Rate (Capitalization Rate):</strong></li>
+          <li><span class="f">Cap Rate = NOI / Property Value</span></li>
+          <li><span class="f">Value = NOI / Cap Rate</span></li>
+          <li>Lower cap rate → higher valuation (prime properties)</li>
+          <li><strong>NAV (Net Asset Value):</strong> market value of assets − liabilities; used for private RE funds</li>
+          <li><strong>FFO (Funds from Operations):</strong> REIT earnings + D&amp;A − gains on sales; preferred performance metric</li>
+          <li><span class="f">FFO = Net Income + D&amp;A − Property Gains</span></li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Infrastructure:</strong> toll roads, airports, utilities, pipelines, hospitals, schools</li>
+          <li>Characteristics: long asset life, high capital intensity, monopoly-like, regulated revenues</li>
+          <li><strong>Greenfield:</strong> new construction; higher risk, higher return potential</li>
+          <li><strong>Brownfield:</strong> existing assets; lower risk, stable cash flows</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>Infrastructure cash flows are <strong>bond-like</strong>: stable, long-duration, often inflation-linked</li>
+          <li>Good for <strong>liability-driven investors</strong> (pension funds, insurance)</li>
+          <li>Access via direct investment, listed infrastructure funds, or unlisted funds</li>
+          <li>Risks: regulatory/political risk, construction risk (greenfield), usage/demand risk</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== R82 ==================== -->
+  <div class="note-section s-pink" id="r82">
+    <div class="sec-title-wrap"><div class="sec-title-box t-pink">R82 · Natural Resources</div></div>
+    <div class="reading-label">Reading 82 — Alternative Investments</div>
+    <div class="row">
+      <div class="sub-head h-pink">Commodity Price Drivers</div>
+      <div class="sub-head h-pink">Futures Curve: Contango &amp; Backwardation</div>
+      <div class="sub-head h-pink">Timberland, Farmland &amp; Features</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Supply factors:</strong> production capacity, reserves, extraction costs, geopolitics, weather</li>
+          <li><strong>Demand factors:</strong> economic growth, industrial activity, substitution, technology</li>
+          <li><strong>Storage costs:</strong> physical commodities incur storage, insurance; affect pricing</li>
+          <li>Commodities are <strong>real assets</strong> → strong <strong>inflation hedge</strong></li>
+          <li>No cash flow yield; return from price appreciation + roll yield + collateral yield</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li><strong>Spot price:</strong> current market price for immediate delivery</li>
+          <li><strong>Futures price:</strong> agreed price for future delivery</li>
+          <li><span class="f">Futures = Spot × e^[(r + storage − convenience yield) × t]</span></li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Contango:</strong> futures price &gt; spot price; normal for storable commodities with carrying costs</li>
+          <li>Rolling long futures position in contango → <strong>negative roll yield</strong> (sell low, buy high)</li>
+          <li><strong>Backwardation:</strong> futures price &lt; spot price; occurs when convenience yield is high or spot demand elevated</li>
+          <li>Rolling long futures in backwardation → <strong>positive roll yield</strong> (sell high, buy low)</li>
+        </ul>
+        <hr class="divider">
+        <table>
+          <tr><td>Curve Shape</td><td>Roll Yield</td><td>Driver</td></tr>
+          <tr><td>Contango</td><td>Negative</td><td>Storage costs dominate</td></tr>
+          <tr><td>Backwardation</td><td>Positive</td><td>Convenience yield dominates</td></tr>
+        </table>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Timberland:</strong> biological growth adds value independent of prices; diversification from harvesting timing flexibility</li>
+          <li>Returns: land appreciation + timber price changes + biological growth</li>
+          <li><strong>Farmland:</strong> income from crop/livestock production + land appreciation</li>
+          <li>Both have <strong>low correlation</strong> with stocks/bonds; inflation hedge</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>Commodity exposure via: <strong>spot</strong> (physical), <strong>futures</strong>, <strong>ETFs</strong>, <strong>commodity producer stocks</strong></li>
+          <li>Producer stocks add equity market beta; not pure commodity play</li>
+          <li><strong>Master Limited Partnerships (MLPs):</strong> midstream energy infrastructure; yield-focused</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== R83 ==================== -->
+  <div class="note-section s-teal" id="r83">
+    <div class="sec-title-wrap"><div class="sec-title-box t-teal">R83 · Hedge Funds</div></div>
+    <div class="reading-label">Reading 83 — Alternative Investments</div>
+    <div class="row">
+      <div class="sub-head h-teal">Key Strategies</div>
+      <div class="sub-head h-teal">Fees, Leverage &amp; Liquidity</div>
+      <div class="sub-head h-teal">Strategy Risk Profiles</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Long/Short Equity:</strong> long undervalued + short overvalued; variable net exposure; most common strategy</li>
+          <li><strong>Global Macro:</strong> top-down bets on currencies, rates, commodities; high leverage; directional</li>
+          <li><strong>Relative Value / Arbitrage:</strong> exploit price discrepancies (convertible arb, fixed income arb, statistical arb)</li>
+          <li><strong>Event-Driven:</strong> merger arb, distressed securities, activist investing; catalyst-dependent</li>
+          <li><strong>Managed Futures (CTA):</strong> trend-following in futures markets; systematic; good in crises</li>
+          <li><strong>Equity Market Neutral:</strong> zero net exposure; pure alpha focus</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>2-and-20 fee structure:</strong> 2% management fee on AUM + 20% incentive fee on profits</li>
+          <li>Actual industry average trending lower (1.4% mgmt / 17% incentive)</li>
+          <li><strong>High-water mark:</strong> incentive fee only on new profits above prior peak NAV</li>
+          <li><strong>Hurdle rate:</strong> minimum return (e.g., LIBOR/SOFR) before incentive fee applies</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li><strong>Leverage:</strong> use of borrowing, derivatives; amplifies both returns and losses</li>
+          <li><strong>Lock-up period:</strong> capital cannot be withdrawn (typically 1–2 years)</li>
+          <li><strong>Redemption gates:</strong> fund limits withdrawal amounts during stress</li>
+          <li><strong>Side pockets:</strong> illiquid assets segregated; investors cannot redeem</li>
+          <li>Prime broker provides leverage, stock lending, and custody services</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <table>
+          <tr><td>Strategy</td><td>Market Exposure</td><td>Key Risk</td></tr>
+          <tr><td>L/S Equity</td><td>Variable net long</td><td>Factor exposure</td></tr>
+          <tr><td>Global Macro</td><td>High directional</td><td>Tail/event risk</td></tr>
+          <tr><td>Merger Arb</td><td>Low (hedged)</td><td>Deal failure risk</td></tr>
+          <tr><td>Distressed</td><td>Low correlation</td><td>Illiquidity, credit</td></tr>
+          <tr><td>Mgd Futures</td><td>Variable/trend</td><td>Whipsaw risk</td></tr>
+          <tr><td>Eq Mkt Neutral</td><td>Near zero</td><td>Model/quant risk</td></tr>
+        </table>
+        <hr class="divider">
+        <ul>
+          <li>Hedge funds often show <strong>low correlation</strong> to equities in normal markets but correlation spikes in crises</li>
+          <li><strong>Omega ratio, Sortino ratio</strong> used alongside Sharpe for evaluation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== R84 ==================== -->
+  <div class="note-section s-orange" id="r84">
+    <div class="sec-title-wrap"><div class="sec-title-box t-orange">R84 · Introduction to Digital Assets</div></div>
+    <div class="reading-label">Reading 84 — Alternative Investments</div>
+    <div class="row">
+      <div class="sub-head h-orange">Blockchain &amp; Cryptocurrency</div>
+      <div class="sub-head h-orange">DeFi &amp; Tokenization</div>
+      <div class="sub-head h-orange">Risks &amp; Regulatory Environment</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Blockchain:</strong> distributed, immutable ledger; records transactions without central authority</li>
+          <li><strong>Proof of Work (PoW):</strong> miners solve cryptographic puzzles; energy intensive (Bitcoin)</li>
+          <li><strong>Proof of Stake (PoS):</strong> validators stake coins; more energy efficient (Ethereum post-merge)</li>
+          <li><strong>Cryptocurrency:</strong> digital currency secured by cryptography; no central bank backing</li>
+          <li><strong>Bitcoin:</strong> store of value/"digital gold"; fixed supply (21M); most liquid</li>
+          <li><strong>Altcoins:</strong> Ethereum, Solana, etc.; platform functionality beyond payments</li>
+          <li><strong>Stablecoins:</strong> pegged to fiat (USDT, USDC); reduce volatility but carry counterparty risk</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>DeFi (Decentralized Finance):</strong> financial services on blockchain without intermediaries; smart contracts execute automatically</li>
+          <li><strong>Smart contracts:</strong> self-executing code on blockchain; enable lending, trading, insurance</li>
+          <li><strong>NFTs (Non-Fungible Tokens):</strong> unique digital assets representing ownership of art, collectibles, etc.</li>
+          <li><strong>Tokenization:</strong> representing real-world assets (RE, art, bonds) as blockchain tokens; enables fractional ownership</li>
+          <li><strong>CBDCs (Central Bank Digital Currencies):</strong> government-issued digital fiat; different from crypto</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>Potential: 24/7 markets, faster settlement, financial inclusion</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Volatility risk:</strong> extreme price swings; no fundamental anchor for many coins</li>
+          <li><strong>Regulatory risk:</strong> evolving global rules; potential bans or restrictions</li>
+          <li><strong>Custody/security risk:</strong> exchange hacks, lost private keys → irreversible loss</li>
+          <li><strong>Liquidity risk:</strong> many tokens thinly traded; wide spreads</li>
+          <li><strong>Fraud/scam risk:</strong> rug pulls, Ponzi schemes, wash trading</li>
+          <li><strong>Technology risk:</strong> smart contract bugs, protocol failures</li>
+          <li><strong>ESG concerns:</strong> PoW mining energy consumption</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>Regulatory approaches vary: US (SEC/CFTC jurisdiction debates), EU (MiCA framework), Asia (varied)</li>
+          <li>Portfolio allocation: typically small (&lt;5%) given volatility</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== R85 ==================== -->
+  <div class="note-section s-indigo" id="r85">
+    <div class="sec-title-wrap"><div class="sec-title-box t-indigo">R85 · Portfolio Management Overview</div></div>
+    <div class="reading-label">Reading 85 — Portfolio Management</div>
+    <div class="row">
+      <div class="sub-head h-indigo">Portfolio Perspective</div>
+      <div class="sub-head h-indigo">Types of Investors</div>
+      <div class="sub-head h-indigo">Portfolio Management Process</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Portfolio perspective:</strong> evaluate each investment in context of the whole portfolio, not in isolation</li>
+          <li>Diversification reduces <strong>unsystematic (specific) risk</strong>; cannot eliminate <strong>systematic (market) risk</strong></li>
+          <li>Key insight: combining assets with low correlation reduces total portfolio risk below weighted average of individual risks</li>
+          <li><span class="f">σ²(port) = w₁²σ₁² + w₂²σ₂² + 2w₁w₂σ₁σ₂ρ₁₂</span></li>
+          <li>As ρ decreases → portfolio variance decreases → diversification benefit increases</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Individual investors:</strong> unique goals, time horizon, tax situation; behavioral biases significant</li>
+          <li><strong>Pension funds:</strong> DB (liability-driven, long horizon) vs DC (member bears risk)</li>
+          <li><strong>Endowments/foundations:</strong> perpetual horizon; spending rule (e.g., 5% annually); total return focus</li>
+          <li><strong>Insurance companies:</strong> match assets to liabilities; regulatory constraints; conservative</li>
+          <li><strong>Sovereign Wealth Funds:</strong> government-owned; long horizon; varied mandates</li>
+          <li><strong>Banks:</strong> manage balance sheet; liquidity crucial; regulatory capital requirements</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Step 1 — Planning:</strong> understand client, prepare IPS (Investment Policy Statement)</li>
+          <li><strong>Step 2 — Execution:</strong> asset allocation, security selection, portfolio construction</li>
+          <li><strong>Step 3 — Feedback:</strong> monitor, rebalance, measure and report performance</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li><strong>IPS</strong> is the cornerstone document; defines objectives and constraints</li>
+          <li>Asset managers: buy-side (portfolio managers) vs sell-side (research/sales)</li>
+          <li><strong>Active management:</strong> seeks alpha vs benchmark; higher fees</li>
+          <li><strong>Passive management:</strong> replicates index; lower fees, lower turnover</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== R86 ==================== -->
+  <div class="note-section s-yellow" id="r86">
+    <div class="sec-title-wrap"><div class="sec-title-box t-yellow">R86 · Basics of Portfolio Planning and Construction</div></div>
+    <div class="reading-label">Reading 86 — Portfolio Management</div>
+    <div class="row">
+      <div class="sub-head h-yellow">IPS Components</div>
+      <div class="sub-head h-yellow">RRTTLLU Constraints</div>
+      <div class="sub-head h-yellow">Strategic Asset Allocation</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>IPS (Investment Policy Statement):</strong> formal document governing the investment relationship</li>
+          <li><strong>IPS components:</strong>
+            <ul>
+              <li>Client description and background</li>
+              <li>Investment objectives (return + risk)</li>
+              <li>Investment constraints</li>
+              <li>Investment guidelines (permitted assets, restrictions)</li>
+              <li>Performance evaluation criteria</li>
+              <li>Procedures for review and modification</li>
+            </ul>
+          </li>
+          <li>Return objective: may be stated as <strong>absolute</strong> (e.g., 7% p.a.) or <strong>relative</strong> (beat benchmark by 200 bps)</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>RRTTLLU</strong> mnemonic for IPS constraints:</li>
+          <li><strong>R</strong>isk — willingness AND ability to take risk (both must be considered)</li>
+          <li><strong>R</strong>eturn — target return requirement</li>
+          <li><strong>T</strong>ime Horizon — investment period length; longer → more risk tolerance</li>
+          <li><strong>T</strong>ax — taxable vs tax-exempt accounts; affects asset location</li>
+          <li><strong>L</strong>iquidity — need for cash; reduces risky/illiquid allocations</li>
+          <li><strong>L</strong>egal / Regulatory — ERISA, trust law, regulatory limits</li>
+          <li><strong>U</strong>nique Circumstances — ESG preferences, concentrated positions, restrictions</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Strategic Asset Allocation (SAA):</strong> long-term target weights across asset classes; driven by IPS objectives</li>
+          <li>Based on <strong>capital market assumptions</strong>: expected returns, volatilities, correlations</li>
+          <li><strong>Tactical Asset Allocation (TAA):</strong> short-term deviations from SAA to exploit market opportunities</li>
+          <li><strong>Efficient frontier:</strong> set of portfolios with highest return for given risk</li>
+          <li><strong>Risk-free asset</strong> + risky portfolio → <strong>Capital Allocation Line (CAL)</strong></li>
+          <li><strong>Optimal portfolio:</strong> tangency point of highest Sharpe ratio portfolio on efficient frontier</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>Rebalancing: periodic or threshold-based; maintains target allocation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== R87 ==================== -->
+  <div class="note-section s-purple" id="r87">
+    <div class="sec-title-wrap"><div class="sec-title-box t-purple">R87 · Behavioral Biases of Individuals</div></div>
+    <div class="reading-label">Reading 87 — Portfolio Management</div>
+    <div class="row">
+      <div class="sub-head h-purple">Cognitive Errors: Belief Perseverance</div>
+      <div class="sub-head h-purple">Cognitive Errors: Information Processing</div>
+      <div class="sub-head h-purple">Emotional Biases &amp; Portfolio Implications</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Cognitive errors</strong> stem from faulty reasoning; more correctable with education</li>
+          <li><strong>Conservatism:</strong> slow to update beliefs with new information; under-react to new data</li>
+          <li><strong>Confirmation bias:</strong> seek/interpret info that confirms existing views; ignore contradictory data</li>
+          <li><strong>Representativeness:</strong> classify based on superficial similarity; ignore base rates (gambler's fallacy)</li>
+          <li><strong>Illusion of control:</strong> believe they can control outcomes that are random</li>
+          <li><strong>Hindsight bias:</strong> "I knew it all along"; overestimate ability to predict</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Anchoring &amp; adjustment:</strong> over-rely on initial information (anchor); insufficient adjustment</li>
+          <li><strong>Mental accounting:</strong> treat money differently based on source/purpose; inconsistent with holistic portfolio view</li>
+          <li><strong>Framing:</strong> decisions affected by how information is presented (gain vs loss frame)</li>
+          <li><strong>Availability heuristic:</strong> overweight recent/vivid events; overestimate probability of memorable outcomes</li>
+          <li><strong>Conjunction fallacy:</strong> think joint event more probable than single event</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Emotional biases</strong> stem from feelings; harder to correct; must accommodate</li>
+          <li><strong>Loss aversion:</strong> losses hurt ~2× more than equal gains feel good; hold losers too long</li>
+          <li><strong>Overconfidence:</strong> over-precise estimates; excessive trading; under-diversification</li>
+          <li><strong>Self-control:</strong> prefer immediate gratification; under-save for retirement</li>
+          <li><strong>Status quo bias:</strong> preference for current state; resist changes to portfolio</li>
+          <li><strong>Endowment effect:</strong> overvalue assets already owned</li>
+          <li><strong>Regret aversion:</strong> avoid decisions that may lead to regret; herding behavior</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>Portfolio implication: underdiversification, excessive trading, suboptimal allocation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== R88 ==================== -->
+  <div class="note-section s-blue" id="r88">
+    <div class="sec-title-wrap"><div class="sec-title-box t-blue">R88 · Introduction to Risk Management</div></div>
+    <div class="reading-label">Reading 88 — Portfolio Management</div>
+    <div class="row">
+      <div class="sub-head h-blue">Risk Governance &amp; ERM</div>
+      <div class="sub-head h-blue">Types of Financial &amp; Non-Financial Risk</div>
+      <div class="sub-head h-blue">Measuring Risk: VaR, CVaR &amp; Risk Budgeting</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Risk governance:</strong> board-level oversight of firm-wide risk; sets risk appetite and policies</li>
+          <li><strong>Enterprise Risk Management (ERM):</strong> integrated framework covering all organizational risks; holistic view</li>
+          <li><strong>Risk budget:</strong> allocation of acceptable risk across portfolio/strategies; ensures total risk ≤ capacity</li>
+          <li><strong>Risk management process:</strong>
+            <ul>
+              <li>Identify risks</li>
+              <li>Measure/quantify risks</li>
+              <li>Manage/mitigate risks</li>
+              <li>Monitor and report</li>
+            </ul>
+          </li>
+          <li>Risk tolerance ≠ risk capacity; must consider both</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Financial risks:</strong>
+            <ul>
+              <li><strong>Market risk:</strong> adverse price movements (equity, FX, rates, commodities)</li>
+              <li><strong>Credit risk:</strong> counterparty default or credit quality deterioration</li>
+              <li><strong>Liquidity risk:</strong> inability to transact at fair value; funding liquidity vs market liquidity</li>
+            </ul>
+          </li>
+          <li><strong>Non-financial risks:</strong>
+            <ul>
+              <li><strong>Operational risk:</strong> people, processes, systems, external events</li>
+              <li><strong>Model risk:</strong> incorrect model assumptions or implementation errors</li>
+              <li><strong>Settlement risk:</strong> one party pays but counterparty fails to deliver</li>
+              <li><strong>Regulatory/legal risk:</strong> changes in laws or compliance failures</li>
+              <li><strong>Reputational risk:</strong> damage to firm's brand/trust</li>
+              <li><strong>Tail risk:</strong> extreme events in distributional tails</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>VaR (Value at Risk):</strong> maximum expected loss at given confidence level over specified period</li>
+          <li>Example: "1-day 95% VaR = $1M" → 95% confident loss will not exceed $1M in one day</li>
+          <li>Limitations: says nothing about losses BEYOND VaR; assumes normal distributions; not sub-additive</li>
+          <li><strong>CVaR (Conditional VaR / Expected Shortfall):</strong> expected loss given loss exceeds VaR; better tail risk measure</li>
+          <li><span class="f">CVaR = E[Loss | Loss > VaR]</span></li>
+          <li><strong>Stress testing:</strong> evaluate portfolio under extreme but plausible scenarios</li>
+          <li><strong>Scenario analysis:</strong> historical (1987 crash, 2008) or hypothetical scenarios</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li><strong>Risk budgeting:</strong> allocate a risk limit (VaR, volatility, tracking error) to each PM/strategy</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== R89 ==================== -->
+  <div class="note-section s-green" id="r89">
+    <div class="sec-title-wrap"><div class="sec-title-box t-green">R89 · Ethics and Trust in the Investment Profession</div></div>
+    <div class="reading-label">Reading 89 — Ethical and Professional Standards</div>
+    <div class="row">
+      <div class="sub-head h-green">Ethics Framework &amp; Challenges</div>
+      <div class="sub-head h-green">Ethical Decision-Making Model</div>
+      <div class="sub-head h-green">Why Ethics Matters in Finance</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Ethics:</strong> system of moral principles that guide behavior; standards for evaluating actions as right or wrong</li>
+          <li><strong>Ethical principles</strong> go beyond legal compliance; law is minimum standard</li>
+          <li>Challenges to ethical behavior:
+            <ul>
+              <li><strong>Self-interest:</strong> personal gain can override professional duty</li>
+              <li><strong>Situational influences:</strong> social pressure, authority, environment</li>
+              <li><strong>Short-term thinking:</strong> focus on immediate outcomes</li>
+              <li><strong>Overconfidence:</strong> belief that own judgment is always correct</li>
+            </ul>
+          </li>
+          <li>Good character + ethical education → better outcomes</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>CFA Institute ethical decision-making framework:</strong></li>
+          <li><strong>Step 1:</strong> Identify relevant facts and stakeholders</li>
+          <li><strong>Step 2:</strong> Identify relevant ethical principles and conflicts</li>
+          <li><strong>Step 3:</strong> Consider situational influences (pressures, incentives)</li>
+          <li><strong>Step 4:</strong> Decide and act; choose course of action consistent with ethical principles</li>
+          <li><strong>Step 5:</strong> Reflect and learn from the experience</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>"<strong>Mirror test</strong>": would you be comfortable if actions were reported in newspaper?</li>
+          <li>Ask: "Is it legal? Is it fair? Is it right?"</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li>Finance operates on <strong>trust</strong>; markets rely on confidence in integrity</li>
+          <li>Investment professionals manage other people's money → <strong>fiduciary duty</strong></li>
+          <li>Ethical behavior supports:
+            <ul>
+              <li>Client trust and long-term relationships</li>
+              <li>Market efficiency and integrity</li>
+              <li>Stability of financial system</li>
+              <li>Profession's reputation</li>
+            </ul>
+          </li>
+          <li>Unethical behavior destroys trust → undermines market function</li>
+          <li>Regulatory compliance is floor; CFA standards aim ABOVE the floor</li>
+          <li><strong>Profession vs occupation:</strong> professions demand higher ethical standards and client-first orientation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== R90 ==================== -->
+  <div class="note-section s-pink" id="r90">
+    <div class="sec-title-wrap"><div class="sec-title-box t-pink">R90 · Code of Ethics and Standards of Professional Conduct</div></div>
+    <div class="reading-label">Reading 90 — Ethical and Professional Standards</div>
+    <div class="row">
+      <div class="sub-head h-pink">6 Components of the Code of Ethics</div>
+      <div class="sub-head h-pink">Overview of the 7 Standards</div>
+      <div class="sub-head h-pink">Key Obligations &amp; Priority Rules</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li>CFA Members and Candidates must:</li>
+          <li><strong>1.</strong> Act with integrity, competence, diligence, respect, and in an ethical manner with the public, clients, prospective clients, employers, employees, colleagues, and regulators</li>
+          <li><strong>2.</strong> Place the integrity of the investment profession and interests of clients above personal interests</li>
+          <li><strong>3.</strong> Use reasonable care and exercise independent professional judgment</li>
+          <li><strong>4.</strong> Practice and encourage others to practice in a professional and ethical manner</li>
+          <li><strong>5.</strong> Promote the integrity and viability of the global capital markets</li>
+          <li><strong>6.</strong> Maintain and improve professional competence and strive to maintain the competence of other investment professionals</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Standard I:</strong> Professionalism</li>
+          <li><strong>Standard II:</strong> Integrity of Capital Markets</li>
+          <li><strong>Standard III:</strong> Duties to Clients</li>
+          <li><strong>Standard IV:</strong> Duties to Employers</li>
+          <li><strong>Standard V:</strong> Investment Analysis, Recommendations, and Actions</li>
+          <li><strong>Standard VI:</strong> Conflicts of Interest</li>
+          <li><strong>Standard VII:</strong> Responsibilities as a CFA Institute Member or CFA Candidate</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>Standards apply to <strong>all CFA members and candidates</strong> globally regardless of local law</li>
+          <li>Where local law conflicts: follow <strong>stricter</strong> of the two requirements</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Priority of transactions:</strong> Clients first → Employer second → Member's own interests last</li>
+          <li><strong>Fiduciary duty:</strong> act in best interest of clients at all times</li>
+          <li>Independence and objectivity must be maintained; gifts/entertainment that could compromise independence must be declined</li>
+          <li>Prohibition on <strong>material nonpublic information (MNPI)</strong> trading → market integrity</li>
+          <li>Standards apply whether or not there is a specific law prohibiting the conduct</li>
+          <li><strong>Best execution:</strong> seek best price/terms for client transactions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== R91 ==================== -->
+  <div class="note-section s-teal" id="r91">
+    <div class="sec-title-wrap"><div class="sec-title-box t-teal">R91 · Guidance for Standards I–VII</div></div>
+    <div class="reading-label">Reading 91 — Ethical and Professional Standards</div>
+
+    <!-- Standards I & II -->
+    <div class="row">
+      <div class="sub-head h-teal">Standard I: Professionalism</div>
+      <div class="sub-head h-teal">Standard II: Capital Market Integrity</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>I(A) Knowledge of the Law:</strong> understand and comply with all applicable laws; must NOT participate in or assist violations; if conflict, follow stricter standard; disassociate from illegal activity</li>
+          <li><strong>I(B) Independence and Objectivity:</strong> maintain free from outside pressures; do not accept gifts/compensation that could compromise independence; modest gifts OK; research must be objective</li>
+          <li><strong>I(C) Misrepresentation:</strong> do not make false or misleading statements about qualifications, services, performance; do not plagiarize; cite sources; model/methodology misrepresentation prohibited</li>
+          <li><strong>I(D) Misconduct:</strong> no acts involving dishonesty, fraud, deceit; personal conduct reflecting adversely on profession</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>II(A) Material Nonpublic Information (MNPI):</strong> do not trade or cause others to trade on MNPI; information is <strong>material</strong> if a reasonable investor would use it in investment decision; <strong>nonpublic</strong> if not generally disseminated</li>
+          <li><strong>Mosaic theory:</strong> analyst may combine non-material nonpublic info + public info to reach conclusion → this is permitted</li>
+          <li><strong>Firewall:</strong> information barriers between investment banking and research/trading; must be maintained</li>
+          <li><strong>II(B) Market Manipulation:</strong> do not engage in practices that distort prices or artificially inflate volume; includes spreading false information or using transactions to mislead others about supply/demand</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Standards III & IV -->
+    <div class="row">
+      <div class="sub-head h-teal">Standard III: Duties to Clients</div>
+      <div class="sub-head h-teal">Standard IV: Duties to Employers</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>III(A) Loyalty, Prudence &amp; Care:</strong> fiduciary duty; client interests above personal; use judgment a prudent person would use; soft dollar commissions must benefit clients</li>
+          <li><strong>III(B) Fair Dealing:</strong> treat all clients fairly when disseminating recommendations or taking investment actions; do NOT discriminate; system for equitable distribution required</li>
+          <li><strong>III(C) Suitability:</strong> know your client (KYC); assess risk tolerance, time horizon, objectives; unsuitable recommendations violate this standard; IPS must be updated regularly</li>
+          <li><strong>III(D) Performance Presentation:</strong> do not misrepresent performance; include relevant benchmarks; composite returns; don't cherry-pick</li>
+          <li><strong>III(E) Preservation of Confidentiality:</strong> maintain confidentiality of client info; exceptions: illegal activity, required by law, client consent</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>IV(A) Loyalty to Employer:</strong> act in employer's best interest; do NOT take client lists, proprietary info when leaving; planning to leave is NOT a violation; must give notice</li>
+          <li><strong>IV(B) Additional Compensation:</strong> must obtain written permission from employer before accepting compensation from outside sources that may create conflicts of interest</li>
+          <li><strong>IV(C) Responsibilities of Supervisors:</strong> must make reasonable efforts to detect and prevent violations by subordinates; implement compliance procedures; delegate supervisory authority properly</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>Whistleblowing: if employer engages in illegal activity, may report to authorities; not required but permitted</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Standards V & VI/VII -->
+    <div class="row">
+      <div class="sub-head h-teal">Standard V: Investment Analysis &amp; Actions</div>
+      <div class="sub-head h-teal">Standards VI &amp; VII: Conflicts &amp; CFA Responsibilities</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>V(A) Diligence and Reasonable Basis:</strong> exercise diligence, independence, thoroughness; reasonable and adequate basis for recommendations; when using third-party research, assess quality</li>
+          <li><strong>V(B) Communication with Clients:</strong> distinguish fact from opinion; disclose limitations of analysis; use reasonable judgment; communicate material changes in process</li>
+          <li><strong>V(C) Record Retention:</strong> maintain records supporting analysis and recommendations; minimum 7 years recommended; electronic records acceptable; member responsible for retention</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>VI(A) Disclosure of Conflicts:</strong> proactively disclose all conflicts of interest to clients and employer; includes ownership of covered securities, board memberships, compensation arrangements</li>
+          <li><strong>VI(B) Priority of Transactions:</strong> client transactions &gt; employer proprietary &gt; member personal; no front-running client orders; personal trading policies (60-day holding period suggested)</li>
+          <li><strong>VI(C) Referral Fees:</strong> disclose any fees received or paid for referring clients; disclosure must be made before engagement so client can assess bias</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li><strong>VII(A) Conduct as Member:</strong> do not engage in conduct that compromises integrity of CFA exams; do not misrepresent exam content</li>
+          <li><strong>VII(B) Reference to CFA:</strong> do not exaggerate CFA significance; cannot say "CFA Level I passed" implies superiority; use correct references (e.g., "CFA charterholder", not "CFA analyst")</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== R92 ==================== -->
+  <div class="note-section s-orange" id="r92">
+    <div class="sec-title-wrap"><div class="sec-title-box t-orange">R92 · Introduction to GIPS</div></div>
+    <div class="reading-label">Reading 92 — Ethical and Professional Standards</div>
+    <div class="row">
+      <div class="sub-head h-orange">Purpose &amp; Compliance</div>
+      <div class="sub-head h-orange">Composites &amp; Key Requirements</div>
+      <div class="sub-head h-orange">Verification &amp; Benefits</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>GIPS (Global Investment Performance Standards):</strong> voluntary ethical standards for investment firms to calculate and present performance fairly and consistently</li>
+          <li>Developed by CFA Institute; globally recognized</li>
+          <li><strong>Who must comply:</strong> the <em>investment management firm</em> claims compliance, not individuals</li>
+          <li><strong>Compliance is firm-wide:</strong> cannot claim compliance for a single product</li>
+          <li>Applies to <strong>prospective clients</strong>; does not apply retroactively to non-GIPS periods</li>
+          <li>Purpose: create global standard for transparent, comparable performance presentation; build investor trust</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Composite:</strong> aggregation of portfolios with similar investment strategy/objective; must include ALL actual fee-paying, discretionary portfolios in at least one composite</li>
+          <li>Cannot exclude poor-performing accounts; cannot cherry-pick</li>
+          <li>New portfolios added after 1 full month under management</li>
+          <li>Terminated portfolios must be included for periods they were managed</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li><strong>Key requirements:</strong>
+            <ul>
+              <li>Returns calculated after trading expenses (gross or net disclosed)</li>
+              <li>Composite returns asset-weighted</li>
+              <li>Minimum 5-year track record (build to 10 years)</li>
+              <li>External cash flows must be handled consistently (TWRR)</li>
+              <li>Disclosures: composite definition, number of portfolios, internal dispersion, benchmark</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Verification:</strong> independent third-party review of firm-wide GIPS compliance; NOT required but recommended</li>
+          <li>Verification covers whether firm has complied with GIPS requirements firm-wide; does NOT verify individual composite accuracy</li>
+          <li><strong>Performance examination:</strong> deeper review of specific composite; separate from verification</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li><strong>Benefits of GIPS compliance:</strong>
+            <ul>
+              <li>Competitive advantage in marketing</li>
+              <li>Credibility with prospective clients globally</li>
+              <li>Standardizes internal performance measurement</li>
+              <li>Facilitates fair comparison across firms</li>
+            </ul>
+          </li>
+          <li>GIPS does NOT guarantee future performance or accuracy of all data</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== R93 ==================== -->
+  <div class="note-section s-indigo" id="r93">
+    <div class="sec-title-wrap"><div class="sec-title-box t-indigo">R93 · Ethics Application</div></div>
+    <div class="reading-label">Reading 93 — Ethical and Professional Standards</div>
+    <div class="row">
+      <div class="sub-head h-indigo">MNPI &amp; Research Scenarios</div>
+      <div class="sub-head h-indigo">Client Duties &amp; Conflicts</div>
+      <div class="sub-head h-indigo">Common Exam Traps &amp; Red Flags</div>
+    </div>
+    <div class="row">
+      <div class="cbox">
+        <ul>
+          <li><strong>Scenario:</strong> analyst receives tip from company CFO before earnings → must NOT trade; must report to compliance; even if tip inadvertently disclosed, it's MNPI</li>
+          <li><strong>Mosaic theory application:</strong> analyst visits factories (public info), reads trade publications (public), observes increased truck activity → may form buy recommendation; PERMITTED</li>
+          <li><strong>Research independence:</strong> investment banking pressure to issue favorable report → analyst must maintain independence (Std I(B)); document pressure and refusal</li>
+          <li><strong>Plagiarism:</strong> using another firm's research without attribution → violates I(C); must cite sources</li>
+          <li><strong>Social media:</strong> tweeting recommendations must meet same standards as formal reports</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Suitability scenario:</strong> retired client asks to put 100% in tech stocks → unsuitable; must update IPS, discuss risk; cannot comply without discussion</li>
+          <li><strong>Fair dealing scenario:</strong> hot IPO allocated only to top clients → violates III(B); must have equitable system; pro-rata or lottery acceptable</li>
+          <li><strong>Soft dollars:</strong> using client commissions to buy research that benefits other clients or manager → must benefit the paying client; disclose to client</li>
+          <li><strong>Leaving employer:</strong> taking client list without permission → violates IV(A); planning departure alone is OK; soliciting clients before leaving is NOT</li>
+          <li><strong>Outside compensation:</strong> board seat at company covered by analyst → must disclose to employer AND clients (Std IV(B), VI(A))</li>
+        </ul>
+      </div>
+      <div class="cbox">
+        <ul>
+          <li><strong>Key exam traps:</strong></li>
+          <li>Law vs Standards: if law is stricter → follow law; if CFA Standards are stricter → follow CFA Standards</li>
+          <li>Disclosure is NOT a cure-all: disclosing a conflict does NOT make the action acceptable if it still harms clients</li>
+          <li>Reasonable basis required EVEN IF client demands a specific recommendation</li>
+          <li>"Best price" for client may NOT always be the lowest commission (consider execution quality, services)</li>
+          <li>CFA designation: "CFA" must be used as adjective not noun; "John Smith, CFA" OK; "John Smith is a CFA" NOT OK</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li><strong>Red flags in exam questions:</strong> commission arrangements, gifts from issuers, analyst travel paid by company, personal trading in covered securities, family account treatment</li>
+          <li>When in doubt: <strong>disclose</strong> the conflict; place <strong>client interests first</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+</body>
+</html>

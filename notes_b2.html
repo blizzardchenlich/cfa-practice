@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CFA L1 三色笔记 — Book 2</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; background: #f0f2f5; color: #222; }
+.layout { display: flex; min-height: 100vh; }
+.sidebar { width: 240px; background: #1a237e; color: white; padding: 16px 12px; position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0; }
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.25); border-radius: 2px; }
+.sidebar .logo { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px; padding: 0 6px; }
+.sidebar .sub { font-size: 11px; color: #90caf9; padding: 0 6px; margin-bottom: 16px; }
+.sidebar-group { margin-bottom: 14px; }
+.sidebar-group-title { font-size: 10px; font-weight: 700; color: #ffcc80; text-transform: uppercase; letter-spacing: .8px; padding: 4px 8px; background: rgba(255,255,255,.08); border-radius: 4px; margin-bottom: 4px; }
+.sidebar a { display: block; padding: 5px 10px; color: #c5cae9; font-size: 12px; text-decoration: none; border-radius: 4px; transition: background .15s; line-height: 1.4; }
+.sidebar a:hover { background: rgba(255,255,255,.14); color: white; }
+.sidebar-back { display: block; padding: 8px 10px; margin-bottom: 14px; background: rgba(255,255,255,.1); border-radius: 6px; color: #90caf9; font-size: 12px; text-decoration: none; text-align: center; transition: background .15s; }
+.sidebar-back:hover { background: rgba(255,255,255,.2); color: white; }
+.main { flex: 1; padding: 24px; overflow-x: hidden; }
+.page-title { background: linear-gradient(135deg, #1a237e 0%, #283593 100%); color: white; text-align: center; padding: 24px 20px; margin-bottom: 28px; border-radius: 12px; box-shadow: 0 4px 16px rgba(26,35,126,.3); }
+.page-title h1 { font-size: 20px; margin-bottom: 6px; font-weight: 700; }
+.page-title p { font-size: 13px; color: #90caf9; }
+.note-section { border-radius: 14px; padding: 22px 20px 20px; margin-bottom: 24px; scroll-margin-top: 20px; }
+.s-yellow { background: #fff8e1; }
+.s-purple { background: #ede7f6; }
+.s-blue { background: #e3f2fd; }
+.s-green { background: #e8f5e9; }
+.s-pink { background: #fce4ec; }
+.s-teal { background: #e0f7fa; }
+.s-orange { background: #fff3e0; }
+.s-indigo { background: #e8eaf6; }
+.sec-title-wrap { display: flex; justify-content: center; margin-bottom: 18px; }
+.sec-title-box { color: white; font-weight: 700; font-size: 13px; text-align: center; text-transform: uppercase; padding: 10px 30px; border-radius: 8px; letter-spacing: .6px; line-height: 1.5; max-width: 460px; }
+.t-yellow { background: #f57f17; }
+.t-purple { background: #6a1b9a; }
+.t-blue { background: #0d47a1; }
+.t-green { background: #1b5e20; }
+.t-pink { background: #880e4f; }
+.t-teal { background: #006064; }
+.t-orange { background: #bf360c; }
+.t-indigo { background: #283593; }
+.reading-label { font-size: 10.5px; color: rgba(0,0,0,.4); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; text-align: center; }
+.row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.sub-head { flex: 1; min-width: 140px; text-align: center; font-weight: 700; font-size: 12.5px; padding: 8px 10px; border-radius: 8px; border: 2px solid; }
+.h-yellow { background: #fff9c4; border-color: #f9a825; color: #5d3d00; }
+.h-purple { background: #f3e5f5; border-color: #9c27b0; color: #4a0072; }
+.h-blue { background: #e3f2fd; border-color: #1e88e5; color: #0d3576; }
+.h-green { background: #f1f8e9; border-color: #66bb6a; color: #1b5e20; }
+.h-pink { background: #fce4ec; border-color: #ec407a; color: #880e4f; }
+.h-teal { background: #e0f7fa; border-color: #26c6da; color: #006064; }
+.h-orange { background: #fff8e1; border-color: #ffa726; color: #bf360c; }
+.h-indigo { background: #e8eaf6; border-color: #7986cb; color: #283593; }
+.cbox { flex: 1; min-width: 170px; background: rgba(255,255,255,.68); border-radius: 9px; padding: 12px 14px; border: 1px solid rgba(0,0,0,.09); font-size: 12.5px; line-height: 1.55; }
+.cbox ul { padding-left: 16px; }
+.cbox li { margin-bottom: 4px; }
+.cbox strong { color: #1a237e; }
+.cbox .f { font-family: 'Courier New', monospace; background: rgba(0,0,0,.06); padding: 3px 8px; border-radius: 4px; font-size: 12px; margin: 4px 0; display: inline-block; }
+.cbox table { border-collapse: collapse; width: 100%; font-size: 11.5px; }
+.cbox table td { padding: 4px 6px; border: 1px solid #ccc; }
+.cbox table tr:first-child td { background: rgba(0,0,0,.05); font-weight: 600; }
+.divider { border: none; border-top: 1.5px solid rgba(0,0,0,.1); margin: 14px 0; }
+@media (max-width: 768px) { .sidebar { display: none; } .main { padding: 12px; } .row { flex-direction: column; } }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<div class="sidebar">
+  <a href="index.html" class="sidebar-back">← 返回主页</a>
+  <div class="logo">CFA L1 · Book 2</div>
+  <div class="sub">三色笔记 | SchweserNotes 2024</div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Portfolio Management</div>
+    <a href="#r20">R20. Portfolio Risk &amp; Return I</a>
+    <a href="#r21">R21. Portfolio Risk &amp; Return II</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Corporate Issuers</div>
+    <a href="#r22">R22. Organizational Forms</a>
+    <a href="#r23">R23. Investors &amp; Stakeholders</a>
+    <a href="#r24">R24. Corporate Governance</a>
+    <a href="#r25">R25. Working Capital &amp; Liquidity</a>
+    <a href="#r26">R26. Capital Investments</a>
+    <a href="#r27">R27. Capital Structure</a>
+    <a href="#r28">R28. Business Models</a>
+  </div>
+</div>
+
+<div class="main">
+
+<div class="page-title">
+  <h1>CFA Level I — Book 2 三色笔记</h1>
+  <p>Portfolio Management (Part 1) &amp; Corporate Issuers &nbsp;|&nbsp; SchweserNotes 2024</p>
+</div>
+
+<!-- R20 -->
+<div id="r20" class="note-section s-yellow">
+  <div class="reading-label">Portfolio Management · Reading 20</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-yellow">20. Portfolio Risk and Return: Part I</div></div>
+  <div class="row">
+    <div class="sub-head h-yellow">Return Measures</div>
+    <div class="sub-head h-yellow">Risk Measures</div>
+    <div class="sub-head h-yellow">Portfolio Diversification</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>HPR</strong>: total return including income and price change</li>
+        <li><div class="f">HPR = (P₁ − P₀ + D) / P₀</div></li>
+        <li><strong>Arithmetic mean</strong>: simple average; overstates compound growth</li>
+        <li><strong>Geometric mean (CAGR)</strong>: correct measure of wealth growth over multiple periods</li>
+        <li><div class="f">G = [(1+R₁)(1+R₂)…(1+Rₙ)]^(1/n) − 1</div></li>
+        <li><strong>Money-weighted return</strong>: IRR method; accounts for cash flow timing; investor-specific</li>
+        <li><strong>Time-weighted return</strong>: eliminates external cash flow impact; preferred for manager evaluation</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Variance</strong>: average squared deviation from mean</li>
+        <li><div class="f">σ² = Σ[Pᵢ(Rᵢ − E[R])²]</div></li>
+        <li><strong>Standard deviation</strong>: √variance; same units as return</li>
+        <li><strong>Covariance</strong>: how two assets move together; positive or negative</li>
+        <li><div class="f">Cov(A,B) = ρ(A,B) × σ_A × σ_B</div></li>
+        <li><strong>Correlation (ρ)</strong>: standardized covariance; ranges −1 to +1</li>
+        <li>ρ = −1: perfect negative (max diversification); ρ = +1: no diversification benefit</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Portfolio variance (2 assets)</strong>:</li>
+        <li><div class="f">σ²_p = w²_Aσ²_A + w²_Bσ²_B + 2w_Aw_BCov(A,B)</div></li>
+        <li>Low correlation → portfolio risk below weighted-average risk</li>
+        <li><strong>Efficient frontier</strong>: highest return for given risk; optimal risky portfolios</li>
+        <li><strong>MVP</strong>: minimum variance portfolio; leftmost point on frontier</li>
+        <li><strong>Diversifiable (unsystematic) risk</strong>: firm-specific; eliminated by diversification</li>
+        <li><strong>Systematic risk</strong>: market-wide; cannot be diversified; compensated by market premium</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- R21 -->
+<div id="r21" class="note-section s-purple">
+  <div class="reading-label">Portfolio Management · Reading 21</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-purple">21. Portfolio Risk and Return: Part II</div></div>
+  <div class="row">
+    <div class="sub-head h-purple">Capital Market Line (CML)</div>
+    <div class="sub-head h-purple">CAPM &amp; SML</div>
+    <div class="sub-head h-purple">Beta &amp; Performance Measures</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>CML</strong>: adds risk-free asset to efficient frontier; all investors hold market portfolio</li>
+        <li><div class="f">E(Rp) = Rf + [(E(Rm)−Rf)/σm] × σp</div></li>
+        <li><strong>Separation theorem</strong>: optimal risky portfolio (market) is same for all; only Rf vs. market allocation differs by risk aversion</li>
+        <li>CML uses <strong>total risk (σ)</strong>; only efficient portfolios lie on CML</li>
+        <li>Borrowing (levered) portfolios extend beyond market portfolio on CML</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>CAPM</strong>: required return based on systematic risk only</li>
+        <li><div class="f">E(Ri) = Rf + βi × [E(Rm) − Rf]</div></li>
+        <li><strong>SML</strong>: plots expected return vs. beta; all fairly priced assets on SML</li>
+        <li>Above SML → underpriced (positive alpha → buy)</li>
+        <li>Below SML → overpriced (negative alpha → sell)</li>
+        <li><strong>Market risk premium</strong> = E(Rm) − Rf</li>
+        <li>SML applies to <strong>any asset</strong>; CML only to efficient portfolios</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Beta</strong>: systematic risk sensitivity</li>
+        <li><div class="f">β = Cov(Ri,Rm) / σ²m = ρ(i,m) × σi/σm</div></li>
+        <li><strong>Jensen's alpha</strong>: actual − CAPM required; α > 0 = outperformance</li>
+        <li><strong>Sharpe ratio</strong>: excess return per unit total risk; use for entire portfolio</li>
+        <li><div class="f">Sharpe = (Rp − Rf) / σp</div></li>
+        <li><strong>Treynor ratio</strong>: excess return per unit beta; use for diversified portfolio</li>
+        <li><div class="f">Treynor = (Rp − Rf) / βp</div></li>
+        <li><strong>M² measure</strong>: risk-adjusts portfolio to market's total risk for direct comparison</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- R22 -->
+<div id="r22" class="note-section s-blue">
+  <div class="reading-label">Corporate Issuers · Reading 22</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-blue">22. Organizational Forms, Corporate Issuer Features &amp; Ownership</div></div>
+  <div class="row">
+    <div class="sub-head h-blue">Business Structures</div>
+    <div class="sub-head h-blue">Corporate Features</div>
+    <div class="sub-head h-blue">Ownership Types</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Sole proprietorship</strong>: unlimited personal liability; owner = manager; no separate taxation</li>
+        <li><strong>General partnership</strong>: all partners share unlimited liability; pass-through taxation</li>
+        <li><strong>Limited partnership (LP)</strong>: GP has unlimited liability; LPs capped at investment; common in PE/hedge funds</li>
+        <li><strong>Corporation</strong>: separate legal entity; <strong>limited liability</strong>; double taxation (corporate + dividend); perpetual existence</li>
+        <li><strong>LLC/LLP</strong>: limited liability + pass-through taxation hybrid</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Common equity</strong>: residual claim; voting rights; highest risk/return</li>
+        <li><strong>Preferred shares</strong>: fixed dividend; priority over common in liquidation; typically no voting</li>
+        <li><strong>Debt</strong>: contractual obligation; interest tax-deductible; priority in bankruptcy</li>
+        <li><strong>Convertible bonds</strong>: can convert to equity; carry lower coupon than straight debt</li>
+        <li><strong>Financial leverage</strong>: debt amplifies equity returns — increases both upside and downside</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Public companies</strong>: exchange-listed; regulatory disclosure; more liquid but costly</li>
+        <li><strong>Private companies</strong>: no public trading; financed by PE/VC/retained earnings; less disclosure</li>
+        <li><strong>Controlling vs. minority shareholders</strong>: controlling can influence strategy; minority face expropriation risk</li>
+        <li><strong>Shareholder vs. creditor conflict</strong>: shareholders prefer higher risk; creditors prefer stability</li>
+        <li><strong>Dual-class shares</strong>: founders retain voting control despite minority economic ownership</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- R23 -->
+<div id="r23" class="note-section s-green">
+  <div class="reading-label">Corporate Issuers · Reading 23</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-green">23. Investors and Other Stakeholders</div></div>
+  <div class="row">
+    <div class="sub-head h-green">Principal-Agent Problem</div>
+    <div class="sub-head h-green">Stakeholder Groups</div>
+    <div class="sub-head h-green">ESG Considerations</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Principal-agent problem</strong>: managers (agents) may not act in owners' (principals') interests</li>
+        <li><strong>Manager-owner conflict</strong>: empire-building, excessive perks, risk-avoidance vs. value maximization</li>
+        <li><strong>Shareholder-creditor conflict</strong>: shareholders benefit from risk-taking; creditors bear downside (asset substitution)</li>
+        <li><strong>Agency costs</strong>: monitoring + bonding + residual loss</li>
+        <li><strong>Board of directors</strong>: primary mechanism aligning manager and shareholder interests</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Shareholders</strong>: residual claimants; seek long-term value; vote on major decisions</li>
+        <li><strong>Creditors/bondholders</strong>: contractual rights; protected by covenants</li>
+        <li><strong>Employees</strong>: human capital at risk; interested in job security and wages</li>
+        <li><strong>Customers</strong>: quality, fair pricing; long-term relationship value</li>
+        <li><strong>Suppliers</strong>: trade credit exposure; interested in payment reliability</li>
+        <li><strong>Government/regulators</strong>: tax revenue, compliance, employment</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>ESG</strong>: framework for non-financial risk and opportunity evaluation</li>
+        <li><strong>Environmental</strong>: carbon emissions, climate risk, resource use — affects costs and regulatory exposure</li>
+        <li><strong>Social</strong>: labor practices, supply chain ethics, diversity and inclusion</li>
+        <li><strong>Governance</strong>: board independence, executive pay, transparency, anti-corruption</li>
+        <li><strong>ESG integration</strong>: negative screening, positive tilts, engagement, impact investing</li>
+        <li>Poor ESG → reputational risk, fines, stranded assets, higher cost of capital</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- R24 -->
+<div id="r24" class="note-section s-pink">
+  <div class="reading-label">Corporate Issuers · Reading 24</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-pink">24. Corporate Governance: Conflicts, Mechanisms, Risks &amp; Benefits</div></div>
+  <div class="row">
+    <div class="sub-head h-pink">Board Structure</div>
+    <div class="sub-head h-pink">Governance Mechanisms</div>
+    <div class="sub-head h-pink">Risks &amp; Benefits</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Independent directors</strong>: no material ties to company; majority should be independent</li>
+        <li><strong>One-tier board</strong>: executive + non-executive directors; common in US/UK</li>
+        <li><strong>Two-tier board</strong>: supervisory board oversees management board; common in Germany</li>
+        <li><strong>Board committees</strong>: audit, compensation, nominations — all should be independent</li>
+        <li><strong>Staggered boards</strong>: directors elected in tranches; makes hostile takeovers harder</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Internal mechanisms</strong>: board oversight, performance-linked pay, internal audit, shareholder voting</li>
+        <li><strong>External mechanisms</strong>: market for corporate control (takeover threat), auditors, regulators, proxy advisors</li>
+        <li><strong>Proxy voting</strong>: vote without attending; institutional investors increasingly active</li>
+        <li><strong>Shareholder activism</strong>: push for strategic/governance changes</li>
+        <li><strong>Takeover defenses</strong>: poison pills, supermajority requirements — can entrench management</li>
+        <li><strong>Say-on-pay</strong>: non-binding shareholder vote on executive compensation</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Governance risks</strong>: fraud, value destruction, excessive risk-taking, tunneling (related-party abuse)</li>
+        <li><strong>Concentration risk</strong>: controlling shareholder may expropriate minority</li>
+        <li><strong>Benefits of good governance</strong>: lower cost of capital, better financing access, reduced agency costs</li>
+        <li><strong>Long-termism vs. short-termism</strong>: quarterly pressure vs. sustainable value creation</li>
+        <li><strong>Key frameworks</strong>: Sarbanes-Oxley (US), UK Corporate Governance Code, OECD Principles</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- R25 -->
+<div id="r25" class="note-section s-teal">
+  <div class="reading-label">Corporate Issuers · Reading 25</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-teal">25. Working Capital and Liquidity</div></div>
+  <div class="row">
+    <div class="sub-head h-teal">Liquidity Ratios</div>
+    <div class="sub-head h-teal">Cash Conversion Cycle</div>
+    <div class="sub-head h-teal">Liquidity Management</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Current ratio</strong>: ability to cover short-term obligations</li>
+        <li><div class="f">Current Ratio = Current Assets / Current Liabilities</div></li>
+        <li><strong>Quick ratio</strong>: excludes inventory (least liquid)</li>
+        <li><div class="f">Quick = (Cash + Securities + Receivables) / CL</div></li>
+        <li><strong>Cash ratio</strong>: most conservative; only cash and equivalents</li>
+        <li><div class="f">Cash Ratio = (Cash + Mkt Securities) / CL</div></li>
+        <li>Interpret vs. industry norms and historical trends</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>CCC</strong>: net days cash tied up in operations; shorter = more efficient</li>
+        <li><div class="f">CCC = DIO + DSO − DPO</div></li>
+        <li><strong>DIO</strong>: avg days to sell inventory</li>
+        <li><div class="f">DIO = (Avg Inventory / COGS) × 365</div></li>
+        <li><strong>DSO</strong>: avg days to collect receivables</li>
+        <li><div class="f">DSO = (Avg Receivables / Revenue) × 365</div></li>
+        <li><strong>DPO</strong>: avg days to pay suppliers; longer = uses supplier financing</li>
+        <li>Negative CCC: collect cash before paying (e.g., Amazon)</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Primary liquidity sources</strong>: cash balances, revolving credit, trade credit — readily available</li>
+        <li><strong>Secondary sources</strong>: asset liquidation, debt restructuring, equity issuance — costly and slow</li>
+        <li><strong>Drags on liquidity</strong>: slow receivables, obsolete inventory — delay cash inflows</li>
+        <li><strong>Pulls on liquidity</strong>: paying early, reduced credit lines — accelerate outflows</li>
+        <li><strong>Working capital</strong> = CA − CL; positive = short-term buffer</li>
+        <li>Excess WC is costly; insufficient WC is risky — balance is key</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- R26 -->
+<div id="r26" class="note-section s-orange">
+  <div class="reading-label">Corporate Issuers · Reading 26</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-orange">26. Capital Investments and Capital Allocation</div></div>
+  <div class="row">
+    <div class="sub-head h-orange">NPV &amp; IRR</div>
+    <div class="sub-head h-orange">Capital Budgeting Process</div>
+    <div class="sub-head h-orange">Real Options</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>NPV rule</strong>: invest if NPV &gt; 0; maximizes shareholder wealth; theoretically superior</li>
+        <li><div class="f">NPV = Σ[CFₜ/(1+r)ᵗ] − Initial Investment</div></li>
+        <li><strong>IRR</strong>: rate where NPV = 0; accept if IRR &gt; hurdle rate</li>
+        <li><strong>NPV vs IRR conflicts</strong>: choose NPV for mutually exclusive projects (scale/timing differences)</li>
+        <li><strong>MIRR</strong>: reinvestment at WACC; resolves reinvestment rate problem</li>
+        <li><strong>Payback period</strong>: years to recover investment; ignores TVM and post-payback flows</li>
+        <li><strong>Profitability Index (PI)</strong> = NPV / Investment; useful for capital rationing</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Expansion projects</strong>: new ventures; use incremental after-tax operating cash flows</li>
+        <li><strong>Replacement projects</strong>: use differential cash flows (new minus old)</li>
+        <li><strong>Regulatory/safety projects</strong>: mandated; evaluate on cost minimization</li>
+        <li><strong>Sunk costs</strong>: already incurred; irrelevant to decisions</li>
+        <li><strong>Opportunity costs</strong>: foregone value of best alternative; must be included</li>
+        <li><strong>Cannibalization</strong>: negative externality — reduce sales of existing products; must be captured</li>
+        <li>Use <strong>incremental after-tax cash flows</strong>, not accounting income</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Real options</strong>: right to take future action; adds value beyond static NPV</li>
+        <li><strong>Abandonment option</strong>: exit project; limits downside (like a put option)</li>
+        <li><strong>Expansion option</strong>: scale up if successful (like a call option)</li>
+        <li><strong>Flexibility option</strong>: change inputs/outputs; reduces cost risk</li>
+        <li><strong>Timing option</strong>: delay until more info available; valuable in uncertainty</li>
+        <li><strong>Fundamental option</strong>: embedded in project nature (e.g., only drill if oil price high)</li>
+        <li>NPV with real options = static NPV + option value</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- R27 -->
+<div id="r27" class="note-section s-indigo">
+  <div class="reading-label">Corporate Issuers · Reading 27</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-indigo">27. Capital Structure</div></div>
+  <div class="row">
+    <div class="sub-head h-indigo">MM Theorems</div>
+    <div class="sub-head h-indigo">WACC &amp; Optimal Structure</div>
+    <div class="sub-head h-indigo">Leverage Effects</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>MM I (no taxes)</strong>: capital structure irrelevant; firm value independent of financing mix</li>
+        <li><strong>MM II (no taxes)</strong>: cost of equity rises with leverage; WACC stays constant</li>
+        <li><div class="f">re = r₀ + (r₀ − rd) × (D/E)</div></li>
+        <li><strong>MM with taxes</strong>: interest tax-deductible → tax shield adds value</li>
+        <li><div class="f">V_L = V_U + (T × D)</div></li>
+        <li><strong>Financial distress costs</strong>: offset tax shield at high leverage — direct (legal) + indirect (lost customers)</li>
+        <li><strong>Trade-off theory</strong>: optimal structure balances tax shield vs. distress costs</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>WACC</strong>: minimum required return on assets; discount rate for projects</li>
+        <li><div class="f">WACC = (E/V)×re + (D/V)×rd×(1−T)</div></li>
+        <li><strong>Optimal structure</strong>: minimizes WACC and maximizes firm value</li>
+        <li><strong>Pecking order theory</strong>: prefer retained earnings → debt → equity; new equity signals overvaluation</li>
+        <li><strong>Static trade-off theory</strong>: target leverage based on tax/distress tradeoff</li>
+        <li>As leverage rises: tax shield captured, but distress probability increases</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Business risk</strong>: variability of EBIT; driven by demand, operating leverage, competition</li>
+        <li><strong>Financial risk</strong>: additional equity risk from debt use</li>
+        <li><strong>DOL</strong>: % change in EBIT per 1% change in sales</li>
+        <li><div class="f">DOL = (Sales − VC) / EBIT</div></li>
+        <li><strong>DFL</strong>: % change in EPS per 1% change in EBIT</li>
+        <li><div class="f">DFL = EBIT / (EBIT − Interest)</div></li>
+        <li><strong>DTL</strong> = DOL × DFL; combined earnings volatility</li>
+        <li>High DOL + High DFL = highly volatile EPS — risky for equity investors</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- R28 -->
+<div id="r28" class="note-section s-yellow">
+  <div class="reading-label">Corporate Issuers · Reading 28</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-yellow">28. Business Models</div></div>
+  <div class="row">
+    <div class="sub-head h-yellow">Value Creation</div>
+    <div class="sub-head h-yellow">Revenue Models</div>
+    <div class="sub-head h-yellow">Business Model Types</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Value proposition</strong>: what customers find valuable — quality, price, convenience, innovation</li>
+        <li><strong>Value chain</strong>: sequence from inputs to delivery; each step must add more value than it costs</li>
+        <li><strong>Competitive advantage</strong>: cost leadership, differentiation, or niche focus</li>
+        <li><strong>Network effects</strong>: value grows with more users; creates strong moat (social media, exchanges)</li>
+        <li><strong>Switching costs</strong>: costs to change providers; increases retention and pricing power</li>
+        <li><strong>Economies of scale</strong>: unit costs fall as volume increases</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Subscription</strong>: recurring payments; predictable revenue; high LTV (Netflix, SaaS)</li>
+        <li><strong>Transaction/volume-based</strong>: revenue per unit; variable and activity-driven</li>
+        <li><strong>Fee-for-service</strong>: payment for specific services; consulting, healthcare, legal</li>
+        <li><strong>Licensing</strong>: charge for IP use (patents, software, brand); high margin, scalable</li>
+        <li><strong>Advertising</strong>: free to users; monetize via advertisers (Google, Meta)</li>
+        <li><strong>Freemium</strong>: basic free, premium paid; low user acquisition cost</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>B2B</strong>: sell to companies; longer sales cycles, larger contracts, relationship-driven</li>
+        <li><strong>B2C</strong>: sell to end users; volume-based, brand important</li>
+        <li><strong>Platform/marketplace</strong>: connects buyers and sellers; earns fees; benefits from network effects (Airbnb, Uber)</li>
+        <li><strong>Franchise</strong>: franchisor provides brand/systems; franchisee pays royalties; capital-light for franchisor</li>
+        <li><strong>Vertically integrated</strong>: controls supply chain; reduces dependency but increases capex</li>
+        <li><strong>Asset-light</strong>: outsources capital-intensive functions; higher ROE but less control</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+</body>
+</html>
