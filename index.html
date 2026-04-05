@@ -65,23 +65,35 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 .history-badge.fail { background:var(--red-pale); color:var(--red); }
 
 /* ========== HOME ========== */
-#home { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 32px; }
+#home { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 80px 32px 48px; }
 .home-header { text-align: center; margin-bottom: 48px; }
 .home-header h1 { font-size: 2rem; font-weight: 700; color: var(--blue); margin-bottom: 8px; }
 .home-header p { color: var(--text-muted); font-size: 1rem; }
-.home-cards { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
-.home-card { background: white; border: 2px solid var(--border); border-radius: 16px; padding: 40px 48px; cursor: pointer; transition: all .2s; text-align: center; min-width: 260px; }
+
+/* Two-section layout */
+.home-sections { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 900px; }
+.home-section { flex: 1; min-width: 280px; }
+.home-section-title { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+
+.home-cards { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.home-card { background: white; border: 2px solid var(--border); border-radius: 16px; padding: 32px 36px; cursor: pointer; transition: all .2s; text-align: center; flex: 1; min-width: 220px; }
 .home-card:hover { border-color: var(--blue-light); box-shadow: 0 4px 20px rgba(37,99,235,.15); transform: translateY(-2px); }
-.home-card .icon { font-size: 3rem; margin-bottom: 16px; }
-.home-card h2 { font-size: 1.3rem; font-weight: 600; color: var(--blue); margin-bottom: 8px; }
-.home-card p { color: var(--text-muted); font-size: .9rem; }
+.home-card .icon { font-size: 2.6rem; margin-bottom: 14px; }
+.home-card h2 { font-size: 1.2rem; font-weight: 600; color: var(--blue); margin-bottom: 6px; }
+.home-card p { color: var(--text-muted); font-size: .85rem; }
+
+/* Study materials card - full width */
+.home-card-study { background: linear-gradient(135deg, #e8eaf6 0%, #ede7f6 100%); border: 2px solid #9fa8da; width: 100%; }
+.home-card-study:hover { border-color: #5c6bc0; box-shadow: 0 4px 20px rgba(63,81,181,.2); }
+.home-card-study h2 { color: #283593; }
+
 .home-stats { margin-top: 24px; text-align: center; color: var(--text-muted); font-size: .9rem; }
-.home-cards-secondary { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 16px; }
-.home-card-sm { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 24px 32px; cursor: pointer; transition: all .2s; text-align: center; flex: 1; min-width: 180px; max-width: 240px; }
+.home-cards-secondary { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 12px; }
+.home-card-sm { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 20px 24px; cursor: pointer; transition: all .2s; text-align: center; flex: 1; min-width: 160px; max-width: 220px; }
 .home-card-sm:hover { border-color: var(--blue-light); box-shadow: 0 4px 20px rgba(37,99,235,.15); transform: translateY(-2px); }
-.home-card-sm .icon { font-size: 2rem; margin-bottom: 8px; }
-.home-card-sm h2 { font-size: 1.05rem; font-weight: 600; color: var(--blue); margin-bottom: 4px; }
-.home-card-sm .count { color: var(--text-muted); font-size: .85rem; }
+.home-card-sm .icon { font-size: 1.8rem; margin-bottom: 8px; }
+.home-card-sm h2 { font-size: 1rem; font-weight: 600; color: var(--blue); margin-bottom: 4px; }
+.home-card-sm .count { color: var(--text-muted); font-size: .82rem; }
 .bookmark-btn { padding: 8px 16px; border: 1px solid var(--border); border-radius: 6px; background: white; cursor: pointer; font-size: .85rem; display: flex; align-items: center; gap: 6px; transition: all .15s; }
 .bookmark-btn.bookmarked { background: #fef3c7; border-color: #f59e0b; color: #b45309; }
 
@@ -215,6 +227,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 @media (max-width: 768px) {
   .exam-layout { flex-direction: column; }
   .nav-panel { width: 100%; max-height: 200px; }
+  .home-sections { flex-direction: column; }
   .home-cards { flex-direction: column; }
 }
 </style>
@@ -233,8 +246,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
       <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">注册</button>
     </div>
     <div class="auth-field">
-      <label>邮箱</label>
-      <input type="email" id="auth-email" placeholder="your@email.com" onkeydown="if(event.key==='Enter')handleAuth()">
+      <label>用户名</label>
+      <input type="text" id="auth-username" placeholder="输入用户名" onkeydown="if(event.key==='Enter')handleAuth()">
     </div>
     <div class="auth-field">
       <label>密码</label>
@@ -254,33 +267,53 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
     <button class="signout-btn" onclick="handleSignOut()">退出</button>
   </div>
   <div class="home-header">
-    <h1>CFA Level 1 练习系统</h1>
-    <p>Kaplan QBank 2025 · 全真模拟 & 专项训练</p>
+    <h1>CFA Level 1 备考系统</h1>
+    <p>Kaplan QBank 2025 · SchweserNotes 2024</p>
   </div>
-  <div class="home-cards">
-    <div class="home-card" onclick="showExamSetup()">
-      <div class="icon">📝</div>
-      <h2>模拟考试</h2>
-      <p>90道题 · 4小时 · 按CFA真实比例出题</p>
+
+  <div class="home-sections">
+    <!-- 学习资料 -->
+    <div class="home-section">
+      <div class="home-section-title">📚 学习资料</div>
+      <div class="home-cards">
+        <div class="home-card home-card-study" onclick="window.location.href='notes.html'">
+          <div class="icon">📖</div>
+          <h2>三色笔记</h2>
+          <p>Book 1: Quantitative Methods &amp; Economics · 19个Reading · 思维导图式整理</p>
+        </div>
+      </div>
     </div>
-    <div class="home-card" onclick="showTrainSetup()">
-      <div class="icon">🎯</div>
-      <h2>专项训练</h2>
-      <p>按科目/Reading选题 · 即时反馈 · 强化弱点</p>
+
+    <!-- 模拟考试 -->
+    <div class="home-section">
+      <div class="home-section-title">📝 模拟考试</div>
+      <div class="home-cards">
+        <div class="home-card" onclick="showExamSetup()">
+          <div class="icon">📝</div>
+          <h2>模拟考试</h2>
+          <p>90道题 · 4小时 · 按CFA真实比例出题</p>
+        </div>
+        <div class="home-card" onclick="showTrainSetup()">
+          <div class="icon">🎯</div>
+          <h2>专项训练</h2>
+          <p>按科目/Reading选题 · 即时反馈</p>
+        </div>
+      </div>
+      <div class="home-cards-secondary">
+        <div class="home-card-sm" onclick="showCollection('wrong')">
+          <div class="icon">❌</div>
+          <h2>错题集</h2>
+          <div class="count" id="wrong-count">0 题</div>
+        </div>
+        <div class="home-card-sm" onclick="showCollection('bookmark')">
+          <div class="icon">⭐</div>
+          <h2>标记题目</h2>
+          <div class="count" id="bookmark-count">0 题</div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="home-cards-secondary">
-    <div class="home-card-sm" onclick="showCollection('wrong')">
-      <div class="icon">❌</div>
-      <h2>错题集</h2>
-      <div class="count" id="wrong-count">0 题</div>
-    </div>
-    <div class="home-card-sm" onclick="showCollection('bookmark')">
-      <div class="icon">⭐</div>
-      <h2>标记题目</h2>
-      <div class="count" id="bookmark-count">0 题</div>
-    </div>
-  </div>
+
   <div class="home-stats" id="home-stats"></div>
   <div class="history-section" id="history-section" style="display:none;">
     <h3>最近考试记录</h3>
@@ -1122,11 +1155,12 @@ function switchAuthTab(mode) {
 }
 
 async function handleAuth() {
-  const email    = document.getElementById('auth-email').value.trim();
+  const username = document.getElementById('auth-username').value.trim();
   const password = document.getElementById('auth-password').value;
   const errEl    = document.getElementById('auth-error');
   const btn      = document.getElementById('auth-submit-btn');
-  if (!email || !password) { errEl.textContent = '请输入邮箱和密码'; return; }
+  if (!username || !password) { errEl.textContent = '请输入用户名和密码'; return; }
+  const email = username + '@cfa.local';
   btn.disabled = true;
   btn.textContent = '请稍候...';
   errEl.textContent = '';
@@ -1136,10 +1170,6 @@ async function handleAuth() {
       result = await sb.auth.signInWithPassword({ email, password });
     } else {
       result = await sb.auth.signUp({ email, password });
-      if (!result.error && result.data.user && !result.data.session) {
-        errEl.textContent = '注册成功！请检查邮箱确认后再登录。';
-        btn.disabled = false; btn.textContent = '注册'; return;
-      }
     }
     if (result.error) throw result.error;
     currentUser = result.data.user;
@@ -1167,9 +1197,9 @@ async function handleSignOut() {
 
 function updateUserBar() {
   if (!currentUser) return;
-  const email = currentUser.email || '';
-  document.getElementById('user-email-display').textContent = email;
-  document.getElementById('user-avatar').textContent = email[0].toUpperCase();
+  const username = (currentUser.email || '').replace('@cfa.local', '');
+  document.getElementById('user-email-display').textContent = username;
+  document.getElementById('user-avatar').textContent = username[0].toUpperCase();
 }
 
 // ========== INIT ==========
