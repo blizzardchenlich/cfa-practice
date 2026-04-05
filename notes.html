@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CFA L1 三色笔记 — Book 1</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; background: #f0f2f5; color: #222; }
+
+/* ===== LAYOUT ===== */
+.layout { display: flex; min-height: 100vh; }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 240px; background: #1a237e; color: white;
+  padding: 16px 12px; position: sticky; top: 0;
+  height: 100vh; overflow-y: auto; flex-shrink: 0;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.25); border-radius: 2px; }
+.sidebar .logo { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 6px; padding: 0 6px; }
+.sidebar .sub { font-size: 11px; color: #90caf9; padding: 0 6px; margin-bottom: 16px; }
+.sidebar-group { margin-bottom: 14px; }
+.sidebar-group-title {
+  font-size: 10px; font-weight: 700; color: #ffcc80;
+  text-transform: uppercase; letter-spacing: .8px;
+  padding: 4px 8px; background: rgba(255,255,255,.08);
+  border-radius: 4px; margin-bottom: 4px;
+}
+.sidebar a {
+  display: block; padding: 5px 10px; color: #c5cae9;
+  font-size: 12px; text-decoration: none; border-radius: 4px;
+  transition: background .15s; line-height: 1.4;
+}
+.sidebar a:hover { background: rgba(255,255,255,.14); color: white; }
+.sidebar-back {
+  display: block; padding: 8px 10px; margin-bottom: 14px;
+  background: rgba(255,255,255,.1); border-radius: 6px;
+  color: #90caf9; font-size: 12px; text-decoration: none;
+  text-align: center; transition: background .15s;
+}
+.sidebar-back:hover { background: rgba(255,255,255,.2); color: white; }
+
+/* ===== MAIN ===== */
+.main { flex: 1; padding: 24px; overflow-x: hidden; }
+
+/* ===== PAGE TITLE ===== */
+.page-title {
+  background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+  color: white; text-align: center; padding: 24px 20px;
+  margin-bottom: 28px; border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(26,35,126,.3);
+}
+.page-title h1 { font-size: 20px; margin-bottom: 6px; font-weight: 700; }
+.page-title p { font-size: 13px; color: #90caf9; }
+
+/* ===== SECTION ===== */
+.note-section {
+  border-radius: 14px; padding: 22px 20px 20px;
+  margin-bottom: 24px; scroll-margin-top: 20px;
+}
+.s-yellow  { background: #fff8e1; }
+.s-purple  { background: #ede7f6; }
+.s-blue    { background: #e3f2fd; }
+.s-green   { background: #e8f5e9; }
+.s-pink    { background: #fce4ec; }
+.s-teal    { background: #e0f7fa; }
+.s-orange  { background: #fff3e0; }
+.s-indigo  { background: #e8eaf6; }
+
+/* Section title */
+.sec-title-wrap { display: flex; justify-content: center; margin-bottom: 18px; }
+.sec-title-box {
+  color: white; font-weight: 700; font-size: 13px; text-align: center;
+  text-transform: uppercase; padding: 10px 30px; border-radius: 8px;
+  letter-spacing: .6px; line-height: 1.5; max-width: 460px;
+}
+.t-yellow  { background: #f57f17; }
+.t-purple  { background: #6a1b9a; }
+.t-blue    { background: #0d47a1; }
+.t-green   { background: #1b5e20; }
+.t-pink    { background: #880e4f; }
+.t-teal    { background: #006064; }
+.t-orange  { background: #bf360c; }
+.t-indigo  { background: #283593; }
+
+/* Reading label */
+.reading-label {
+  font-size: 10.5px; color: rgba(0,0,0,.4); font-weight: 600;
+  text-transform: uppercase; letter-spacing: .5px;
+  margin-bottom: 10px; text-align: center;
+}
+
+/* ===== ROWS & BOXES ===== */
+.row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+
+/* Sub-header */
+.sub-head {
+  flex: 1; min-width: 140px; text-align: center;
+  font-weight: 700; font-size: 12.5px; padding: 8px 10px;
+  border-radius: 8px; border: 2px solid;
+}
+.h-yellow { background: #fff9c4; border-color: #f9a825; color: #5d3d00; }
+.h-purple { background: #f3e5f5; border-color: #9c27b0; color: #4a0072; }
+.h-blue   { background: #e3f2fd; border-color: #1e88e5; color: #0d3576; }
+.h-green  { background: #f1f8e9; border-color: #66bb6a; color: #1b5e20; }
+.h-pink   { background: #fce4ec; border-color: #ec407a; color: #880e4f; }
+.h-teal   { background: #e0f7fa; border-color: #26c6da; color: #006064; }
+.h-orange { background: #fff8e1; border-color: #ffa726; color: #bf360c; }
+.h-indigo { background: #e8eaf6; border-color: #7986cb; color: #283593; }
+
+/* Content box */
+.cbox {
+  flex: 1; min-width: 170px; background: rgba(255,255,255,.68);
+  border-radius: 9px; padding: 12px 14px;
+  border: 1px solid rgba(0,0,0,.09);
+  font-size: 12.5px; line-height: 1.55;
+}
+.cbox ul { padding-left: 16px; }
+.cbox li { margin-bottom: 4px; }
+.cbox strong { color: #1a237e; }
+.cbox .f { /* formula */
+  font-family: 'Courier New', monospace;
+  background: rgba(0,0,0,.06); padding: 3px 8px;
+  border-radius: 4px; font-size: 12px;
+  margin: 4px 0; display: inline-block;
+}
+.cbox table { border-collapse: collapse; width: 100%; font-size: 11.5px; }
+.cbox table td { padding: 4px 6px; border: 1px solid #ccc; }
+.cbox table tr:first-child td { background: rgba(0,0,0,.05); font-weight: 600; }
+
+/* Divider inside section */
+.divider { border: none; border-top: 1.5px solid rgba(0,0,0,.1); margin: 14px 0; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main { padding: 12px; }
+  .row { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ===== SIDEBAR ===== -->
+<div class="sidebar">
+  <a href="index.html" class="sidebar-back">← 返回主页</a>
+  <div class="logo">CFA L1 · Book 1</div>
+  <div class="sub">三色笔记 | SchweserNotes 2024</div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Quantitative Methods</div>
+    <a href="#r1">R1. Rates and Returns</a>
+    <a href="#r2">R2. Time Value of Money</a>
+    <a href="#r3">R3. Statistical Measures</a>
+    <a href="#r4">R4. Probability Trees</a>
+    <a href="#r5">R5. Portfolio Mathematics</a>
+    <a href="#r6">R6. Simulation Methods</a>
+    <a href="#r7">R7. Estimation &amp; Inference</a>
+    <a href="#r8">R8. Hypothesis Testing</a>
+    <a href="#r9">R9. Non-Parametric Tests</a>
+    <a href="#r10">R10. Linear Regression</a>
+    <a href="#r11">R11. Big Data Techniques</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Economics</div>
+    <a href="#r12">R12. Firms &amp; Market Structures</a>
+    <a href="#r13">R13. Business Cycles</a>
+    <a href="#r14">R14. Fiscal Policy</a>
+    <a href="#r15">R15. Monetary Policy</a>
+    <a href="#r16">R16. Geopolitics</a>
+    <a href="#r17">R17. International Trade</a>
+    <a href="#r18">R18. Capital Flows &amp; FX</a>
+    <a href="#r19">R19. Exchange Rate Calculations</a>
+  </div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="main">
+
+<div class="page-title">
+  <h1>CFA Level I — Book 1 三色笔记</h1>
+  <p>Quantitative Methods &amp; Economics &nbsp;|&nbsp; SchweserNotes 2024</p>
+</div>
+
+<!-- ══════════════════ READING 1 ══════════════════ -->
+<div id="r1" class="note-section s-yellow">
+  <div class="reading-label">Quantitative Methods · Reading 1</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-yellow">1. Rates and Returns</div></div>
+
+  <div class="row">
+    <div class="sub-head h-yellow">Interest Rates</div>
+    <div class="sub-head h-yellow">HPR &amp; Mean Returns</div>
+    <div class="sub-head h-yellow">Money- vs Time-Weighted</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <strong>Interest rate = required return = discount rate = opportunity cost</strong>
+      <ul>
+        <li><strong>Nominal rate</strong> ≈ real risk-free rate + inflation premium</li>
+        <li><strong>Required return</strong> = real risk-free + inflation + default + liquidity + maturity risk premiums</li>
+        <li>Real interest rates are inflation-adjusted</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <strong>Holding Period Return:</strong>
+      <div class="f">HPR = (P₁ − P₀ + D) / P₀</div>
+      <ul>
+        <li><strong>Arithmetic mean</strong>: simple average; best for single-period estimates</li>
+        <li><strong>Geometric mean</strong>: compound annual rate; multi-period performance</li>
+        <li><strong>Harmonic mean</strong> X̄_H = n / Σ(1/xᵢ); used for average cost of equal periodic investments</li>
+        <li><strong>Trimmed</strong>: remove top/bottom extreme %; <strong>Winsorized</strong>: replace extremes with threshold values</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <strong>Money-Weighted Return (MWR):</strong>
+      <ul>
+        <li>= IRR of all cash flows into/out of portfolio</li>
+        <li>Sensitive to <strong>timing</strong> of cash flows</li>
+        <li>Use when <u>manager controls</u> cash flows</li>
+      </ul>
+      <strong>Time-Weighted Return (TWR):</strong>
+      <ul>
+        <li>= geometric mean of sub-period HPRs</li>
+        <li><strong>Not affected</strong> by cash flow timing</li>
+        <li><strong>Preferred measure</strong> for evaluating manager performance</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="row">
+    <div class="sub-head h-yellow">Annualized &amp; Compounded Returns</div>
+    <div class="sub-head h-yellow">Common Return Measures</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <strong>Annualized Return:</strong>
+      <div class="f">(1 + HPR)^(365/days) − 1</div>
+      <strong>Continuously Compounded Return (R_cc):</strong>
+      <div class="f">R_cc = ln(1 + HPR) = ln(ending value / beginning value)</div>
+      <ul>
+        <li>Additive across time periods</li>
+        <li>As compounding frequency ↑ → FV ↑ and PV ↓</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Gross return</strong>: total return before management fees (after trading costs)</li>
+        <li><strong>Net return</strong>: after all fees and expenses</li>
+        <li><strong>Pretax nominal return</strong>: before taxes and inflation adjustment</li>
+        <li><strong>After-tax nominal return</strong>: after tax liability, before inflation</li>
+        <li><strong>Real return</strong>: inflation-adjusted; measures purchasing power gain</li>
+        <li><strong>Leveraged return</strong> = gain or loss / investor's own cash invested</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 2 ══════════════════ -->
+<div id="r2" class="note-section s-purple">
+  <div class="reading-label">Quantitative Methods · Reading 2</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-purple">2. The Time Value of Money in Finance</div></div>
+
+  <div class="row">
+    <div class="sub-head h-purple">PV / FV Formulas</div>
+    <div class="sub-head h-purple">Fixed-Income Securities</div>
+    <div class="sub-head h-purple">Equity Valuation (DDM)</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <div class="f">FV = PV × (1 + r)ᵗ</div>
+      <div class="f">PV = FV / (1 + r)ᵗ = FV × (1 + r)⁻ᵗ</div>
+      <strong>Perpetuity:</strong> <div class="f">PV = PMT / r</div>
+      <strong>Annuity payment:</strong>
+      <div class="f">PMT = r × PV / [1 − (1+r)⁻ᵗ]</div>
+      <strong>Continuous compounding:</strong>
+      <div class="f">FV = PV × eʳᵗ &nbsp;&nbsp; PV = FV × e⁻ʳᵗ</div>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Zero-coupon bond</strong>: PV = FV/(1+r)ᴺ &nbsp;(no periodic payments)</li>
+        <li><strong>Coupon bond</strong>: PV = Σ [PMT/(1+r)ᵗ] + FV/(1+r)ᴺ</li>
+        <li><strong>Price ↑ ↔ Yield ↓</strong> (inverse relationship)</li>
+        <li><strong>Perpetual bond</strong>: PV = PMT/r</li>
+        <li><strong>Amortizing bond</strong>: each payment includes principal portion (annuity)</li>
+        <li>Negative yield → bond priced at <strong>premium</strong> (price > face value)</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <strong>Preferred stock (perpetuity):</strong>
+      <div class="f">V = D_p / k_p</div>
+      <strong>Gordon Growth Model (constant growth):</strong>
+      <div class="f">V₀ = D₁ / (k_e − g_c)</div>
+      <ul>
+        <li>Implied return: k_e = D₁/V₀ + g_c</li>
+        <li>Implied growth: g_c = k_e − D₁/V₀</li>
+        <li><strong>Multistage DDM</strong>: discount high-growth dividends individually, then apply constant-growth model for terminal value at transition point</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="row">
+    <div class="sub-head h-purple">Cash Flow Additivity</div>
+    <div class="sub-head h-purple">Forward Interest Rates</div>
+    <div class="sub-head h-purple">Forward Exchange &amp; Option Pricing</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li>PV of a stream = sum of PVs of each individual cash flow</li>
+        <li>Can split or combine cash flow series; PVs still add up</li>
+        <li>Basis for the <strong>no-arbitrage principle</strong> ("law of one price")</li>
+        <li>Two identical future cash flow streams must have the <strong>same price today</strong></li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Spot rate</strong> S₁: for loan made today</li>
+        <li><strong>Forward rate notation</strong>: 1y1y = 1-year loan 1 year from now</li>
+        <li><div class="f">(1 + S₂)² = (1 + S₁)(1 + 1y1y)</div></li>
+        <li><div class="f">1y1y = (1+S₂)²/(1+S₁) − 1</div></li>
+        <li>Forward rates are <strong>implied</strong> by observable spot rates</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <strong>No-arbitrage forward exchange rate:</strong>
+      <div class="f">F/S = (1 + r_price) / (1 + r_base)</div>
+      <strong>Binomial option pricing:</strong>
+      <ul>
+        <li>Form hedge portfolio: write 1 call, buy h shares</li>
+        <li>h (hedge ratio) = (c_u − c_d) / (S_u − S_d)</li>
+        <li>No-arbitrage gives call value c₀</li>
+        <li>Key insight: equivalent payoffs must have same present value</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 3 ══════════════════ -->
+<div id="r3" class="note-section s-blue">
+  <div class="reading-label">Quantitative Methods · Reading 3</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-blue">3. Statistical Measures of Asset Returns</div></div>
+
+  <div class="row">
+    <div class="sub-head h-blue">Central Tendency</div>
+    <div class="sub-head h-blue">Location &amp; Quantiles</div>
+    <div class="sub-head h-blue">Dispersion Measures</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Arithmetic mean</strong>: X̄ = ΣXᵢ/n; most widely used</li>
+        <li><strong>Median</strong>: middle value when sorted; robust to outliers</li>
+        <li><strong>Mode</strong>: most frequent value; can be bimodal/trimodal</li>
+        <li><strong>Trimmed mean</strong>: exclude top &amp; bottom percentage</li>
+        <li><strong>Winsorized mean</strong>: replace extremes with threshold values (n−1 denominator still used)</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Quantile</strong>: value below which x% of data falls</li>
+        <li><strong>Quartile</strong>: Q1 = 25th, Q2 = 50th, Q3 = 75th percentile</li>
+        <li><strong>Quintile</strong>: 5 equal groups; <strong>Decile</strong>: 10 equal groups</li>
+        <li><strong>IQR</strong> = Q3 − Q1 (interquartile range)</li>
+        <li><strong>Box and whisker plot</strong>: visualizes IQR, median, range</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Range</strong> = max − min</li>
+        <li><strong>MAD</strong> = Σ|Xᵢ − X̄| / n</li>
+        <li><strong>Sample variance</strong>: <div class="f">s² = Σ(Xᵢ−X̄)² / (n−1)</div></li>
+        <li><strong>Std deviation</strong> s = √s² (same units as data)</li>
+        <li><strong>CV</strong> = s/X̄ (risk per unit return; lower = better)</li>
+        <li><strong>Target semideviation</strong>: <div class="f">s_target = √[Σ(Xᵢ−B)²/(n−1)] for Xᵢ&lt;B</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="row">
+    <div class="sub-head h-blue">Skewness</div>
+    <div class="sub-head h-blue">Kurtosis</div>
+    <div class="sub-head h-blue">Correlation &amp; Covariance</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Positive (right) skew</strong>: Mean &gt; Median &gt; Mode; long right tail; large positive outliers pull mean up</li>
+        <li><strong>Negative (left) skew</strong>: Mean &lt; Median &lt; Mode; long left tail</li>
+        <li><strong>Symmetric</strong>: Mean = Median = Mode</li>
+        <li>|Skewness| &gt; 0.5 → significant skew</li>
+        <li>Skewness = 0 for normal distribution</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Leptokurtic</strong>: more peaked, <strong>fat tails</strong>, excess kurtosis &gt; 0 → greater extreme-outcome risk</li>
+        <li><strong>Platykurtic</strong>: less peaked, thin tails, excess kurtosis &lt; 0</li>
+        <li><strong>Mesokurtic</strong>: normal distribution (kurtosis = 3; excess kurtosis = 0)</li>
+        <li>Securities returns tend to be <strong>leptokurtic</strong> → models underestimate tail risk</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <strong>Covariance:</strong>
+      <div class="f">Cov(X,Y) = Σ{(Xᵢ−X̄)(Yᵢ−Ȳ)} / (n−1)</div>
+      <strong>Correlation coefficient:</strong>
+      <div class="f">ρ_XY = Cov(X,Y) / (s_X × s_Y) &nbsp; ∈ [−1, +1]</div>
+      <ul>
+        <li>ρ = 0 → no linear relationship</li>
+        <li><strong>Correlation ≠ causation</strong></li>
+        <li><strong>Spurious correlation</strong>: due to chance or a third variable</li>
+        <li>Scatter plots reveal non-linear relationships</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 4 ══════════════════ -->
+<div id="r4" class="note-section s-green">
+  <div class="reading-label">Quantitative Methods · Reading 4</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-green">4. Probability Trees and Conditional Expectations</div></div>
+
+  <div class="row">
+    <div class="sub-head h-green">Expected Value &amp; Variance</div>
+    <div class="sub-head h-green">Probability Trees</div>
+    <div class="sub-head h-green">Bayes' Formula</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <strong>Expected value (probability model):</strong>
+      <div class="f">E(X) = ΣP(xᵢ) × xᵢ</div>
+      <strong>Variance:</strong>
+      <div class="f">Var(X) = ΣP(xᵢ) × [xᵢ − E(X)]²</div>
+      <ul>
+        <li>σ = √Var(X)</li>
+        <li>Forward-looking model (uses probabilities, not historical n−1)</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li>Visualizes sequential conditional events with branches</li>
+        <li><strong>Joint probability</strong> = product of branch probabilities along path</li>
+        <li>All terminal probabilities sum to 1</li>
+        <li><strong>Conditional expected value</strong>: E(X|event) — revises expectations given new information</li>
+        <li>Example: economy state → company results → EPS scenarios</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <strong>Bayes' Formula (updating probabilities):</strong>
+      <div class="f">P(A|B) = P(B|A) × P(A) / P(B)</div>
+      <ul>
+        <li>Updates <strong>prior probability</strong> P(A) given new event B</li>
+        <li>P(B) = unconditional probability of new information</li>
+        <li>P(A|B) = <strong>posterior (updated) probability</strong></li>
+        <li>Used to revise investment probabilities as new data arrives</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 5 ══════════════════ -->
+<div id="r5" class="note-section s-pink">
+  <div class="reading-label">Quantitative Methods · Reading 5</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-pink">5. Portfolio Mathematics</div></div>
+
+  <div class="row">
+    <div class="sub-head h-pink">Portfolio Return</div>
+    <div class="sub-head h-pink">Portfolio Variance</div>
+    <div class="sub-head h-pink">Safety-First Criterion</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <strong>Expected portfolio return:</strong>
+      <div class="f">E(Rp) = Σwᵢ × E(Rᵢ)</div>
+      <ul>
+        <li>wᵢ = weight of asset i; Σwᵢ = 1</li>
+        <li>Weighted average of individual expected returns</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <strong>2-Asset Portfolio variance:</strong>
+      <div class="f">σ²p = w₁²σ₁² + w₂²σ₂² + 2w₁w₂Cov(R₁,R₂)</div>
+      <div class="f">Cov(R₁,R₂) = ρ₁₂σ₁σ₂</div>
+      <ul>
+        <li>Diversification benefit: ρ &lt; 1 reduces portfolio variance</li>
+        <li>ρ = −1: maximum diversification benefit</li>
+        <li>ρ = +1: no diversification benefit</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <strong>Roy's Safety-First Ratio:</strong>
+      <div class="f">SFR = [E(Rp) − R_L] / σp</div>
+      <ul>
+        <li>R_L = threshold (minimum acceptable) return</li>
+        <li>Choose portfolio with <strong>highest SFR</strong></li>
+        <li>Minimizes P(Rp &lt; R_L)</li>
+        <li>If returns ~ normal: P(Rp &lt; R_L) = N(−SFR)</li>
+        <li>Equivalent to Sharpe ratio when R_L = risk-free rate</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 6 ══════════════════ -->
+<div id="r6" class="note-section s-teal">
+  <div class="reading-label">Quantitative Methods · Reading 6</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-teal">6. Simulation Methods</div></div>
+
+  <div class="row">
+    <div class="sub-head h-teal">Lognormal Distribution</div>
+    <div class="sub-head h-teal">Monte Carlo Simulation</div>
+    <div class="sub-head h-teal">Bootstrap Resampling</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li>If ln(X) ~ Normal, then X is <strong>lognormally distributed</strong></li>
+        <li>Asset prices are modeled as lognormal (prices ≥ 0)</li>
+        <li>Continuously compounded returns → normal distribution → asset prices → lognormal</li>
+        <li><strong>Right-skewed</strong>; bounded below by zero</li>
+        <li>E.g., stock price after 1 year = S₀ × e^(μ+σZ)</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li>Generate many random scenarios using specified probability distributions</li>
+        <li>Estimate distribution of possible outcomes (e.g., portfolio value, option price)</li>
+        <li>Uses: option pricing, VaR, pension fund modeling</li>
+        <li><strong>Advantage</strong>: handles complex, path-dependent payoffs</li>
+        <li><strong>Limitation</strong>: results only as good as model assumptions; garbage-in → garbage-out</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Bootstrap</strong>: repeatedly sample with replacement from observed data; estimate sampling distribution empirically</li>
+        <li><strong>Jackknife</strong>: leave-one-out approach; estimate parameter by omitting one observation at a time</li>
+        <li>Both are <strong>non-parametric</strong> — no distribution assumption needed</li>
+        <li>Useful when parametric assumptions (normality) may not hold</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 7 ══════════════════ -->
+<div id="r7" class="note-section s-yellow">
+  <div class="reading-label">Quantitative Methods · Reading 7</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-yellow">7. Estimation and Inference</div></div>
+
+  <div class="row">
+    <div class="sub-head h-yellow">Sampling Methods</div>
+    <div class="sub-head h-yellow">Central Limit Theorem</div>
+    <div class="sub-head h-yellow">Resampling Techniques</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Simple random</strong>: each element equally likely; minimal bias</li>
+        <li><strong>Stratified random</strong>: divide into sub-groups (strata), sample proportionally from each</li>
+        <li><strong>Cluster</strong>: randomly select entire clusters; cost-effective but less precise</li>
+        <li><strong>Convenience</strong>: use available data; subject to <strong>selection bias</strong></li>
+        <li><strong>Judgmental</strong>: expert selects; subjective bias risk</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <strong>Central Limit Theorem (CLT):</strong>
+      <ul>
+        <li>For large n: sample mean X̄ is approximately <strong>normally distributed</strong> regardless of the shape of original distribution</li>
+        <li>Mean of sampling distribution = population mean μ</li>
+        <li><strong>Standard error</strong>: σ_X̄ = σ/√n</li>
+        <li>Larger n → smaller standard error → more precise estimate</li>
+        <li>Foundation for confidence intervals and hypothesis testing</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Bootstrap</strong>: sample with replacement; build empirical sampling distribution; useful when distribution unknown</li>
+        <li><strong>Jackknife</strong>: omit one observation at a time; recompute statistic; estimate bias and variance</li>
+        <li>Both overcome need for parametric distributional assumptions</li>
+        <li>Bootstrap preferred for complex statistics; jackknife better for variance estimation</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 8 ══════════════════ -->
+<div id="r8" class="note-section s-purple">
+  <div class="reading-label">Quantitative Methods · Reading 8</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-purple">8. Hypothesis Testing</div></div>
+
+  <div class="row">
+    <div class="sub-head h-purple">Setup &amp; Decision Rules</div>
+    <div class="sub-head h-purple">Errors &amp; Power</div>
+    <div class="sub-head h-purple">Test Statistics</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>H₀ (null)</strong>: hypothesis to be tested (e.g., μ = 0); researcher seeks to reject it</li>
+        <li><strong>H_a (alternative)</strong>: accepted if H₀ rejected</li>
+        <li><strong>One-tailed</strong>: tests direction (H_a: μ &gt; 0 or μ &lt; 0)</li>
+        <li><strong>Two-tailed</strong>: tests any difference (H_a: μ ≠ 0)</li>
+        <li><strong>Significance level α</strong>: maximum acceptable P(Type I error), typically 5% or 1%</li>
+        <li>Reject H₀ if |test statistic| &gt; critical value, or p-value &lt; α</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Type I error</strong>: reject true H₀ → probability = α (significance level)</li>
+        <li><strong>Type II error</strong>: fail to reject false H₀ → probability = β</li>
+        <li><strong>Power of test</strong> = 1 − β = P(correctly rejecting false H₀)</li>
+        <li>Tradeoff: ↓α → ↑β (lower Type I error raises Type II error)</li>
+        <li><strong>p-value</strong>: smallest α at which H₀ is rejected; reject H₀ if p-value &lt; α</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>z-test</strong>: σ² known, or n ≥ 30</li>
+        <li><strong>t-test</strong>: σ² unknown, small sample; df = n−1</li>
+        <li><strong>Chi-square (χ²) test</strong>: test variance; goodness of fit; independence; df = n−1</li>
+        <li><strong>F-test</strong>: equality of two variances; df = (n₁−1, n₂−1)</li>
+        <li><strong>Parametric tests</strong>: assume specific distributions (more powerful if assumptions hold)</li>
+        <li><strong>Non-parametric tests</strong>: fewer assumptions; use for ordinal or non-normal data</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 9 ══════════════════ -->
+<div id="r9" class="note-section s-blue">
+  <div class="reading-label">Quantitative Methods · Reading 9</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-blue">9. Parametric and Non-Parametric Tests of Independence</div></div>
+
+  <div class="row">
+    <div class="sub-head h-blue">Parametric: Correlation Test</div>
+    <div class="sub-head h-blue">Non-Parametric: Chi-Square Test</div>
+    <div class="sub-head h-blue">Parametric vs Non-Parametric</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <strong>Test H₀: ρ = 0 (no linear correlation)</strong>
+      <div class="f">t = r√(n−2) / √(1−r²) &nbsp; df = n−2</div>
+      <ul>
+        <li>Reject H₀ if |t| &gt; critical t-value</li>
+        <li>Also: Spearman rank correlation (non-parametric alternative for ranked data)</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <strong>χ² Test of Independence (contingency table):</strong>
+      <div class="f">χ² = Σ [(O − E)² / E]</div>
+      <ul>
+        <li>O = observed, E = expected frequency</li>
+        <li>df = (rows − 1)(cols − 1)</li>
+        <li>Reject H₀ (independence) if χ² &gt; critical value</li>
+        <li>All expected frequencies should be ≥ 5 for valid test</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <table>
+        <tr><td></td><td>Parametric</td><td>Non-Parametric</td></tr>
+        <tr><td>Assumption</td><td>Specific distribution (e.g., normal)</td><td>No distribution assumed</td></tr>
+        <tr><td>Power</td><td>Higher (if assumptions met)</td><td>Lower generally</td></tr>
+        <tr><td>Data type</td><td>Continuous, interval/ratio</td><td>Ordinal, ranks, non-normal</td></tr>
+        <tr><td>Examples</td><td>t-test, F-test, χ² for known dist</td><td>Spearman, contingency χ²</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 10 ══════════════════ -->
+<div id="r10" class="note-section s-green">
+  <div class="reading-label">Quantitative Methods · Reading 10</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-green">10. Simple Linear Regression</div></div>
+
+  <div class="row">
+    <div class="sub-head h-green">Regression Model &amp; OLS</div>
+    <div class="sub-head h-green">Goodness of Fit (ANOVA)</div>
+    <div class="sub-head h-green">Assumptions &amp; Violations</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <strong>Model:</strong>
+      <div class="f">Yᵢ = b₀ + b₁Xᵢ + εᵢ</div>
+      <ul>
+        <li>b₀ = intercept; b₁ = slope coefficient</li>
+        <li><strong>OLS</strong>: minimizes Σ(Yᵢ − Ŷᵢ)² (sum of squared residuals)</li>
+        <li><div class="f">b₁ = Cov(X,Y) / Var(X)</div></li>
+        <li><div class="f">b₀ = Ȳ − b₁X̄</div></li>
+        <li>t-test for b₁: H₀: b₁ = 0; df = n−2</li>
+        <li>Predicted value: Ŷ = b₀ + b₁X</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>R²</strong> = SSR/SST = % of variation in Y explained by X (0 to 1)</li>
+        <li>For simple regression: R² = ρ²_XY</li>
+        <li><strong>SST</strong> = SSR + SSE (Total = Regression + Error)</li>
+        <li><strong>F = MSR / MSE</strong> tests if all slope coefficients = 0</li>
+        <li><strong>SEE</strong> = √MSE = standard error of the estimate</li>
+        <li>Lower SEE → better fit</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <strong>Classical Assumptions:</strong>
+      <ul>
+        <li>Linear relationship Y~X</li>
+        <li>X values are non-stochastic</li>
+        <li>ε: E(ε) = 0, constant variance (homoskedastic), uncorrelated, normally distributed</li>
+      </ul>
+      <strong>Violations (identified by residual plots):</strong>
+      <ul>
+        <li><strong>Heteroskedasticity</strong>: non-constant error variance → biased standard errors</li>
+        <li><strong>Autocorrelation</strong>: correlated errors; Durbin-Watson test; common in time series</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 11 ══════════════════ -->
+<div id="r11" class="note-section s-orange">
+  <div class="reading-label">Quantitative Methods · Reading 11</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-orange">11. Introduction to Big Data Techniques</div></div>
+
+  <div class="row">
+    <div class="sub-head h-orange">Big Data Characteristics</div>
+    <div class="sub-head h-orange">Machine Learning Types</div>
+    <div class="sub-head h-orange">Fintech Applications &amp; Risks</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <strong>Big Data "3 Vs":</strong>
+      <ul>
+        <li><strong>Volume</strong>: massive amounts of data</li>
+        <li><strong>Velocity</strong>: high-speed data generation and processing</li>
+        <li><strong>Variety</strong>: diverse types (structured vs unstructured)</li>
+      </ul>
+      <strong>Data types:</strong>
+      <ul>
+        <li><strong>Structured</strong>: tables, databases, financial statements</li>
+        <li><strong>Unstructured</strong>: text (earnings calls, news), images, audio, satellite data</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Supervised learning</strong>: trained on labeled data; learns input→output mapping (classification, regression)</li>
+        <li><strong>Unsupervised learning</strong>: finds patterns in unlabeled data (clustering, dimensionality reduction)</li>
+        <li><strong>Deep learning</strong>: neural networks with many layers; powerful for images, NLP</li>
+        <li><strong>NLP</strong>: analyze text data (sentiment analysis of earnings calls, news)</li>
+        <li><strong>Overfitting</strong>: model fits training data too closely; poor out-of-sample performance</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <strong>Applications:</strong>
+      <ul>
+        <li><strong>Robo-advisors</strong>: automated, algorithm-based portfolio construction</li>
+        <li><strong>Algorithmic trading</strong>: rule-based automated execution</li>
+        <li><strong>Risk management</strong>: real-time monitoring and stress testing</li>
+        <li><strong>RegTech</strong>: automated regulatory compliance</li>
+      </ul>
+      <strong>Risks:</strong>
+      <ul>
+        <li>Model risk, data privacy, cybersecurity, algorithmic bias</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ ECONOMICS ═══════════════════ -->
+
+<!-- ══════════════════ READING 12 ══════════════════ -->
+<div id="r12" class="note-section s-yellow">
+  <div class="reading-label">Economics · Reading 12</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-yellow">12. Firms and Market Structures</div></div>
+
+  <div class="row">
+    <div class="sub-head h-yellow">Profit Maximization &amp; Shutdown</div>
+    <div class="sub-head h-yellow">Market Structures Compared</div>
+    <div class="sub-head h-yellow">Key Characteristics</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Profit max rule</strong>: produce where MR = MC</li>
+        <li><strong>Breakeven</strong>: P = ATC (zero economic profit)</li>
+        <li><strong>Short-run shutdown</strong>: P &lt; AVC (stop if can't cover variable costs)</li>
+        <li><strong>Normal profit</strong> = zero economic profit (accounting profit covers all opportunity costs)</li>
+        <li><strong>Economies of scale</strong>: LRAC falls as output rises</li>
+        <li><strong>Minimum efficient scale</strong>: lowest output achieving minimum LRAC</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <table>
+        <tr><td>Structure</td><td>Sellers</td><td>Product</td><td>Entry</td><td>LR Profit</td></tr>
+        <tr><td><strong>Perfect competition</strong></td><td>Many</td><td>Identical</td><td>Free</td><td>Zero</td></tr>
+        <tr><td><strong>Monopolistic comp.</strong></td><td>Many</td><td>Differentiated</td><td>Free</td><td>Zero</td></tr>
+        <tr><td><strong>Oligopoly</strong></td><td>Few</td><td>Similar/diff.</td><td>Barriers</td><td>Positive</td></tr>
+        <tr><td><strong>Monopoly</strong></td><td>One</td><td>Unique</td><td>Blocked</td><td>Positive</td></tr>
+      </table>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Perfect competition</strong>: price taker; P = MR; zero economic profit in LR; P = MC = ATC</li>
+        <li><strong>Monopolistic comp.</strong>: brand differentiation; short-run profit; free entry → zero LR profit; excess capacity</li>
+        <li><strong>Oligopoly</strong>: strategic interdependence; kinked demand curve (sticky prices); game theory applies; Nash equilibrium</li>
+        <li><strong>Monopoly</strong>: price maker; MR &lt; P; deadweight loss; possible government regulation</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 13 ══════════════════ -->
+<div id="r13" class="note-section s-purple">
+  <div class="reading-label">Economics · Reading 13</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-purple">13. Understanding Business Cycles</div></div>
+
+  <div class="row">
+    <div class="sub-head h-purple">Business Cycle Phases</div>
+    <div class="sub-head h-purple">Economic Indicators</div>
+    <div class="sub-head h-purple">Unemployment Types</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Expansion</strong>: rising GDP, employment, inflation; consumer/business confidence high</li>
+        <li><strong>Peak</strong>: maximum economic activity; inflation often highest</li>
+        <li><strong>Contraction/Recession</strong>: GDP declining (2+ consecutive quarters); rising unemployment</li>
+        <li><strong>Trough</strong>: lowest point; turning point for recovery</li>
+        <li><strong>Recovery</strong>: growth from trough; unemployment still high initially</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <strong>Leading indicators</strong> (predict future direction):
+      <ul><li>Stock prices, yield curve spread, building permits, money supply (M2), consumer confidence index</li></ul>
+      <strong>Lagging indicators</strong> (confirm trend after the fact):
+      <ul><li>Unemployment rate, CPI, commercial loans outstanding, average duration of unemployment</li></ul>
+      <strong>Coincident indicators</strong> (move with economy):
+      <ul><li>GDP, employment level, personal income, industrial production</li></ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Frictional unemployment</strong>: between jobs; always present even at "full employment"; voluntary and temporary</li>
+        <li><strong>Structural unemployment</strong>: skills mismatch due to technological change; requires retraining</li>
+        <li><strong>Cyclical unemployment</strong>: due to economic downturn; target of fiscal/monetary policy</li>
+        <li><strong>Natural rate of unemployment</strong> = frictional + structural (cyclical = 0)</li>
+        <li><strong>Output gap</strong> = actual GDP − potential GDP</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 14 ══════════════════ -->
+<div id="r14" class="note-section s-blue">
+  <div class="reading-label">Economics · Reading 14</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-blue">14. Fiscal Policy</div></div>
+
+  <div class="row">
+    <div class="sub-head h-blue">Objectives &amp; Stance</div>
+    <div class="sub-head h-blue">Fiscal Policy Tools</div>
+    <div class="sub-head h-blue">Multiplier &amp; Limitations</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <strong>Goals:</strong>
+      <ul>
+        <li>Full employment, price stability, economic growth</li>
+      </ul>
+      <strong>Stance:</strong>
+      <ul>
+        <li><strong>Expansionary</strong>: increase spending or cut taxes → stimulate GDP; may increase deficit</li>
+        <li><strong>Contractionary</strong>: cut spending or raise taxes → reduce inflation; may create surplus</li>
+        <li><strong>Structural budget balance</strong>: actual balance adjusted for cycle; measures true fiscal stance</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Discretionary fiscal policy</strong>: deliberate changes (stimulus packages, tax cuts)</li>
+        <li><strong>Automatic stabilizers</strong>: unemployment insurance, progressive taxation — automatically cushion cycle without new legislation</li>
+        <li><strong>Government spending</strong>: transfer payments, public goods, infrastructure</li>
+        <li><strong>Tax policy</strong>: income tax, capital gains tax, VAT, corporate tax</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Fiscal multiplier</strong> = 1/(1−MPC) → each dollar of gov't spending increases GDP by more than $1</li>
+        <li><strong>Ricardian equivalence</strong>: consumers anticipate future taxes to repay deficit → save more now → spending stimulus offset → fiscal policy ineffective</li>
+        <li><strong>Crowding out</strong>: gov't borrowing ↑ interest rates → ↓ private investment → partial offset of stimulus</li>
+        <li><strong>Implementation lags</strong>: recognition lag + legislative lag + impact lag → reduces effectiveness</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 15 ══════════════════ -->
+<div id="r15" class="note-section s-green">
+  <div class="reading-label">Economics · Reading 15</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-green">15. Monetary Policy</div></div>
+
+  <div class="row">
+    <div class="sub-head h-green">Central Bank Objectives &amp; Tools</div>
+    <div class="sub-head h-green">Policy Transmission</div>
+    <div class="sub-head h-green">Effects &amp; Limitations</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <strong>Primary objective:</strong> price stability (inflation target ~2%)
+      <br>Also: full employment, financial system stability, GDP growth
+      <br><br><strong>Tools:</strong>
+      <ul>
+        <li><strong>Policy interest rate</strong>: main lever (e.g., federal funds rate); most direct tool</li>
+        <li><strong>Reserve requirements</strong>: minimum reserves banks must hold</li>
+        <li><strong>Open market operations</strong>: buy bonds → inject money; sell bonds → drain money</li>
+        <li><strong>Quantitative easing (QE)</strong>: large-scale asset purchases when rates near zero</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <strong>Expansionary monetary policy (lower rates):</strong>
+      <ul>
+        <li>↓ Borrowing cost → ↑ consumption and investment</li>
+        <li>↓ Exchange rate → ↑ net exports</li>
+        <li>↑ Asset prices → wealth effect → ↑ spending</li>
+      </ul>
+      <strong>Contractionary monetary policy (raise rates):</strong>
+      <ul>
+        <li>↑ Cost of credit → ↓ spending and investment → ↓ inflation</li>
+      </ul>
+      <strong>Neutral rate</strong>: neither expansionary nor contractionary
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Recognition lag</strong>: time to identify that action is needed</li>
+        <li><strong>Response lag</strong>: time for central bank to act (shorter than fiscal)</li>
+        <li><strong>Impact lag</strong>: 12–18 months for full economic effect</li>
+        <li><strong>Liquidity trap</strong>: rates near zero; QE may have diminishing returns; cash hoarding</li>
+        <li>Cannot simultaneously target both interest rates AND money supply</li>
+        <li>Inflation targeting: anchor inflation expectations</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 16 ══════════════════ -->
+<div id="r16" class="note-section s-pink">
+  <div class="reading-label">Economics · Reading 16</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-pink">16. Introduction to Geopolitics</div></div>
+
+  <div class="row">
+    <div class="sub-head h-pink">Geopolitical Risk Factors</div>
+    <div class="sub-head h-pink">Tools of Geopolitics</div>
+    <div class="sub-head h-pink">Investment Implications</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>National security</strong>: military alliances, territorial disputes</li>
+        <li><strong>Trade &amp; economic policy</strong>: sanctions, tariffs, embargoes</li>
+        <li><strong>Political stability</strong>: regime type, election risk, social unrest, policy continuity</li>
+        <li><strong>Nationalization risk</strong>: government seizure of foreign assets</li>
+        <li><strong>Resource allocation</strong>: control of strategic resources (oil, rare earth)</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Cooperative tools</strong>: treaties, alliances, multilateral agreements (WTO, UN)</li>
+        <li><strong>Economic coercion</strong>: sanctions, tariffs, foreign aid conditions, debt leverage</li>
+        <li><strong>Military tools</strong>: deterrence, use of force, arms sales</li>
+        <li>Countries balance <strong>economic interdependence</strong> vs <strong>national security</strong></li>
+        <li>Globalization increases both cooperation opportunities and vulnerability</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li>Geopolitical events → asset price volatility → higher <strong>risk premium</strong></li>
+        <li>Supply chain disruptions → commodity price shocks</li>
+        <li><strong>Safe-haven flows</strong>: USD, JPY, CHF, gold appreciate in crises</li>
+        <li>Country risk analysis: assess political stability for EM investments</li>
+        <li>Portfolio managers should monitor geopolitical risks as part of risk management</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 17 ══════════════════ -->
+<div id="r17" class="note-section s-teal">
+  <div class="reading-label">Economics · Reading 17</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-teal">17. International Trade</div></div>
+
+  <div class="row">
+    <div class="sub-head h-teal">Comparative Advantage</div>
+    <div class="sub-head h-teal">Trade Barriers</div>
+    <div class="sub-head h-teal">Trade Agreements</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Absolute advantage</strong>: produce more output with same inputs</li>
+        <li><strong>Comparative advantage</strong>: lower <em>opportunity cost</em>; true basis for trade; both countries can gain</li>
+        <li>Free trade maximizes global output even if one country has absolute advantage in all goods</li>
+        <li><strong>Heckscher-Ohlin model</strong>: export goods using <strong>abundant factors</strong> (e.g., capital-rich country exports capital-intensive goods)</li>
+        <li><strong>Terms of trade</strong> = export price index / import price index</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Tariff</strong>: tax on imports; raises domestic price; government revenue; deadweight loss</li>
+        <li><strong>Import quota</strong>: quantity limit on imports; similar price effect but no tariff revenue</li>
+        <li><strong>Export subsidy</strong>: government support to domestic producers; distorts trade</li>
+        <li><strong>Voluntary Export Restraint (VER)</strong>: exporting country limits own exports</li>
+        <li>All barriers: reduce consumer surplus and global efficiency</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Preferential trading agreement</strong>: lower tariffs for select partners</li>
+        <li><strong>Free trade area (FTA)</strong>: no tariffs among members; each keeps own external tariffs (e.g., NAFTA/USMCA)</li>
+        <li><strong>Customs union</strong>: FTA + common external tariffs toward non-members</li>
+        <li><strong>Common market</strong>: customs union + free movement of labor and capital</li>
+        <li><strong>Economic union</strong>: common market + harmonized economic/monetary policies (e.g., EU)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 18 ══════════════════ -->
+<div id="r18" class="note-section s-orange">
+  <div class="reading-label">Economics · Reading 18</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-orange">18. Capital Flows and the FX Market</div></div>
+
+  <div class="row">
+    <div class="sub-head h-orange">Balance of Payments (BOP)</div>
+    <div class="sub-head h-orange">Exchange Rate Regimes</div>
+    <div class="sub-head h-orange">FX Determinants</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Current account (CA)</strong>: trade in goods/services + investment income + transfers</li>
+        <li><strong>Capital account (KA)</strong>: capital transfers, non-produced/non-financial assets</li>
+        <li><strong>Financial account (FA)</strong>: FDI, portfolio investment, reserve asset changes</li>
+        <li><strong>BOP identity</strong>: CA + KA + FA = 0 (always balances)</li>
+        <li>CA deficit → FA surplus (foreign capital inflow)</li>
+        <li>CA surplus → FA deficit (capital outflow/accumulation of foreign reserves)</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Free float</strong>: market-determined; most major currencies (USD, EUR, GBP, JPY)</li>
+        <li><strong>Managed (dirty) float</strong>: central bank intervenes to smooth excessive volatility</li>
+        <li><strong>Fixed (pegged) rate</strong>: pegged to another currency; requires reserve management</li>
+        <li><strong>Currency board</strong>: strict fixed rate; domestic currency fully backed by foreign reserves</li>
+        <li><strong>Crawling peg</strong>: small, pre-announced periodic adjustments</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li><strong>Interest rate differentials</strong>: higher rates attract capital → currency <strong>appreciates</strong></li>
+        <li><strong>Inflation</strong>: higher inflation → purchasing power erosion → currency <strong>depreciates</strong> (PPP)</li>
+        <li><strong>Economic growth</strong>: strong growth → more investment demand → currency appreciates</li>
+        <li><strong>Trade balance</strong>: CA surplus → appreciation</li>
+        <li><strong>Central bank intervention</strong>: buy/sell currency to influence rate</li>
+        <li><strong>Speculation and sentiment</strong>: short-term driver</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ READING 19 ══════════════════ -->
+<div id="r19" class="note-section s-indigo">
+  <div class="reading-label">Economics · Reading 19</div>
+  <div class="sec-title-wrap"><div class="sec-title-box t-indigo">19. Exchange Rate Calculations</div></div>
+
+  <div class="row">
+    <div class="sub-head h-indigo">Spot Rates &amp; Cross Rates</div>
+    <div class="sub-head h-indigo">Forward Exchange Rates</div>
+    <div class="sub-head h-indigo">Parity Conditions</div>
+  </div>
+  <div class="row">
+    <div class="cbox">
+      <ul>
+        <li><strong>Spot rate</strong>: rate for immediate currency exchange</li>
+        <li><strong>Convention</strong>: price currency / base currency (e.g., USD/EUR = USD per 1 EUR)</li>
+        <li>To convert: multiply spot rate by base currency amount</li>
+        <li><strong>Cross rate</strong>: exchange rate between two currencies derived from their rates vs a third currency</li>
+        <li>If USD/EUR = 1.10 and USD/GBP = 1.25 → GBP/EUR = 1.10/1.25 = 0.88</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <ul>
+        <li>Contract to exchange currency at future date at a pre-agreed rate</li>
+        <li><strong>Forward premium</strong>: forward rate &gt; spot rate (price currency's interest rate is higher)</li>
+        <li><strong>Forward discount</strong>: forward rate &lt; spot rate</li>
+        <li><strong>No-arbitrage forward rate:</strong></li>
+      </ul>
+      <div class="f">F/S = (1 + r_price) / (1 + r_base)</div>
+      <ul>
+        <li>Forward premium ≈ interest rate differential between the two countries</li>
+      </ul>
+    </div>
+    <div class="cbox">
+      <strong>Purchasing Power Parity (PPP):</strong>
+      <ul>
+        <li><strong>Absolute PPP</strong>: exchange rate = ratio of price levels (S = P_A/P_B)</li>
+        <li><strong>Relative PPP</strong>: % change in rate ≈ inflation differential (e_A/B ≈ π_A − π_B)</li>
+      </ul>
+      <strong>Interest Rate Parity (IRP):</strong>
+      <ul>
+        <li>Forward premium reflects interest rate differential between countries</li>
+      </ul>
+      <strong>International Fisher Effect:</strong>
+      <ul>
+        <li>Interest rate differentials reflect expected inflation differentials</li>
+        <li>Real interest rates equal across countries in equilibrium</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+</div><!-- end layout -->
+</body>
+</html>
