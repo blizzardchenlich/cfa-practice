@@ -213,6 +213,23 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 .train-progress-bar { flex: 1; height: 6px; background: var(--gray-light); border-radius: 3px; }
 .train-progress-fill { height: 100%; background: var(--blue-light); border-radius: 3px; transition: width .3s; }
 
+/* ========== QUESTION LIST (train setup) ========== */
+.q-list-container { max-height: 320px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; background: white; }
+.q-list-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: .85rem; }
+.q-list-item:last-child { border-bottom: none; }
+.q-list-item .q-num { width: 32px; text-align: right; color: var(--text-muted); font-size: .78rem; flex-shrink: 0; }
+.q-list-item .q-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
+.q-list-item .q-badges { display: flex; gap: 4px; flex-shrink: 0; }
+.q-badge { font-size: .7rem; padding: 1px 6px; border-radius: 4px; font-weight: 500; }
+.q-badge.done { background: var(--green-pale); color: var(--green); }
+.q-badge.wrong { background: var(--red-pale); color: var(--red); }
+.q-badge.bm { background: var(--yellow-pale); color: var(--yellow); }
+.topic-progress { margin-top: 14px; padding: 14px 16px; background: var(--gray-light); border-radius: 8px; }
+.topic-progress .prog-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: .88rem; font-weight: 500; }
+.topic-progress .prog-bar { height: 8px; background: white; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+.topic-progress .prog-fill { height: 100%; background: var(--blue-light); border-radius: 4px; transition: width .3s; }
+.topic-progress .prog-nums { display: flex; gap: 16px; font-size: .82rem; flex-wrap: wrap; }
+
 /* ========== LOADING ========== */
 #loading { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); align-items: center; justify-content: center; z-index: 999; }
 #loading .box { background: white; border-radius: 12px; padding: 32px 48px; text-align: center; }
@@ -380,21 +397,34 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
     <button class="btn-secondary" onclick="showHome()">← 返回</button>
   </div>
   <div class="setup-title">专项训练</div>
-  <div class="setup-subtitle">选择科目或具体Reading，进行针对性练习</div>
+  <div class="setup-subtitle">选择一个科目，再可选具体 Reading</div>
   <div class="setup-section">
-    <h3>选择科目</h3>
+    <h3>选择科目（单选）</h3>
     <div class="topic-list" id="topic-list"></div>
   </div>
   <div class="setup-section" id="reading-section" style="display:none;">
-    <h3>选择Reading（可选，默认全部）</h3>
+    <h3>选择 Reading（可多选，不选则练习整个科目）</h3>
     <div class="topic-list" id="reading-list"></div>
+  </div>
+  <div class="setup-section" id="q-list-section" style="display:none;">
+    <h3>题目列表 <span id="q-list-total" style="font-weight:400;color:var(--text-muted);font-size:.85rem;"></span></h3>
+    <div class="q-list-container" id="q-list-container"></div>
+    <div class="topic-progress" id="topic-progress">
+      <div class="prog-header">
+        <span>刷题进度</span>
+        <span id="prog-pct" style="color:var(--blue-light);font-weight:700;">0%</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+      <div class="prog-nums">
+        <span id="prog-done">已做 0</span>
+        <span id="prog-wrong" style="color:var(--red);">答错 0</span>
+        <span id="prog-bm" style="color:var(--yellow);">收藏 0</span>
+        <span id="prog-total" style="color:var(--text-muted);">共 0 题</span>
+      </div>
+    </div>
   </div>
   <div class="setup-section">
     <h3>训练设置</h3>
-    <div class="input-row" style="margin-bottom:12px;">
-      <label>题目数量</label>
-      <input type="number" id="train-count" value="20" min="5" max="200">
-    </div>
     <div class="input-row">
       <label>反馈模式</label>
       <select id="train-mode">
@@ -482,6 +512,7 @@ let isReviewMode = false;
 // Persistent: wrong answers & bookmarks (cloud-synced)
 let wrongIds = new Set();
 let bookmarkIds = new Set();
+let answeredIds = new Set();
 
 async function loadUserData() {
   try {
@@ -494,6 +525,22 @@ async function loadUserData() {
   } catch(e) {
     console.warn('loadUserData error (tables may not exist yet):', e);
   }
+}
+
+function loadAnsweredFromStorage() {
+  if (!currentUser) return;
+  try {
+    const stored = localStorage.getItem('answered_' + currentUser.id);
+    answeredIds = new Set(stored ? JSON.parse(stored) : []);
+  } catch(e) { answeredIds = new Set(); }
+}
+
+function markQuestionAnswered(qid) {
+  answeredIds.add(qid);
+  if (!currentUser) return;
+  try {
+    localStorage.setItem('answered_' + currentUser.id, JSON.stringify([...answeredIds]));
+  } catch(e) {}
 }
 
 async function saveWrongIds(qid) {
@@ -531,7 +578,7 @@ const CFA_WEIGHTS = {
 async function loadQuestions() {
   showLoading('加载题库...');
   try {
-    const resp = await fetch('questions.json');
+    const resp = await fetch('questions.json?v=' + Date.now());
     if (!resp.ok) throw new Error('未找到题库文件');
     const data = await resp.json();
     allQuestions = data.questions || [];
@@ -625,25 +672,23 @@ function buildTopicList() {
 
   topics.forEach(t => {
     const btn = document.createElement('button');
-    btn.className = 'topic-btn selected';
+    btn.className = 'topic-btn';
     const count = allQuestions.filter(q => q.topic === t).length;
     btn.textContent = `${t} (${count})`;
     btn.dataset.topic = t;
-    selectedTopics.add(t);
-    btn.onclick = () => toggleTopic(btn, t);
+    btn.onclick = () => selectTopic(btn, t);
     container.appendChild(btn);
   });
   buildReadingList(null);
+  buildQuestionList();
 }
 
-function toggleTopic(btn, topic) {
-  if (selectedTopics.has(topic)) {
-    selectedTopics.delete(topic);
-    btn.classList.remove('selected');
-  } else {
-    selectedTopics.add(topic);
-    btn.classList.add('selected');
-  }
+function selectTopic(btn, topic) {
+  // 单选：取消其他所有选中
+  document.querySelectorAll('#topic-list .topic-btn').forEach(b => b.classList.remove('selected'));
+  selectedTopics.clear();
+  selectedTopics.add(topic);
+  btn.classList.add('selected');
   buildReadingList(topic);
 }
 
@@ -672,14 +717,14 @@ function buildReadingList(topic) {
 
   Object.entries(readings).sort((a,b) => +a[0]-+b[0]).forEach(([r, info]) => {
     const btn = document.createElement('button');
-    btn.className = 'topic-btn selected';
+    btn.className = 'topic-btn';
     btn.textContent = `R${r}: ${info.name.substring(0,25)}... (${info.count})`;
     btn.title = info.name;
     btn.dataset.reading = r;
-    selectedReadings.add(+r);
     btn.onclick = () => toggleReading(btn, +r);
     container.appendChild(btn);
   });
+  buildQuestionList();
 }
 
 function toggleReading(btn, reading) {
@@ -690,6 +735,54 @@ function toggleReading(btn, reading) {
     selectedReadings.add(reading);
     btn.classList.add('selected');
   }
+  buildQuestionList();
+}
+
+function buildQuestionList() {
+  const section = document.getElementById('q-list-section');
+  const container = document.getElementById('q-list-container');
+
+  const qs = allQuestions.filter(q => {
+    if (selectedTopics.size > 0 && !selectedTopics.has(q.topic)) return false;
+    if (selectedReadings.size > 0 && !selectedReadings.has(q.reading)) return false;
+    return true;
+  });
+
+  if (qs.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+
+  document.getElementById('q-list-total').textContent = `(${qs.length} 题)`;
+
+  container.innerHTML = '';
+  qs.forEach((q, i) => {
+    const done = answeredIds.has(q.id);
+    const wrong = wrongIds.has(q.id);
+    const bm = bookmarkIds.has(q.id);
+    const div = document.createElement('div');
+    div.className = 'q-list-item';
+    div.innerHTML =
+      `<span class="q-num">${i + 1}</span>` +
+      `<span class="q-text" title="${q.question.replace(/"/g, '&quot;')}">${q.question.substring(0, 60)}${q.question.length > 60 ? '…' : ''}</span>` +
+      `<span class="q-badges">` +
+      (done ? '<span class="q-badge done">已做</span>' : '') +
+      (wrong ? '<span class="q-badge wrong">错题</span>' : '') +
+      (bm ? '<span class="q-badge bm">收藏</span>' : '') +
+      `</span>`;
+    container.appendChild(div);
+  });
+
+  const total = qs.length;
+  const doneCount = qs.filter(q => answeredIds.has(q.id)).length;
+  const wrongCount = qs.filter(q => wrongIds.has(q.id)).length;
+  const bmCount = qs.filter(q => bookmarkIds.has(q.id)).length;
+  const pct = total > 0 ? Math.round(doneCount / total * 100) : 0;
+
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-done').textContent = '已做 ' + doneCount;
+  document.getElementById('prog-wrong').textContent = '答错 ' + wrongCount;
+  document.getElementById('prog-bm').textContent = '收藏 ' + bmCount;
+  document.getElementById('prog-total').textContent = '共 ' + total + ' 题';
 }
 
 // ========== START EXAM ==========
@@ -754,7 +847,6 @@ function selectByWeight(pool, total, weights) {
 
 // ========== START TRAINING ==========
 function startTraining() {
-  const count = parseInt(document.getElementById('train-count').value) || 20;
   const mode = document.getElementById('train-mode').value;
   trainImmediate = mode === 'immediate';
 
@@ -764,9 +856,10 @@ function startTraining() {
     return true;
   });
 
+  if (selectedTopics.size === 0) { showToast('请先选择一个科目'); return; }
   if (pool.length === 0) { showToast('所选范围内无题目'); return; }
 
-  const qs = shuffle([...pool]).slice(0, count);
+  const qs = shuffle([...pool]);
   examMode = 'train';
   isReviewMode = false;
   startSession(qs, 0, '专项训练');
@@ -934,6 +1027,7 @@ function selectOption(letter) {
   if (isImmediate && userAnswers[currentIndex] !== undefined) return;
 
   userAnswers[currentIndex] = letter;
+  markQuestionAnswered(currentQuestions[currentIndex].id);
 
   // 即时训练模式：实时记录错题
   if (isImmediate) {
@@ -1195,6 +1289,7 @@ async function handleAuth() {
     currentUser = result.data.user;
     showLoading('加载用户数据...');
     await loadUserData();
+    loadAnsweredFromStorage();
     showLoading('加载题库（约3秒）...');
     await loadQuestions();
     updateUserBar();
@@ -1230,6 +1325,7 @@ window.addEventListener('load', async () => {
       currentUser = session.user;
       showLoading('加载用户数据...');
       await loadUserData();
+      loadAnsweredFromStorage();
       showLoading('加载题库（约3秒）...');
       await loadQuestions();
       updateUserBar();
