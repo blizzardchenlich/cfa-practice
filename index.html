@@ -176,6 +176,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 .nav-btn.flagged { background: var(--yellow-pale); border-color: var(--yellow); }
 .nav-btn.correct { background: var(--green-pale); border-color: #86efac; }
 .nav-btn.wrong { background: var(--red-pale); border-color: #fca5a5; }
+.nav-btn.pre-done { background: #e0e7ff; border-color: #a5b4fc; color: #4338ca; }
 .nav-legend { display: flex; flex-direction: column; gap: 6px; }
 .legend-item { display: flex; align-items: center; gap: 8px; font-size: .75rem; color: var(--text-muted); }
 .legend-dot { width: 12px; height: 12px; border-radius: 2px; border: 1px solid; flex-shrink: 0; }
@@ -443,8 +444,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
     <div class="input-row">
       <label>练习范围</label>
       <select id="train-scope">
-        <option value="todo">只练未做题（续上次进度）</option>
-        <option value="all">全部题目（重新开始）</option>
+        <option value="todo">从上次进度继续（跳到第一道未做题）</option>
+        <option value="all">从第一题开始</option>
       </select>
     </div>
   </div>
@@ -469,7 +470,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
       <h3 id="nav-label">答题进度</h3>
       <div class="nav-grid" id="nav-grid"></div>
       <div class="nav-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:var(--blue-pale);border-color:#93c5fd;"></div>已作答</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#e0e7ff;border-color:#a5b4fc;"></div>上次已做</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--blue-pale);border-color:#93c5fd;"></div>本次已答</div>
         <div class="legend-item"><div class="legend-dot" style="background:var(--yellow-pale);border-color:var(--yellow);"></div>已标记</div>
         <div class="legend-item"><div class="legend-dot" style="background:white;border-color:var(--border);"></div>未作答</div>
       </div>
@@ -528,6 +530,7 @@ let isReviewMode = false;
 let wrongIds = new Set();
 let bookmarkIds = new Set();
 let answeredIds = new Set();
+let preDoneIndices = new Set(); // 本次session中预填的历史已做题索引
 
 async function loadUserData() {
   try {
@@ -914,7 +917,7 @@ function startTraining() {
   const scope = document.getElementById('train-scope').value;
   trainImmediate = mode === 'immediate';
 
-  let pool = allQuestions.filter(q => {
+  const pool = allQuestions.filter(q => {
     if (!selectedTopics.has(q.topic)) return false;
     if (selectedReadings.size > 0 && !selectedReadings.has(q.reading)) return false;
     return true;
@@ -922,27 +925,39 @@ function startTraining() {
 
   if (pool.length === 0) { showToast('所选范围内无题目'); return; }
 
-  // 固定顺序（按JSON中的位置，不打乱）
-  // 只练未做题时过滤已做题目
-  let qs = pool;
+  examMode = 'train';
+  isReviewMode = false;
+  preDoneIndices.clear();
+
+  // 预填历史已做题的答案，并记录索引
+  const preAnswers = {};
+  pool.forEach((q, i) => {
+    if (answeredIds.has(q.id)) {
+      preAnswers[i] = q.correct;
+      preDoneIndices.add(i);
+    }
+  });
+
+  // 计算起始题目索引
+  let startIndex = 0;
   if (scope === 'todo') {
-    qs = pool.filter(q => !answeredIds.has(q.id));
-    if (qs.length === 0) {
-      showToast('该范围全部题目已完成！可切换为「全部题目」重新练习');
-      return;
+    const firstUndone = pool.findIndex(q => !answeredIds.has(q.id));
+    if (firstUndone === -1) {
+      showToast('该范围全部题目已完成！可切换为「全部题目」从头开始');
+      startIndex = 0; // 全做完了就从头
+    } else {
+      startIndex = firstUndone;
     }
   }
 
-  examMode = 'train';
-  isReviewMode = false;
-  startSession(qs, 0, '专项训练');
+  startSession(pool, 0, '专项训练', preAnswers, startIndex);
 }
 
 // ========== SESSION ==========
-function startSession(qs, duration, label) {
+function startSession(qs, duration, label, preAnswers, startIndex) {
   currentQuestions = qs;
-  currentIndex = 0;
-  userAnswers = {};
+  currentIndex = startIndex || 0;
+  userAnswers = preAnswers || {};
   flagged.clear();
   secondsLeft = duration;
 
@@ -1154,6 +1169,7 @@ function updateNavGrid() {
       const correct = userAnswers[i] === currentQuestions[i].correct;
       btn.classList.add(userAnswers[i] ? (correct ? 'correct' : 'wrong') : '');
     } else if (flagged.has(i)) btn.classList.add('flagged');
+    else if (preDoneIndices.has(i) && userAnswers[i] !== undefined) btn.classList.add('pre-done');
     else if (userAnswers[i]) btn.classList.add('answered');
   });
 }
