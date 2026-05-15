@@ -230,6 +230,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 .q-detail .q-answer.correct { color: var(--green); }
 .q-detail .q-answer.wrong { color: var(--red); }
 .q-detail .q-expl { color: var(--text-muted); white-space: pre-wrap; word-break: break-word; }
+.q-list-item.done-item { cursor: pointer; }
+.q-list-item.done-item:hover { background: #f0f4ff; }
 .topic-progress { margin-top: 14px; padding: 14px 16px; background: var(--gray-light); border-radius: 8px; }
 .topic-progress .prog-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: .88rem; font-weight: 500; }
 .topic-progress .prog-bar { height: 8px; background: white; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
@@ -667,6 +669,37 @@ function showTrainSetup() {
   window.scrollTo(0, 0);
 }
 
+// 返回专项训练设置页但保留已有科目/Reading选择
+function goBackToTrainSetup() {
+  hideAll();
+  document.getElementById('train-setup').style.display = 'block';
+  buildQuestionList(); // 刷新已做状态
+  window.scrollTo(0, 0);
+}
+
+// 单题复习：点击题目列表中已做题目时调用
+function reviewSingleQuestion(q) {
+  currentQuestions = [q];
+  currentIndex = 0;
+  userAnswers = { 0: q.correct }; // 显示正确答案
+  flagged.clear();
+  isReviewMode = true;
+  examMode = 'train';
+  trainImmediate = true;
+  secondsLeft = 0;
+
+  hideAll();
+  document.getElementById('exam-view').style.display = 'block';
+  document.getElementById('exam-mode-label').textContent = '题目回顾';
+  document.getElementById('timer').style.display = 'none';
+  const submitBtn = document.getElementById('submit-btn');
+  submitBtn.textContent = '← 返回';
+  submitBtn.onclick = goBackToTrainSetup;
+  stopTimer();
+  buildNavGrid();
+  renderQuestion();
+}
+
 function hideAll() {
   ['auth-view','home','exam-setup','train-setup','exam-view','results-view'].forEach(id => {
     document.getElementById(id).style.display = 'none';
@@ -772,7 +805,7 @@ function buildQuestionList() {
     const wrong = wrongIds.has(q.id);
     const bm    = bookmarkIds.has(q.id);
     const div   = document.createElement('div');
-    div.className = 'q-list-item';
+    div.className = 'q-list-item' + (done ? ' done-item' : '');
 
     const answerClass = done ? (wrong ? 'wrong' : 'correct') : '';
     const answerLabel = done ? (wrong ? '✗ 答错，正确答案：' : '✓ 答对，正确答案：') : '';
@@ -795,6 +828,7 @@ function buildQuestionList() {
         `</div>`
       : '');
 
+    if (done) div.addEventListener('click', () => reviewSingleQuestion(q));
     container.appendChild(div);
   });
 
