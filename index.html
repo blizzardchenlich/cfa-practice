@@ -425,11 +425,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
   </div>
   <div class="setup-section">
     <h3>训练设置</h3>
-    <div class="input-row">
+    <div class="input-row" style="margin-bottom:12px;">
       <label>反馈模式</label>
       <select id="train-mode">
         <option value="immediate">即时反馈（答完立即显示答案）</option>
         <option value="deferred">延后反馈（全部做完后显示）</option>
+      </select>
+    </div>
+    <div class="input-row">
+      <label>练习范围</label>
+      <select id="train-scope">
+        <option value="todo">只练未做题（续上次进度）</option>
+        <option value="all">全部题目（重新开始）</option>
       </select>
     </div>
   </div>
@@ -847,19 +854,31 @@ function selectByWeight(pool, total, weights) {
 
 // ========== START TRAINING ==========
 function startTraining() {
-  const mode = document.getElementById('train-mode').value;
+  if (selectedTopics.size === 0) { showToast('请先选择一个科目'); return; }
+
+  const mode  = document.getElementById('train-mode').value;
+  const scope = document.getElementById('train-scope').value;
   trainImmediate = mode === 'immediate';
 
   let pool = allQuestions.filter(q => {
-    if (selectedTopics.size > 0 && !selectedTopics.has(q.topic)) return false;
+    if (!selectedTopics.has(q.topic)) return false;
     if (selectedReadings.size > 0 && !selectedReadings.has(q.reading)) return false;
     return true;
   });
 
-  if (selectedTopics.size === 0) { showToast('请先选择一个科目'); return; }
   if (pool.length === 0) { showToast('所选范围内无题目'); return; }
 
-  const qs = shuffle([...pool]);
+  // 固定顺序（按JSON中的位置，不打乱）
+  // 只练未做题时过滤已做题目
+  let qs = pool;
+  if (scope === 'todo') {
+    qs = pool.filter(q => !answeredIds.has(q.id));
+    if (qs.length === 0) {
+      showToast('该范围全部题目已完成！可切换为「全部题目」重新练习');
+      return;
+    }
+  }
+
   examMode = 'train';
   isReviewMode = false;
   startSession(qs, 0, '专项训练');
