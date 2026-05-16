@@ -1386,7 +1386,6 @@ async function handleAuth() {
     currentUser = result.data.user;
     showLoading('加载用户数据...');
     await loadUserData();
-    loadAnsweredFromStorage();
     showLoading('加载题库（约3秒）...');
     await loadQuestions();
     updateUserBar();
@@ -1422,7 +1421,6 @@ window.addEventListener('load', async () => {
       currentUser = session.user;
       showLoading('加载用户数据...');
       await loadUserData();
-      loadAnsweredFromStorage();
       showLoading('加载题库（约3秒）...');
       await loadQuestions();
       updateUserBar();
