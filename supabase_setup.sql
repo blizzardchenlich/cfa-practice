@@ -20,6 +20,16 @@ create table if not exists user_bookmarks (
 alter table user_bookmarks enable row level security;
 create policy "own data" on user_bookmarks for all using (auth.uid() = user_id);
 
+-- 已做题目（跨设备同步）
+create table if not exists user_answered_ids (
+  user_id uuid references auth.users on delete cascade,
+  question_id text not null,
+  created_at timestamptz default now(),
+  primary key (user_id, question_id)
+);
+alter table user_answered_ids enable row level security;
+create policy "own data" on user_answered_ids for all using (auth.uid() = user_id);
+
 -- 考试记录
 create table if not exists exam_records (
   id uuid default gen_random_uuid() primary key,

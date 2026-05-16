@@ -534,14 +534,18 @@ let preDoneIndices = new Set(); // 本次session中预填的历史已做题索�
 
 async function loadUserData() {
   try {
-    const [w, b] = await Promise.all([
+    const [w, b, a] = await Promise.all([
       sb.from('user_wrong_ids').select('question_id').eq('user_id', currentUser.id),
       sb.from('user_bookmarks').select('question_id').eq('user_id', currentUser.id),
+      sb.from('user_answered_ids').select('question_id').eq('user_id', currentUser.id),
     ]);
     wrongIds    = new Set((w.data || []).map(r => r.question_id));
     bookmarkIds = new Set((b.data || []).map(r => r.question_id));
+    answeredIds = new Set((a.data || []).map(r => r.question_id));
   } catch(e) {
     console.warn('loadUserData error (tables may not exist yet):', e);
+    // 降级：从 localStorage 读取 answeredIds
+    loadAnsweredFromStorage();
   }
 }
 
@@ -556,9 +560,8 @@ function loadAnsweredFromStorage() {
 function markQuestionAnswered(qid) {
   answeredIds.add(qid);
   if (!currentUser) return;
-  try {
-    localStorage.setItem('answered_' + currentUser.id, JSON.stringify([...answeredIds]));
-  } catch(e) {}
+  // 写入云端（不等待，不阻塞答题）
+  sb.from('user_answered_ids').upsert({ user_id: currentUser.id, question_id: qid });
 }
 
 async function saveWrongIds(qid) {
