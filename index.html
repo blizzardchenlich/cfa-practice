@@ -539,9 +539,13 @@ async function loadUserData() {
       sb.from('user_bookmarks').select('question_id').eq('user_id', currentUser.id),
       sb.from('user_answered_ids').select('question_id').eq('user_id', currentUser.id),
     ]);
+    if (w.error) console.error('wrong_ids load error:', w.error);
+    if (b.error) console.error('bookmarks load error:', b.error);
+    if (a.error) console.error('answered_ids load error:', a.error);
     wrongIds    = new Set((w.data || []).map(r => r.question_id));
     bookmarkIds = new Set((b.data || []).map(r => r.question_id));
     answeredIds = new Set((a.data || []).map(r => r.question_id));
+    console.log(`loadUserData: wrong=${wrongIds.size}, bookmarks=${bookmarkIds.size}, answered=${answeredIds.size}`);
   } catch(e) {
     console.warn('loadUserData error (tables may not exist yet):', e);
     // 降级：从 localStorage 读取 answeredIds
@@ -561,7 +565,8 @@ function markQuestionAnswered(qid) {
   answeredIds.add(qid);
   if (!currentUser) return;
   // 写入云端（不等待，不阻塞答题）
-  sb.from('user_answered_ids').upsert({ user_id: currentUser.id, question_id: qid });
+  sb.from('user_answered_ids').upsert({ user_id: currentUser.id, question_id: String(qid) })
+    .then(({error}) => { if (error) console.error('answered upsert error:', error); });
 }
 
 async function saveWrongIds(qid) {
