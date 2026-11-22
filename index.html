@@ -157,7 +157,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 /* Explanation */
 .explanation-box { background: #f8fafc; border: 1px solid var(--border); border-left: 4px solid var(--blue-light); border-radius: 8px; padding: 20px; margin-top: 24px; }
 .explanation-box h4 { font-size: .85rem; font-weight: 600; color: var(--blue); margin-bottom: 8px; text-transform: uppercase; letter-spacing: .05em; }
-.explanation-box p { font-size: .9rem; line-height: 1.7; color: var(--text); white-space: pre-wrap; }
+.explanation-box p, .explanation-box .expl-text { font-size: .9rem; line-height: 1.7; color: var(--text); white-space: pre-wrap; }
+.cfa-table-wrap { overflow-x: auto; margin: 12px 0; white-space: normal; }
+.cfa-table { border-collapse: collapse; font-size: .88rem; line-height: 1.45; white-space: normal; background: #fff; }
+.cfa-table th, .cfa-table td { border: 1px solid #cbd5e1; padding: 6px 12px; text-align: center; vertical-align: middle; }
+.cfa-table th { background: #e2e8f0; font-weight: 600; }
+.cfa-table td:first-child, .cfa-table th:first-child { text-align: left; }
+.option-btn .cfa-table-wrap { margin: 4px 0; }
 .los-tag { margin-top: 10px; font-size: .8rem; color: var(--text-muted); font-style: italic; }
 .tips-box { background: #f0fdf4; border: 1px solid #86efac; border-left: 4px solid var(--green); border-radius: 8px; padding: 20px; margin-top: 24px; }
 .tips-box h4 { font-size: .85rem; font-weight: 600; color: var(--green); margin-bottom: 10px; text-transform: uppercase; letter-spacing: .05em; }
@@ -472,7 +478,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
       <div class="nav-legend">
         <div class="legend-item"><div class="legend-dot" style="background:#e0e7ff;border-color:#a5b4fc;"></div>上次已做</div>
         <div class="legend-item"><div class="legend-dot" style="background:var(--blue-pale);border-color:#93c5fd;"></div>本次已答</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--yellow-pale);border-color:var(--yellow);"></div>已标记</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--yellow-pale);border-color:var(--yellow);"></div>稍后检查</div>
         <div class="legend-item"><div class="legend-dot" style="background:white;border-color:var(--border);"></div>未作答</div>
       </div>
       <div class="submit-section">
@@ -511,8 +517,19 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 // ========== SUPABASE ==========
 const SUPABASE_URL      = 'https://plqhtgxacfgwthzvvqit.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_7QbA8OiWeCjqfrKtKXZcrA_eBCV3UYS';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
+});
 let currentUser = null;
+
+sb.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+    currentUser = session?.user ?? null;
+  } else if (event === 'SIGNED_OUT') {
+    currentUser = null;
+    showAuth();
+  }
+});
 
 // ========== STATE ==========
 let allQuestions = [];
@@ -825,7 +842,7 @@ function buildQuestionList() {
     div.innerHTML =
       `<div class="q-row1">` +
         `<span class="q-num">${i + 1}</span>` +
-        `<span class="q-text" title="${q.question.replace(/"/g, '&quot;')}">${q.question.substring(0, 60)}${q.question.length > 60 ? '…' : ''}</span>` +
+        `<span class="q-text" title="${escHtml(plainText(q.question))}">${escHtml(plainText(q.question).substring(0, 60))}${plainText(q.question).length > 60 ? '…' : ''}</span>` +
         `<span class="q-badges">` +
         (done ? '<span class="q-badge done">已做</span>' : '') +
         (wrong ? '<span class="q-badge wrong">错题</span>' : '') +
@@ -835,7 +852,7 @@ function buildQuestionList() {
       (done ?
         `<div class="q-detail">` +
           `<div class="q-answer ${answerClass}">${answerLabel}${q.correct}</div>` +
-          `<div class="q-expl">${expl || '暂无解释'}</div>` +
+          `<div class="q-expl">${expl ? renderRich(expl) : '暂无解释'}</div>` +
         `</div>`
       : '');
 
@@ -1031,7 +1048,7 @@ function renderQuestion() {
   const readingBadge = `<span class="badge">Reading ${q.reading}</span>`;
   const losBadge = q.los ? `<span class="badge">LOS ${q.los}</span>` : '';
   const flagClass = flagged.has(currentIndex) ? 'flagged' : '';
-  const flagText = flagged.has(currentIndex) ? '🚩 已标记' : '🏳 标记';
+  const flagText = flagged.has(currentIndex) ? '🚩 稍后检查 ✓' : '🚩 稍后检查';
   const bmClass = bookmarkIds.has(q.id) ? 'bookmarked' : '';
   const bmText = bookmarkIds.has(q.id) ? '⭐ 已收藏' : '☆ 收藏';
 
@@ -1054,7 +1071,7 @@ function renderQuestion() {
     optionsHtml += `
       <button class="${cls}" ${disabled} onclick="selectOption('${letter}')">
         <span class="option-letter">${letter})</span>
-        <span>${escHtml(optText)}</span>
+        <span>${renderRich(optText)}</span>
       </button>`;
   });
 
@@ -1068,7 +1085,7 @@ function renderQuestion() {
     const explHtml = q.explanation ? `
       <div class="explanation-box">
         <h4>Kaplan 解析</h4>
-        <p>${escHtml(q.explanation)}</p>
+        <div class="expl-text">${renderRich(q.explanation)}</div>
         ${q.module ? `<div class="los-tag">Module ${q.module} · LOS ${q.los || ''}</div>` : ''}
       </div>` : '';
     explanationHtml = tipsHtml + explHtml;
@@ -1099,7 +1116,7 @@ function renderQuestion() {
       ${topicBadge} ${readingBadge} ${losBadge}
       <span style="margin-left:auto;color:var(--text-muted);font-size:.8rem;">第 ${currentIndex + 1} 题 / 共 ${currentQuestions.length} 题</span>
     </div>
-    <div class="q-text">${escHtml(q.question)}</div>
+    <div class="q-text">${renderRich(q.question)}</div>
     <div class="options">${optionsHtml}</div>
     ${trainFeedback}
     ${explanationHtml}
@@ -1107,7 +1124,7 @@ function renderQuestion() {
       ${prevBtn}
       ${nextBtn}
       ${submitBtn}
-      ${!isReviewMode ? `<button class="flag-btn ${flagClass}" onclick="toggleFlag()"><span>🏳</span> ${flagText}</button>` : ''}
+      ${!isReviewMode ? `<button class="flag-btn ${flagClass}" onclick="toggleFlag()">${flagText}</button>` : ''}
       <button class="bookmark-btn ${bmClass}" onclick="toggleBookmark()">${bmText}</button>
     </div>
   `;
@@ -1326,6 +1343,23 @@ function renderTips(text) {
   }
   if (inList) out += '</ol>';
   return out;
+}
+
+// 题干/选项/解析：转义全部文本，仅放行题库里的表格标签（<table class="cfa-table">）
+function renderRich(str) {
+  if (!str) return '';
+  let html = escHtml(str);
+  if (html.indexOf('&lt;table') === -1) return html;
+  html = html.replace(/&lt;(\/?)(table|tbody|thead|tr|td|th)((?:\s+(?:class|colspan|rowspan)=&quot;[\w\- ]*&quot;)*)&gt;/g,
+    (m, slash, tag, attrs) => '<' + slash + tag + attrs.replace(/&quot;/g, '"') + '>');
+  html = html.replace(/\s*(<table[\s\S]*?<\/table>)\s*/g, '<div class="cfa-table-wrap">$1</div>');
+  return html;
+}
+
+// 列表预览/提示用的纯文本（表格压成一行）
+function plainText(str) {
+  if (!str) return '';
+  return str.replace(/<\/t[dh]>/g, ' ').replace(/<\/tr>/g, '; ').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
 }
 
 function escHtml(str) {
